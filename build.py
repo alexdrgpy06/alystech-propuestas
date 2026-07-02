@@ -2,7 +2,7 @@
 import re, sys, os
 
 SRC = "/sessions/vigilant-intelligent-ride/mnt/uploads/Alystech_Plataforma.html"
-OUT = "/tmp/build2/alystech-propuestas/public/araucanos/index.html"
+OUT = "/tmp/alystech-propuestas/public/araucanos/index.html"
 
 with open(SRC, "r", encoding="utf-8") as f:
     html = f.read()
@@ -70,16 +70,16 @@ html{scroll-behavior:smooth}
 .about h2{font-size:18px;color:var(--navy);font-weight:800;letter-spacing:-.3px;margin-bottom:8px}
 .about h3.subkicker{font-size:14px;color:var(--navy);font-weight:800;margin:24px 0 4px}
 .about .aboutlead{font-size:13px;color:var(--slate);line-height:1.6}
-.paycard{display:flex;gap:11px;padding:2px 0}
-.paycard .pcicon{font-size:17px;flex-shrink:0;width:26px;text-align:center}
-.paycard h5{font-size:12.6px;color:var(--navy);font-weight:700;margin-bottom:3px}
-.paycard p{font-size:12px;color:var(--slate);line-height:1.5;margin:0}
-.pay-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px 24px;margin-top:12px;padding-top:14px;border-top:1px solid var(--line2)}
-.benefit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px 24px;margin:14px 0}
-.benefit{display:flex;gap:11px;padding:0;background:none;border:none}
-.benefit .bicon{width:26px;height:26px;font-size:14px;flex-shrink:0;background:none;margin-bottom:0}
-.benefit h5{font-size:12.6px;margin-bottom:3px}
-.benefit p{font-size:11.8px;margin:0}
+.benefit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+.benefit{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px}
+.benefit .bicon{width:32px;height:32px;border-radius:8px;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:9px}
+.benefit h5{font-size:12.8px;color:var(--navy);font-weight:700;margin-bottom:5px}
+.benefit p{font-size:12px;color:var(--slate);line-height:1.5}
+.pay-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
+.paycard{display:grid;grid-template-columns:32px 1fr;column-gap:11px;background:#fbfcfe;border:1px solid var(--line);border-radius:10px;padding:14px}
+.paycard .pcicon{grid-column:1;grid-row:1 / 3;align-self:start;width:32px;height:32px;border-radius:8px;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:15px}
+.paycard h5{grid-column:2;grid-row:1;font-size:12.8px;color:var(--navy);font-weight:700;margin-bottom:4px}
+.paycard p{grid-column:2;grid-row:2;font-size:12px;color:var(--slate);line-height:1.5;margin:0}
 
 /* ====== NAV RÁPIDA (sticky, con marca integrada) ====== */
 .quicknav{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 6px rgba(0,0,0,.05)}
