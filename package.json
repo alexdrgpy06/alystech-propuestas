@@ -1,0 +1,18 @@
+{
+  "name": "alystech-propuestas",
+  "version": "1.0.0",
+  "description": "Propuestas interactivas de Alystech (wizard, PDF, consultas)",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemailer": "^6.9.14",
+    "pdfkit": "^0.15.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
