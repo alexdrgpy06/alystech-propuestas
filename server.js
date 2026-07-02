@@ -71,6 +71,35 @@ function esc(s) {
 
 const GROUP_LABELS = { mdm: 'A · Plataforma móvil', srv: 'B · Servidor', net: 'B · Red', aud: 'C · Auditoría', sup: 'D · Soporte' };
 
+// Plantilla de email con la misma identidad visual (navy/azul) que la propuesta.
+function emailShell({ eyebrow, title, accent, bodyHtml }) {
+  return `
+  <div style="background:#f5f7fa;padding:32px 16px;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+    <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #dde3ec">
+      <div style="background:linear-gradient(120deg,#0d1f3c 0%,#173a68 55%,#2c5788 100%);padding:26px 28px">
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+          <td style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#4f8cf7,#2c5788);text-align:center;vertical-align:middle;font-weight:800;color:#fff;font-size:16px;font-family:Arial,sans-serif">AT</td>
+          <td style="padding-left:12px;color:#fff;font-size:15px;font-weight:700">Alystech<div style="font-weight:400;font-size:11.5px;color:#aebde0;margin-top:1px">Soluciones en Software y Seguridad Informática</div></td>
+        </tr></table>
+      </div>
+      <div style="padding:26px 28px 6px">
+        <div style="display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:${accent};background:${accent}1a;border:1px solid ${accent}40;border-radius:20px;padding:5px 12px;margin-bottom:14px">${esc(eyebrow)}</div>
+        <h1 style="font-size:19px;color:#0d1f3c;margin:0 0 18px;font-weight:800">${esc(title)}</h1>
+      </div>
+      <div style="padding:0 28px 26px;color:#182437;font-size:13.5px;line-height:1.6">
+        ${bodyHtml}
+      </div>
+      <div style="background:#fafbfd;border-top:1px solid #eef1f6;padding:14px 28px;color:#8590a3;font-size:11px">
+        Alystech · Propuesta técnica y económica · Notificación automática
+      </div>
+    </div>
+  </div>`;
+}
+
+function infoRow(label, value) {
+  return `<div style="margin-bottom:10px"><span style="display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#48546b;margin-bottom:2px">${esc(label)}</span><span style="color:#182437">${value}</span></div>`;
+}
+
 app.use(express.json({ limit: '256kb' }));
 
 app.use(express.static(path.join(__dirname, 'public'), { index: 'landing.html' }));
@@ -101,22 +130,29 @@ app.post('/api/decision', async (req, res) => {
   };
   appendJson(DECISIONS_FILE, entry);
 
+  const accepted = decision === 'accept';
+  const accent = accepted ? '#0f7a48' : '#b23a2b';
   const rows = (selections || []).map(s =>
-    `<tr><td style="padding:4px 8px;border:1px solid #ddd">${esc(GROUP_LABELS[s.group] || s.group)}</td><td style="padding:4px 8px;border:1px solid #ddd">${esc(s.code)} — ${esc(s.name)}</td><td style="padding:4px 8px;border:1px solid #ddd">${esc(s.price)}</td></tr>`
+    `<tr><td style="padding:9px 10px;border-bottom:1px solid #eef1f6;font-size:12.5px;color:#48546b">${esc(GROUP_LABELS[s.group] || s.group)}</td><td style="padding:9px 10px;border-bottom:1px solid #eef1f6;font-size:12.5px"><b>${esc(s.code)}</b> — ${esc(s.name)}</td><td style="padding:9px 10px;border-bottom:1px solid #eef1f6;font-size:12.5px;text-align:right;white-space:nowrap">${esc(s.price)}</td></tr>`
   ).join('');
-  const subject = (decision === 'accept' ? '✅ Propuesta ACEPTADA' : '❌ Propuesta RECHAZADA') + ` — ${clientName} (${proposalId || ''})`;
-  const html = `
-    <h2>${decision === 'accept' ? 'Propuesta aceptada' : 'Propuesta rechazada'}</h2>
-    <p><b>Propuesta:</b> ${esc(proposalId)}</p>
-    <p><b>Cliente:</b> ${esc(clientName)} — ${esc(clientEmail)} ${clientPhone ? '— ' + esc(clientPhone) : ''}</p>
-    <p><b>Comentarios:</b> ${esc(comments) || '(sin comentarios)'}</p>
-    <table style="border-collapse:collapse;margin-top:10px">
-      <tr><th style="padding:4px 8px;border:1px solid #ddd;text-align:left">Bloque</th><th style="padding:4px 8px;border:1px solid #ddd;text-align:left">Opción</th><th style="padding:4px 8px;border:1px solid #ddd;text-align:left">Precio</th></tr>
+  const subject = (accepted ? '✅ Propuesta ACEPTADA' : '❌ Propuesta RECHAZADA') + ` — ${clientName} (${proposalId || ''})`;
+  const body = `
+    ${infoRow('Propuesta', esc(proposalId))}
+    ${infoRow('Cliente', `${esc(clientName)} — ${esc(clientEmail)}${clientPhone ? ' — ' + esc(clientPhone) : ''}`)}
+    ${infoRow('Comentarios', esc(comments) || '<span style="color:#8590a3">(sin comentarios)</span>')}
+    <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;margin:16px 0;border:1px solid #eef1f6;border-radius:8px;overflow:hidden">
+      <tr style="background:#0d1f3c"><th style="padding:9px 10px;text-align:left;color:#fff;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px">Bloque</th><th style="padding:9px 10px;text-align:left;color:#fff;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px">Opción</th><th style="padding:9px 10px;text-align:right;color:#fff;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px">Precio</th></tr>
       ${rows}
+      <tr><td colspan="2" style="padding:10px;background:#eef3fc;font-weight:700;color:#0d1f3c;font-size:13px">Total estimado</td><td style="padding:10px;background:#eef3fc;font-weight:700;color:#0d1f3c;font-size:13px;text-align:right">${esc(totals && totals.total)}</td></tr>
     </table>
-    <p style="margin-top:10px"><b>Total estimado:</b> ${esc(totals && totals.total)}</p>
-    <p style="color:#888;font-size:12px">Recibido: ${entry.createdAt} · IP: ${esc(entry.ip)}</p>
+    <p style="color:#8590a3;font-size:11px;margin-top:14px">Recibido: ${entry.createdAt} · IP: ${esc(entry.ip)}</p>
   `;
+  const html = emailShell({
+    eyebrow: accepted ? 'Propuesta aceptada' : 'Propuesta rechazada',
+    title: accepted ? '✓ El cliente aceptó la propuesta' : '✕ El cliente rechazó la propuesta',
+    accent,
+    bodyHtml: body
+  });
   await notify(subject, html);
   res.json({ ok: true });
 });
@@ -138,13 +174,21 @@ app.post('/api/consulta', async (req, res) => {
   appendJson(CONSULTAS_FILE, entry);
 
   const subject = `💬 Nueva consulta — ${name} (${proposalId || ''})`;
-  const html = `
-    <h2>Nueva consulta sobre la propuesta</h2>
-    <p><b>Propuesta:</b> ${esc(proposalId)}</p>
-    <p><b>De:</b> ${esc(name)} — ${esc(email)} ${phone ? '— ' + esc(phone) : ''}</p>
-    <p><b>Mensaje:</b><br>${esc(message).replace(/\n/g, '<br>')}</p>
-    <p style="color:#888;font-size:12px">Recibido: ${entry.createdAt} · IP: ${esc(entry.ip)}</p>
+  const body = `
+    ${infoRow('Propuesta', esc(proposalId))}
+    ${infoRow('De', `${esc(name)} — ${esc(email)}${phone ? ' — ' + esc(phone) : ''}`)}
+    <div style="margin-top:14px;background:#eef3fc;border:1px solid #cfe0f7;border-radius:10px;padding:14px 16px;color:#1e3d6b">
+      <span style="display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#48546b;margin-bottom:6px">Mensaje</span>
+      ${esc(message).replace(/\n/g, '<br>')}
+    </div>
+    <p style="color:#8590a3;font-size:11px;margin-top:14px">Recibido: ${entry.createdAt} · IP: ${esc(entry.ip)}</p>
   `;
+  const html = emailShell({
+    eyebrow: 'Nueva consulta',
+    title: '💬 Un cliente dejó una consulta',
+    accent: '#2f6fed',
+    bodyHtml: body
+  });
   await notify(subject, html);
   res.json({ ok: true });
 });
