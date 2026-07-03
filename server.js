@@ -21,6 +21,7 @@ const SMTP_USER = process.env.SMTP_USER || '';
 const SMTP_PASS = process.env.SMTP_PASS || '';
 const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER || 'no-reply@alystechpy.online';
 const SMTP_SECURE = process.env.SMTP_SECURE === 'true';
+const CONTACT_EMAIL = process.env.NOTIFY_EMAIL || 'aramirez@alystechpy.online';
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(DECISIONS_FILE)) fs.writeFileSync(DECISIONS_FILE, '[]');
@@ -54,17 +55,21 @@ function getTransporter() {
   return transporter;
 }
 
-async function notify(subject, html) {
+async function sendMail(to, subject, html) {
   const t = getTransporter();
-  if (!t || !NOTIFY_EMAIL) {
-    console.log('[email no configurado] ' + subject);
+  if (!t || !to) {
+    console.log('[email no configurado] ' + subject + (to ? ` -> ${to}` : ''));
     return;
   }
   try {
-    await t.sendMail({ from: SMTP_FROM, to: NOTIFY_EMAIL, subject, html });
+    await t.sendMail({ from: SMTP_FROM, to, subject, html });
   } catch (e) {
-    console.error('Error enviando email:', e.message);
+    console.error(`Error enviando email a ${to}:`, e.message);
   }
+}
+
+async function notify(subject, html) {
+  await sendMail(NOTIFY_EMAIL, subject, html);
 }
 
 function esc(s) {
@@ -76,25 +81,25 @@ function esc(s) {
 const GROUP_LABELS = { mdm: 'A · Plataforma móvil', srv: 'B · Servidor', net: 'B · Red', aud: 'C · Auditoría', sup: 'D · Soporte' };
 
 // Plantilla de email con la misma identidad visual (navy/azul) que la propuesta.
-function emailShell({ eyebrow, title, accent, bodyHtml }) {
+function emailShell({ eyebrow, title, accent, bodyHtml, footerNote }) {
   return `
-  <div style="background:#f5f7fa;padding:32px 16px;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
-    <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #dde3ec">
-      <div style="background:linear-gradient(120deg,#0d1f3c 0%,#173a68 55%,#2c5788 100%);padding:26px 28px">
+  <div style="background:#eef1f6;padding:40px 16px;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+    <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #dde3ec;box-shadow:0 4px 24px rgba(13,31,60,0.08)">
+      <div style="background:linear-gradient(120deg,#0d1f3c 0%,#173a68 55%,#2c5788 100%);padding:28px 30px">
         <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-          <td style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#4f8cf7,#2c5788);text-align:center;vertical-align:middle;font-weight:800;color:#fff;font-size:16px;font-family:Arial,sans-serif">AT</td>
-          <td style="padding-left:12px;color:#fff;font-size:15px;font-weight:700">Alystech<div style="font-weight:400;font-size:11.5px;color:#aebde0;margin-top:1px">Soluciones en Software y Seguridad Informática</div></td>
+          <td style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#4f8cf7,#2c5788);text-align:center;vertical-align:middle;font-weight:800;color:#fff;font-size:16px;font-family:Arial,sans-serif">AT</td>
+          <td style="padding-left:14px;color:#fff;font-size:16px;font-weight:700">Alystech<div style="font-weight:400;font-size:11.5px;color:#aebde0;margin-top:2px">Soluciones en Software y Seguridad Informática</div></td>
         </tr></table>
       </div>
-      <div style="padding:26px 28px 6px">
-        <div style="display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:${accent};background:${accent}1a;border:1px solid ${accent}40;border-radius:20px;padding:5px 12px;margin-bottom:14px">${esc(eyebrow)}</div>
-        <h1 style="font-size:19px;color:#0d1f3c;margin:0 0 18px;font-weight:800">${esc(title)}</h1>
+      <div style="padding:28px 30px 8px">
+        <div style="display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:${accent};background:${accent}1a;border:1px solid ${accent}40;border-radius:20px;padding:5px 12px;margin-bottom:16px">${esc(eyebrow)}</div>
+        <h1 style="font-size:19px;color:#0d1f3c;margin:0 0 20px;font-weight:800;line-height:1.35">${esc(title)}</h1>
       </div>
-      <div style="padding:0 28px 26px;color:#182437;font-size:13.5px;line-height:1.6">
+      <div style="padding:0 30px 28px;color:#182437;font-size:13.5px;line-height:1.65">
         ${bodyHtml}
       </div>
-      <div style="background:#fafbfd;border-top:1px solid #eef1f6;padding:14px 28px;color:#8590a3;font-size:11px">
-        Alystech · Propuesta técnica y económica · Notificación automática
+      <div style="background:#fafbfd;border-top:1px solid #eef1f6;padding:16px 30px;color:#8590a3;font-size:11px;line-height:1.6">
+        ${footerNote || `Alystech · Propuesta técnica y económica · Notificación automática · ${esc(CONTACT_EMAIL)}`}
       </div>
     </div>
   </div>`;
@@ -158,6 +163,30 @@ app.post('/api/decision', async (req, res) => {
     bodyHtml: body
   });
   await notify(subject, html);
+
+  // Copia de confirmación al cliente, al email que ingresó en el formulario.
+  const clientBody = `
+    <p style="margin:0 0 16px">Hola ${esc(clientName)}, ${accepted
+      ? 'confirmamos que aceptaste la propuesta. Este es un resumen de la configuración registrada:'
+      : 'registramos tu decisión de rechazar la propuesta. Este es un resumen de la configuración que estaba en pantalla:'}</p>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;margin:16px 0;border:1px solid #eef1f6;border-radius:8px;overflow:hidden">
+      <tr style="background:#0d1f3c"><th style="padding:9px 10px;text-align:left;color:#fff;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px">Bloque</th><th style="padding:9px 10px;text-align:left;color:#fff;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px">Opción</th><th style="padding:9px 10px;text-align:right;color:#fff;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px">Precio</th></tr>
+      ${rows}
+      <tr><td colspan="2" style="padding:10px;background:#eef3fc;font-weight:700;color:#0d1f3c;font-size:13px">Total estimado</td><td style="padding:10px;background:#eef3fc;font-weight:700;color:#0d1f3c;font-size:13px;text-align:right">${esc(totals && totals.total)}</td></tr>
+    </table>
+    ${accepted ? `<p style="margin:16px 0 0">Nos vamos a contactar por este mismo correo para coordinar los próximos pasos (pago inicial y visita de relevamiento).</p>` : ''}
+    ${comments ? infoRow('Tu comentario', esc(comments)) : ''}
+    <p style="margin:16px 0 0;color:#8590a3;font-size:12px">¿Alguna duda? Respondé este correo o escribinos a ${esc(CONTACT_EMAIL)}.</p>
+  `;
+  const clientHtml = emailShell({
+    eyebrow: 'Copia de tu respuesta',
+    title: accepted ? '¡Gracias por confirmar!' : 'Recibimos tu respuesta',
+    accent,
+    bodyHtml: clientBody,
+    footerNote: `Alystech · Soluciones en Software y Seguridad Informática · ${esc(CONTACT_EMAIL)}`
+  });
+  await sendMail(clientEmail, accepted ? 'Confirmación: propuesta aceptada — Alystech' : 'Confirmación: propuesta rechazada — Alystech', clientHtml);
+
   res.json({ ok: true });
 });
 
@@ -194,10 +223,27 @@ app.post('/api/consulta', async (req, res) => {
     bodyHtml: body
   });
   await notify(subject, html);
+
+  // Copia de confirmación al cliente, al email que ingresó en el formulario.
+  const clientBody = `
+    <p style="margin:0 0 16px">Hola ${esc(name)}, recibimos tu consulta. Te vamos a responder por este mismo correo a la brevedad.</p>
+    <div style="background:#eef3fc;border:1px solid #cfe0f7;border-radius:10px;padding:14px 16px;color:#1e3d6b">
+      <span style="display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#48546b;margin-bottom:6px">Tu mensaje</span>
+      ${esc(message).replace(/\n/g, '<br>')}
+    </div>
+    <p style="margin:16px 0 0;color:#8590a3;font-size:12px">¿Querés agregar algo? Respondé este correo o escribinos a ${esc(CONTACT_EMAIL)}.</p>
+  `;
+  const clientHtml = emailShell({
+    eyebrow: 'Consulta recibida',
+    title: 'Recibimos tu consulta',
+    accent: '#2f6fed',
+    bodyHtml: clientBody,
+    footerNote: `Alystech · Soluciones en Software y Seguridad Informática · ${esc(CONTACT_EMAIL)}`
+  });
+  await sendMail(email, 'Recibimos tu consulta — Alystech', clientHtml);
+
   res.json({ ok: true });
 });
-
-const CONTACT_EMAIL = process.env.NOTIFY_EMAIL || 'aramirez@alystechpy.online';
 
 const NEXT_STEPS = [
   ['Paso 1', 'Aceptación de la propuesta desde la página interactiva (botón «Aceptar propuesta»).'],
@@ -252,17 +298,20 @@ app.post('/api/pdf', (req, res) => {
   doc.moveTo(50, 100).lineTo(545, 100).strokeColor('#2563eb').lineWidth(2).stroke();
   doc.lineWidth(1);
 
+  const titleText = 'Presupuesto — Plataforma de gestión móvil y seguridad informática';
   doc.fontSize(16).fillColor('#0d1f3c').font('Helvetica-Bold')
-    .text('Presupuesto — Plataforma de gestión móvil y seguridad informática', 50, 116, { width: 495 });
-  let y = 148;
+    .text(titleText, 50, 116, { width: 495, lineGap: 2 });
+  // Title can wrap to 2 lines — measure it instead of assuming 1, or the client-name
+  // line below renders on top of the title's second line.
+  let y = 116 + doc.heightOfString(titleText, { width: 495, fontSize: 16, lineGap: 2 }) + 14;
   doc.fontSize(10).fillColor('#48546b').font('Helvetica-Bold').text('Cliente: Araucanos S.A.', 50, y);
-  y += 15;
-  if (clientName) { doc.font('Helvetica').fillColor('#48546b').text(`Confirmado por: ${clientName}`, 50, y); y += 15; }
+  y += 16;
+  if (clientName) { doc.font('Helvetica').fillColor('#48546b').text(`Confirmado por: ${clientName}`, 50, y); y += 16; }
 
-  y += 6;
+  y += 10;
   const introText = 'Este documento resume la configuración elegida en la propuesta interactiva de Alystech para Araucanos S.A.: los módulos seleccionados, su desglose de inversión y las condiciones comerciales. Los montos son estimativos, sujetos a confirmación tras el relevamiento en sitio.';
   doc.fontSize(9).fillColor('#48546b').font('Helvetica').text(introText, 50, y, { width: 495, lineGap: 2 });
-  y += doc.heightOfString(introText, { width: 495, fontSize: 9 }) + 18;
+  y += doc.heightOfString(introText, { width: 495, fontSize: 9, lineGap: 2 }) + 24;
 
   doc.fontSize(11).fillColor('#0d1f3c').font('Helvetica-Bold').text('Configuración seleccionada', 50, y);
   y += 22;
@@ -312,13 +361,13 @@ app.post('/api/pdf', (req, res) => {
       y += 6;
     }
 
-    y += 12;
-    doc.moveTo(50, y - 6).lineTo(545, y - 6).strokeColor('#eef1f6').stroke();
+    y += 16;
+    doc.moveTo(50, y - 8).lineTo(545, y - 8).strokeColor('#eef1f6').stroke();
   });
 
   // Investment summary — one-time and recurring shown as two clearly separated boxes.
   if (y + 70 > 750) { doc.addPage(); y = 50; }
-  y += 12;
+  y += 16;
   doc.rect(50, y, 300, 60).fill('#eef3fc');
   doc.rect(360, y, 185, 60).fill('#f4f7fb');
   doc.fillColor('#0d1f3c').fontSize(8.5).font('Helvetica-Bold').text('TOTAL AÑO 1 (pago único + recurrente, estimativo con IVA incluido)', 65, y + 10, { width: 270 });

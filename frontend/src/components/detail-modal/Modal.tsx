@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { GlassPanel, GlassPanelHeader, GlassPanelBody, GlassPanelFooter } from '../ui/GlassPanel';
+import { GlassPanel, GlassPanelHeader, GlassPanelBody } from '../ui/GlassPanel';
 import { GhostButton } from '../ui/ActionButton';
 
 interface ModalProps {
@@ -52,9 +52,9 @@ export function Modal({ open, onClose, title, children, footer }: ModalProps) {
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-2xl max-h-[90dvh] overflow-hidden"
           >
-            <GlassPanel variant="modal" className="h-full flex flex-col">
+            <GlassPanel variant="light" className="h-full flex flex-col !bg-white">
               {/* Header */}
-              <GlassPanelHeader className="bg-white/95 border-border-slate">
+              <GlassPanelHeader className="border-border-slate px-6 pt-6">
                 <h3 className="font-headline-md text-headline-md text-on-surface leading-snug">{title}</h3>
                 <GhostButton
                   onClick={onClose}
@@ -69,13 +69,13 @@ export function Modal({ open, onClose, title, children, footer }: ModalProps) {
               </GlassPanelHeader>
 
               {/* Content (scrollable) */}
-              <GlassPanelBody className="overflow-y-auto p-6">{children}</GlassPanelBody>
+              <GlassPanelBody className="flex-1 min-h-0 overflow-y-auto p-6">{children}</GlassPanelBody>
 
               {/* Footer */}
               {footer && (
-                <GlassPanelFooter sticky className="bg-white/95 border-border-slate">
+                <div className="shrink-0 sticky bottom-0 bg-white border-t border-border-slate px-6 py-4 flex items-center justify-end gap-3">
                   {footer}
-                </GlassPanelFooter>
+                </div>
               )}
             </GlassPanel>
           </motion.div>
