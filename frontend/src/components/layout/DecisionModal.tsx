@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { DecisionModalContent } from '@/types/proposal';
 import { Modal } from '../detail-modal/Modal';
+import { PrimaryButton, SecondaryButton, DangerButton } from '../ui/ActionButton';
 
 export interface DecisionFormValues {
   clientName: string;
@@ -18,6 +19,10 @@ interface DecisionModalProps {
 }
 
 const EMPTY: DecisionFormValues = { clientName: '', clientEmail: '', clientPhone: '', comments: '' };
+
+const fieldLabelClass = 'mb-1.5 block font-label-caps text-label-caps text-ink-muted';
+const inputClass =
+  'w-full min-h-[44px] rounded-lg border border-border-slate bg-white px-3 py-2 font-body-base text-body-base text-on-surface placeholder:text-ink-muted outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20';
 
 export function DecisionModal({ kind, content, summaryText, onClose, onSubmit }: DecisionModalProps) {
   const [values, setValues] = useState<DecisionFormValues>(EMPTY);
@@ -46,88 +51,83 @@ export function DecisionModal({ kind, content, summaryText, onClose, onSubmit }:
   const title = isAccept ? content.acceptTitle : content.rejectTitle;
   const hint = isAccept ? content.acceptHint : content.rejectHint;
   const submitLabel = isAccept ? content.acceptSubmitLabel : content.rejectSubmitLabel;
+  const SubmitButton = isAccept ? PrimaryButton : DangerButton;
 
   const footer =
     status !== 'done' ? (
-      <div className="flex justify-end gap-2">
-        <button type="button" onClick={handleClose} className="rounded-lg px-4 py-2 text-[13px] font-semibold text-slate hover:bg-line-soft">
-          Cancelar
-        </button>
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={status === 'sending'}
-          className={`rounded-lg px-4 py-2 text-[13px] font-bold text-white disabled:opacity-60 ${
-            isAccept ? 'bg-green hover:bg-green/90' : 'bg-red hover:bg-red/90'
-          }`}
-        >
-          {status === 'sending' ? 'Enviando…' : submitLabel}
-        </button>
-      </div>
+      <>
+        <SecondaryButton onClick={handleClose} size="sm">
+          <span className="font-label-caps text-label-caps">Cancelar</span>
+        </SecondaryButton>
+        <SubmitButton onClick={handleSubmit} disabled={status === 'sending'} loading={status === 'sending'} size="sm">
+          <span className="font-label-caps text-label-caps">{status === 'sending' ? 'Enviando…' : submitLabel}</span>
+        </SubmitButton>
+      </>
     ) : undefined;
 
   return (
     <Modal open={kind !== null} onClose={handleClose} title={title} footer={footer}>
       {status === 'done' ? (
         <div className="flex flex-col items-center gap-2 py-6 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-soft text-green">
-            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M8 12l3 3 5-6" />
-            </svg>
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-positive/10 text-positive">
+            <span className="material-symbols-outlined text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+              check_circle
+            </span>
           </div>
-          <h4 className="text-base font-bold text-navy">{content.okTitle}</h4>
-          <p className="text-[13px] text-slate">{content.okText}</p>
+          <h4 className="font-headline-md text-headline-md text-on-surface">{content.okTitle}</h4>
+          <p className="font-body-medium text-body-medium text-ink-secondary">{content.okText}</p>
         </div>
       ) : (
         <div className="space-y-3.5">
-          <p className="text-[13px] text-slate">{hint}</p>
-          <div className="rounded-lg border border-line bg-bg/60 p-3 text-[12px] text-ink">
-            <b className="mb-1 block text-navy">{content.summaryLabel}</b>
+          <p className="font-body-medium text-body-medium text-ink-secondary">{hint}</p>
+          <div className="rounded-lg border border-border-slate bg-surface-container-low p-3 font-body-base text-body-base text-ink-secondary">
+            <b className="mb-1 block text-on-surface">{content.summaryLabel}</b>
             {summaryText}
           </div>
           <label className="block">
-            <span className="mb-1 block text-[12px] font-semibold text-navy">Nombre y apellido</span>
+            <span className={fieldLabelClass}>Nombre y apellido</span>
             <input
               type="text"
               value={values.clientName}
               onChange={(e) => setValues((v) => ({ ...v, clientName: e.target.value }))}
               placeholder="Nombre de quien confirma"
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-blue focus:ring-2 focus:ring-blue/20"
+              className={inputClass}
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-[12px] font-semibold text-navy">Email</span>
+            <span className={fieldLabelClass}>Email</span>
             <input
               type="email"
               value={values.clientEmail}
               onChange={(e) => setValues((v) => ({ ...v, clientEmail: e.target.value }))}
               placeholder="tu@empresa.com"
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-blue focus:ring-2 focus:ring-blue/20"
+              className={inputClass}
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-[12px] font-semibold text-navy">Teléfono (opcional)</span>
+            <span className={fieldLabelClass}>Teléfono (opcional)</span>
             <input
               type="text"
               value={values.clientPhone}
               onChange={(e) => setValues((v) => ({ ...v, clientPhone: e.target.value }))}
               placeholder="+595..."
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-blue focus:ring-2 focus:ring-blue/20"
+              className={inputClass}
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-[12px] font-semibold text-navy">Comentarios (opcional)</span>
+            <span className={fieldLabelClass}>Comentarios (opcional)</span>
             <textarea
               value={values.comments}
               onChange={(e) => setValues((v) => ({ ...v, comments: e.target.value }))}
               placeholder="Alguna aclaración sobre la decisión..."
               rows={3}
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-blue focus:ring-2 focus:ring-blue/20"
+              className={inputClass}
             />
           </label>
           {status === 'error' && (
-            <p className="text-[12px] font-medium text-red">No pudimos enviar tu respuesta. Probá de nuevo en un momento.</p>
+            <p className="font-body-medium text-body-medium text-danger">
+              No pudimos enviar tu respuesta. Probá de nuevo en un momento.
+            </p>
           )}
         </div>
       )}

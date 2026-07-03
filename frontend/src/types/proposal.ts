@@ -365,6 +365,13 @@ export interface ConsultaPayload {
   message: string;
 }
 
+/** Charged addon line for a selection summary — mirrors a CostLine but sourced from AddonItem (label, not category) */
+export interface SelectionAddonLine {
+  label: string;
+  amountUsd: number;
+  recurring?: boolean;
+}
+
 /** Enriched per-selection summary sent to /api/pdf so the server can render a detailed, professional quote */
 export interface SelectionSummary {
   group: GroupId;
@@ -374,4 +381,6 @@ export interface SelectionSummary {
   id: string;
   description?: string;
   costBreakdown?: CostLine[];
+  /** addons selected for this group's tier that are charged (excludes addons already bundled into the tier) */
+  addons?: SelectionAddonLine[];
 }

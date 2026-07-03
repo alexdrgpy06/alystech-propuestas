@@ -1,54 +1,130 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
 
-  /* ── Escala tipográfica ──
-     Reemplaza los text-[Npx] arbitrarios dispersos en los componentes.
-     text-xs/sm/base/lg/xl/2xl/3xl siguen siendo los defaults de Tailwind (12/14/16/18/20/24/30px);
-     los tres pasos de abajo cubren el rango de texto pequeño (eyebrows, badges, notas) que
-     antes se resolvía con valores arbitrarios sueltos por componente. */
-  --text-3xs: 0.5625rem; /* 9px  — eyebrows, badges diminutos */
-  --text-2xs: 0.6875rem; /* 11px — labels secundarios, notas al pie */
-  --text-md: 0.8125rem;  /* 13px — texto entre xs (12px) y sm (14px), el más usado en cuerpo de tarjetas */
+  /* ── Typography Scale (DESIGN.md) ── */
+  --text-display-lg: 2.25rem;    /* 36px */
+  --text-display-lg--line-height: 2.75rem; /* 44px */
+  --text-display-lg--font-weight: 800;
+  --text-display-lg--letter-spacing: -0.02em;
 
-  /* ── Surface (dark shell) ── */
-  --color-surface: #0f172a;
+  --text-headline-md: 1.5rem;    /* 24px */
+  --text-headline-md--line-height: 2rem;   /* 32px */
+  --text-headline-md--font-weight: 800;
+  --text-headline-md--letter-spacing: -0.01em;
+
+  --text-body-base: 1rem;        /* 16px */
+  --text-body-base--line-height: 1.5rem;   /* 24px */
+  --text-body-base--font-weight: 400;
+
+  --text-body-medium: 0.875rem;  /* 14px */
+  --text-body-medium--line-height: 1.25rem; /* 20px */
+  --text-body-medium--font-weight: 500;
+
+  --text-label-caps: 0.6875rem;  /* 11px */
+  --text-label-caps--line-height: 1rem;   /* 16px */
+  --text-label-caps--font-weight: 700;
+  --text-label-caps--letter-spacing: 0.15em;
+
+  --text-display-lg-mobile: 1.875rem; /* 30px */
+  --text-display-lg-mobile--line-height: 2.25rem; /* 36px */
+  --text-display-lg-mobile--font-weight: 800;
+  --text-display-lg-mobile--letter-spacing: -0.02em;
+
+  /* ── Colors (DESIGN.md) ── */
+  /* Surface Architecture */
+  --color-surface: #f7f9fb;
+  --color-surface-dim: #d8dadc;
+  --color-surface-bright: #f7f9fb;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f6;
+  --color-surface-container: #eceef0;
+  --color-surface-container-high: #e6e8ea;
+  --color-surface-container-highest: #e0e3e5;
+  --color-on-surface: #191c1e;
+  --color-on-surface-variant: #434655;
+  --color-inverse-surface: #2d3133;
+  --color-inverse-on-surface: #eff1f3;
+  --color-outline: #737686;
+  --color-outline-variant: #c3c6d7;
+
+  /* Brand & Interactive */
+  --color-surface-tint: #0053db;
+  --color-primary: #004ac6;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #2563eb;
+  --color-on-primary-container: #eeefff;
+  --color-inverse-primary: #b4c5ff;
+
+  --color-secondary: #565e74;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #dae2fd;
+  --color-on-secondary-container: #5c647a;
+
+  --color-tertiary: #4b566a;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #636e83;
+  --color-on-tertiary-container: #ecf1ff;
+
+  /* Semantic */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-primary-fixed: #dbe1ff;
+  --color-primary-fixed-dim: #b4c5ff;
+  --color-on-primary-fixed: #00174b;
+  --color-on-primary-fixed-variant: #003ea8;
+
+  --color-secondary-fixed: #dae2fd;
+  --color-secondary-fixed-dim: #bec6e0;
+  --color-on-secondary-fixed: #131b2e;
+  --color-on-secondary-fixed-variant: #3f465c;
+
+  --color-tertiary-fixed: #d8e3fb;
+  --color-tertiary-fixed-dim: #bcc7de;
+  --color-on-tertiary-fixed: #111c2d;
+  --color-on-tertiary-fixed-variant: #3c475a;
+
+  --color-background: #f7f9fb;
+  --color-on-background: #191c1e;
+  --color-surface-variant: #e0e3e5;
+
+  /* Custom Brand Tokens */
+  --color-ink-navy: #0d1f3c;
+  --color-ink-secondary: #475569;
+  --color-ink-muted: #94a3b8;
+  --color-border-slate: #e2e8f0;
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+  --color-accent-soft: #eff6ff;
+
+  /* Legacy compat aliases */
+  --color-surface-dark: #0f172a;
   --color-surface-alt: #1e293b;
   --color-surface-border: rgba(255, 255, 255, 0.06);
-
-  /* ── Card (light content area) ── */
   --color-card: #ffffff;
   --color-card-hover: #f8fafc;
   --color-card-border: #e2e8f0;
-
-  /* ── Brand palette ── */
   --color-navy: #0d1f3c;
   --color-navy-2: #17335c;
   --color-steel: #2c5788;
   --color-accent: #2563eb;
   --color-accent-hover: #1d4ed8;
-  --color-accent-soft: #eff6ff;
   --color-accent-muted: rgba(37, 99, 235, 0.08);
-
-  /* ── Semantic ── */
   --color-positive: #16a34a;
   --color-positive-soft: #f0fdf4;
   --color-positive-hover: #15803d;
   --color-amber: #d97706;
   --color-amber-soft: #fffbeb;
-  --color-danger: #dc2626;
-  --color-danger-soft: #fef2f2;
-
-  /* ── Text ── */
   --color-ink: #0f172a;
-  --color-ink-secondary: #475569;
-  --color-ink-muted: #94a3b8;
   --color-ink-on-dark: #f1f5f9;
   --color-ink-on-dark-secondary: #94a3b8;
-
-  /* ── Legacy compat ── */
   --color-blue: #2563eb;
   --color-blue-dark: #1d4ed8;
   --color-blue-soft: #eff6ff;
@@ -63,6 +139,25 @@
   --color-line: #e2e8f0;
   --color-line-soft: #f1f5f9;
   --color-bg: #0f172a;
+
+  /* ── Border Radius (DESIGN.md) ── */
+  --radius-sm: 0.25rem;    /* 4px */
+  --radius-default: 0.5rem;  /* 8px */
+  --radius-md: 0.75rem;    /* 12px */
+  --radius-lg: 1rem;       /* 16px */
+  --radius-xl: 1.5rem;     /* 24px */
+  --radius-full: 9999px;
+
+  /* ── Spacing (DESIGN.md) ── */
+  --spacing-unit: 4px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-margin-mobile: 16px;
+  --spacing-margin-desktop: 40px;
+  --spacing-max-width-content: 1024px;
 }
 
 @layer base {
@@ -71,7 +166,7 @@
   }
 
   body {
-    background: var(--color-surface);
+    background: var(--color-surface-dark);
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -88,10 +183,131 @@
       scroll-behavior: auto !important;
     }
   }
+
+  .material-symbols-outlined {
+    font-family: "Material Symbols Outlined";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.25rem;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: "liga";
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Glass Panel Utility */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border-slate);
+  }
+
+  .glass-panel-dark {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Grid Pattern Background */
+  .bg-grid-pattern {
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, rgba(226, 232, 240, 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(226, 232, 240, 0.4) 1px, transparent 1px);
+  }
+
+  /* Shell backdrop gradient orb */
+  .bg-gradient-orb {
+    background: radial-gradient(circle, var(--color-primary-container) 0%, transparent 70%);
+    opacity: 0.05;
+  }
+
+  /* Custom Radio Indicator */
+  .radio-indicator {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--color-border-slate);
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .radio-indicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .card-option {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .card-option:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-accent-soft);
+    box-shadow: 0 4px 20px rgba(0, 74, 198, 0.1);
+  }
+
+  .card-option.selected {
+    border-width: 2px;
+    border-color: var(--color-primary);
+    background-color: var(--color-accent-soft);
+  }
+
+  .card-option.selected .radio-indicator {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+  }
+
+  .card-option.selected .radio-indicator::after {
+    opacity: 1;
+  }
+
+  /* Progress Track Segments */
+  .progress-segment {
+    height: 0.5rem; /* 8px */
+    width: 2rem; /* 32px */
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+  }
+
+  .progress-segment.active {
+    background-color: var(--color-primary);
+  }
+
+  .progress-segment.inactive {
+    background-color: var(--color-surface-container-high);
+  }
+
+  /* Focus visible styles */
+  .focus-visible-ring:focus-visible {
+    outline: none;
+    ring: 2px;
+    ring-color: var(--color-primary);
+    ring-offset: 2px;
+    ring-offset-color: var(--color-surface-dark);
   }
 }

@@ -259,6 +259,24 @@ app.post('/api/pdf', (req, res) => {
       y += 6;
     }
 
+    if (s.addons && s.addons.length > 0) {
+      if (y + 14 > 750) { doc.addPage(); y = 50; }
+      doc.fillColor('#48546b').font('Helvetica-Bold').fontSize(8).text('Complementos seleccionados', 160, y, { width: 380 });
+      y += 14;
+
+      const addonsBoxHeight = s.addons.length * 16 + 12;
+      if (y + addonsBoxHeight > 750) { doc.addPage(); y = 50; }
+      doc.rect(160, y, 385, addonsBoxHeight).fill('#fafbfd');
+      doc.rect(160, y, 385, addonsBoxHeight).strokeColor('#eef1f6').stroke();
+      y += 6;
+      s.addons.forEach(line => {
+        doc.fillColor('#8590a3').font('Helvetica').fontSize(8.5).text(line.label, 170, y, { width: 200 });
+        doc.fillColor('#182437').font('Helvetica-Bold').text(line.recurring ? `$${line.amountUsd.toLocaleString('es-PY')}/año` : `$${line.amountUsd.toLocaleString('es-PY')}`, 450, y, { width: 85, align: 'right' });
+        y += 16;
+      });
+      y += 6;
+    }
+
     y += 12;
     doc.moveTo(50, y - 6).lineTo(545, y - 6).strokeColor('#eef1f6').stroke();
   });

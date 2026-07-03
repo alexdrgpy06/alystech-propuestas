@@ -1,7 +1,7 @@
-import type { JSX } from 'react';
 import { motion } from 'framer-motion';
 import type { TcoContent, Totals, OptionGroupContent } from '@/types/proposal';
 import { formatUsd } from '@/lib/currency';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 interface TcoComparisonStepProps {
   content: TcoContent;
@@ -9,39 +9,13 @@ interface TcoComparisonStepProps {
   groups: OptionGroupContent[];
 }
 
-// SVG icons for each module block
-const MODULE_ICONS: Record<string, JSX.Element> = {
-  mdm: (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-      <rect x="5" y="2" width="14" height="20" rx="2" />
-      <circle cx="12" cy="18" r="1" fill="currentColor" />
-    </svg>
-  ),
-  srv: (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-      <rect x="2" y="3" width="20" height="5" rx="1.5" />
-      <rect x="2" y="10" width="20" height="5" rx="1.5" />
-      <rect x="2" y="17" width="20" height="4" rx="1.5" />
-      <circle cx="18" cy="5.5" r="1" fill="currentColor" />
-      <circle cx="18" cy="12.5" r="1" fill="currentColor" />
-    </svg>
-  ),
-  net: (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-      <path strokeLinecap="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    </svg>
-  ),
-  aud: (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-      <circle cx="11" cy="11" r="8" />
-      <path strokeLinecap="round" d="M21 21l-4.35-4.35" />
-    </svg>
-  ),
-  sup: (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-      <path strokeLinecap="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-    </svg>
-  ),
+// Material Symbols icons for each module
+const MODULE_ICONS: Record<string, string> = {
+  mdm: 'devices',
+  srv: 'dns',
+  net: 'hub',
+  aud: 'security',
+  sup: 'support_agent',
 };
 
 export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStepProps) {
@@ -58,180 +32,208 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
   const savingsPct = Math.round((savingsUsd / saasTotal3Years) * 100);
 
   return (
-    <div className="space-y-6 pb-6 w-full max-w-4xl mx-auto flex-1 flex flex-col">
-
-      {/* Step header */}
-      <div className="text-center space-y-2">
-        <p className="text-2xs font-bold uppercase tracking-[0.2em] text-accent">Análisis Financiero</p>
-        <h2 className="text-xl sm:text-2xl font-extrabold text-navy">{content.title}</h2>
-        <p className="text-sm text-slate max-w-2xl mx-auto leading-relaxed">
-          Comparación de costos enfocada en licenciamiento, desarrollo, implementación y soporte técnico. Hardware excluido de ambas columnas por ser activo directo del cliente.
+    <div className="w-full flex flex-col gap-6 py-4">
+      {/* Step Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="text-center"
+      >
+        <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full font-label-caps text-label-caps mb-4">
+          Paso 12 de 13
+        </span>
+        <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm">
+          Comparativa de Inversión a 3 Años (TCO)
+        </h1>
+        <p className="font-headline-md text-headline-md text-ink-secondary font-medium">
+          Análisis proyectado de costos operativos y profesionales
         </p>
-      </div>
+      </motion.div>
 
-      {/* Main comparison: 2 columns */}
-      <div className="grid gap-4 md:grid-cols-2 items-stretch">
-        {/* SaaS column */}
-        <motion.div
-          initial={{ opacity: 0, x: -15 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="flex flex-col rounded-2xl border border-card-border bg-card overflow-hidden shadow-xs"
-        >
-          <div className="bg-card-hover px-5 py-4 border-b border-card-border">
-            <span className="text-3xs font-bold uppercase tracking-widest text-ink-secondary">Alternativa de Mercado</span>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-navy">{formatUsd(saasTotal3Years)}</span>
-              <span className="text-xs text-ink-muted">a {content.years} años</span>
+      {/* Financial Dashboard Grid */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.35 }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-lg"
+      >
+        {/* Dev Cost Card */}
+        <GlassPanel variant="light" elevated className="p-xl flex flex-col justify-between h-full">
+          <div className="flex items-start justify-between mb-lg">
+            <div className="bg-surface-container-low p-sm rounded-lg text-tertiary">
+              <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                code_blocks
+              </span>
             </div>
-            <p className="text-2xs text-ink-muted mt-0.5">Servicio SaaS Licenciado Regional</p>
+            <span className="font-label-caps text-label-caps text-ink-muted bg-surface-container-low px-sm py-xs rounded-md uppercase">CAPEX</span>
           </div>
-          <div className="flex-1 p-5 space-y-3">
-            {[
-              { label: `Licenciamiento MDM Cloud (80 disp. × ${content.years} años)`, value: formatUsd(content.saasPerDeviceUsd * content.deviceCount * content.years) },
-              { label: 'Licenciamiento Software Servidor / Firewall', value: '$20.000' },
-              { label: `Soporte Técnico Especializado (SLA ${content.years} años)`, value: formatUsd(saasSupport3Years) },
-            ].map((row, i) => (
-              <div key={i} className="flex justify-between items-start gap-3 text-xs">
-                <span className="text-slate leading-snug">{row.label}</span>
-                <span className="font-semibold text-navy whitespace-nowrap shrink-0">{row.value}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Alystech column */}
-        <motion.div
-          initial={{ opacity: 0, x: 15 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="flex flex-col rounded-2xl border-2 border-accent overflow-hidden shadow-md relative"
-        >
-          <div className="h-1 bg-gradient-to-r from-accent to-blue-dark" />
-          <div className="bg-accent-soft/50 px-5 py-4 border-b border-accent/20">
-            <span className="text-3xs font-bold uppercase tracking-widest text-accent">Solución Alystech</span>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-navy">{formatUsd(alystechTotal3Years)}</span>
-              <span className="text-xs text-navy/60">a {content.years} años</span>
+          <div>
+            <h3 className="font-body-medium text-body-medium text-ink-secondary mb-xs">Costo único de Desarrollo</h3>
+            <div className="font-display-lg text-display-lg text-on-background">
+              {formatUsd(alystechDev)} <span className="text-body-base font-body-base text-ink-muted font-normal">USD</span>
             </div>
-            <p className="text-2xs text-navy/60 mt-0.5">Implementación y Soporte Propio</p>
+            <p className="font-body-base text-body-base text-ink-muted mt-sm text-sm">
+              Inversión inicial para arquitectura, diseño e implementación del sistema core.
+            </p>
           </div>
-          <div className="flex-1 p-5 space-y-3">
-            {[
-              { label: 'Ingeniería, Desarrollo e Implementación (costo único)', value: formatUsd(alystechDev), color: 'text-navy' },
-              { label: 'Licenciamiento de Software Lógico', value: '$0 — Código Abierto', color: 'text-positive font-bold' },
-              { label: `Abono de Soporte y Suscripciones (${content.years} años acumulados)`, value: formatUsd(alystechSupport3Years), color: 'text-navy' },
-            ].map((row, i) => (
-              <div key={i} className="flex justify-between items-start gap-3 text-xs">
-                <span className="text-slate leading-snug">{row.label}</span>
-                <span className={`${row.color ?? 'font-semibold text-navy'} whitespace-nowrap shrink-0`}>{row.value}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
+        </GlassPanel>
 
-      {/* Savings banner */}
+        {/* Support Cost Card */}
+        <GlassPanel variant="light" elevated className="p-xl flex flex-col justify-between h-full">
+          <div className="flex items-start justify-between mb-lg">
+            <div className="bg-surface-container-low p-sm rounded-lg text-tertiary">
+              <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                support_agent
+              </span>
+            </div>
+            <span className="font-label-caps text-label-caps text-ink-muted bg-surface-container-low px-sm py-xs rounded-md uppercase">OPEX</span>
+          </div>
+          <div>
+            <h3 className="font-body-medium text-body-medium text-ink-secondary mb-xs">Soporte Acumulado (3 años)</h3>
+            <div className="font-display-lg text-display-lg text-on-background">
+              {formatUsd(alystechSupport3Years)} <span className="text-body-base font-body-base text-ink-muted font-normal">USD</span>
+            </div>
+            <p className="font-body-base text-body-base text-ink-muted mt-sm text-sm">
+              Mantenimiento, actualizaciones de seguridad y soporte técnico garantizado.
+            </p>
+          </div>
+        </GlassPanel>
+      </motion.div>
+
+      {/* Total TCO Card (Full Width) */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="rounded-2xl border border-positive/25 bg-positive-soft overflow-hidden"
+        transition={{ delay: 0.2, duration: 0.35 }}
+        className="bg-accent-soft border-2 border-primary rounded-xl p-xl shadow-md relative overflow-hidden"
       >
-        <div className="grid sm:grid-cols-[1fr_auto] gap-0 items-center">
-          <div className="px-5 sm:px-6 py-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-positive mb-1">Justificación del Retorno de Inversión</p>
-            <p className="text-sm leading-relaxed text-navy">
+        {/* Decorative background elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-container opacity-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-xl">
+          <div className="flex-1 w-full text-center md:text-left">
+            <div className="inline-flex items-center gap-sm font-label-caps text-label-caps text-primary mb-sm uppercase tracking-widest">
+              <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
+                account_balance
+              </span>
+              Total Cost of Ownership Proyectado
+            </div>
+            <div className="font-display-lg text-[48px] leading-tight font-extrabold text-on-primary-fixed-variant">
+              {formatUsd(alystechTotal3Years)} <span className="text-[24px] text-primary/70 font-normal">USD</span>
+            </div>
+          </div>
+          {/* Visual Breakdown Bar */}
+          <div className="w-full md:w-1/2">
+            <div className="flex justify-between text-body-medium font-body-medium text-ink-secondary mb-xs">
+              <span>Desarrollo ({Math.round((alystechDev / alystechTotal3Years) * 100)}%)</span>
+              <span>Soporte ({Math.round((alystechSupport3Years / alystechTotal3Years) * 100)}%)</span>
+            </div>
+            <div className="w-full h-4 bg-surface-container-highest rounded-full overflow-hidden flex shadow-inner">
+              <div className="h-full bg-primary transition-all duration-1000 ease-out" style={{ width: `${Math.round((alystechDev / alystechTotal3Years) * 100)}%` }} />
+              <div className="h-full bg-secondary-fixed transition-all duration-1000 ease-out delay-300" style={{ width: `${Math.round((alystechSupport3Years / alystechTotal3Years) * 100)}%` }} />
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Savings vs SaaS Alternative */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.35 }}
+        className="rounded-xl border border-positive/25 bg-positive/5 p-6"
+      >
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex-1">
+            <p className="font-label-caps text-label-caps text-positive mb-1">Justificación del Retorno de Inversión</p>
+            <p className="font-body-base text-body-base text-ink-secondary leading-relaxed">
               Al optar por Alystech, Araucanos S.A. evita cargos recurrentes de suscripción y reduce su costo total a 3 años en un <strong>{savingsPct}%</strong>, representando un ahorro neto de <strong>{formatUsd(savingsUsd)}</strong> en servicios profesionales, desarrollo e ingeniería.
             </p>
           </div>
-          <div className="bg-positive px-6 py-5 text-center sm:h-full flex flex-col items-center justify-center gap-0.5 shrink-0">
-            <span className="text-3xs font-bold uppercase tracking-widest text-white/80">Ahorro</span>
-            <span className="text-3xl font-black text-white">{savingsPct}%</span>
-            <span className="text-xs text-white/80">{formatUsd(savingsUsd)}</span>
+          <div className="bg-positive px-6 py-4 text-center flex flex-col items-center justify-center gap-1 shrink-0">
+            <span className="font-label-caps text-label-caps text-white/80">Ahorro Proyectado</span>
+            <span className="font-display-lg text-display-lg text-white">{savingsPct}%</span>
+            <span className="font-body-medium text-body-medium text-white/80">{formatUsd(savingsUsd)}</span>
           </div>
         </div>
       </motion.div>
 
       {/* Module-specific regional comparisons */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 h-px bg-card-border" />
-          <p className="text-2xs font-bold uppercase tracking-widest text-ink-muted shrink-0">
-            Comparativa Regional por Módulo
-          </p>
-          <div className="flex-1 h-px bg-card-border" />
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.35 }}
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex-1 h-px bg-border-slate" />
+          <p className="font-label-caps text-label-caps text-ink-muted shrink-0">Comparativa Regional por Módulo</p>
+          <div className="flex-1 h-px bg-border-slate" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {groups
             .filter((g) => g.tcoRegional)
             .map((g, idx) => {
-              let competitorLabel = g.tcoRegional!.competitorLabel;
-              let competitorValue = g.tcoRegional!.competitorValue;
-              let alystechLabel = g.tcoRegional!.alystechLabel;
-              let alystechValue = g.tcoRegional!.alystechValue;
-              let description = g.tcoRegional!.description;
-              let savingsText = g.tcoRegional!.savingsText;
+              const competitorLabel = g.tcoRegional!.competitorLabel;
+              const competitorValue = g.tcoRegional!.competitorValue;
+              const alystechLabel = g.tcoRegional!.alystechLabel;
+              const alystechValue = g.tcoRegional!.alystechValue;
+              const description = g.tcoRegional!.description;
+              const savingsText = g.tcoRegional!.savingsText;
 
-              if (g.id === 'srv') {
-                competitorLabel = 'Licencias de virtualización SaaS regional';
-                competitorValue = '$3.200 / año';
-                alystechLabel = 'Hipervisor Proxmox VE (Alystech)';
-                alystechValue = '$0 / año';
-                description = 'Comparación de costos de licenciamiento lógico para servidores centrales sin contemplar adquisición de hardware.';
-                savingsText = 'El uso de Proxmox VE evita abonos recurrentes por software de virtualización propietario.';
-              }
-
-              const icon = MODULE_ICONS[g.id];
+              const icon = MODULE_ICONS[g.id] || 'settings';
 
               return (
                 <motion.div
                   key={g.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + idx * 0.05 }}
-                  className="rounded-xl border border-card-border bg-card p-4 sm:p-5 space-y-3 shadow-xs hover:shadow-sm transition-shadow"
+                  transition={{ delay: 0.4 + idx * 0.05, duration: 0.3 }}
+                  className="rounded-xl border border-border-slate bg-surface-container-lowest p-4 sm:p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow"
                 >
                   {/* Module header */}
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-8 h-8 rounded-lg bg-accent-soft border border-accent/15 flex items-center justify-center text-accent shrink-0">
-                      {icon}
-                    </span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                      <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 0" }}>
+                        {icon}
+                      </span>
+                    </div>
                     <div className="min-w-0">
-                      <span className="text-3xs font-extrabold uppercase tracking-wider text-accent bg-accent-soft px-2 py-0.5 rounded-md border border-accent/15">
+                      <span className="font-label-caps text-label-caps text-primary bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20">
                         Bloque {g.code}
                       </span>
-                      <p className="text-sm font-bold text-navy mt-0.5 leading-tight">
-                        {g.title.split(' con ')[0].split(' y ')[0]}
+                      <p className="font-body-medium text-body-medium text-on-surface mt-1 leading-tight line-clamp-2">
+                        {g.title}
                       </p>
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate leading-relaxed">{description}</p>
+                  <p className="font-body-base text-body-base text-ink-secondary leading-relaxed">{description}</p>
 
                   {/* Comparison rows */}
-                  <div className="space-y-2 pt-1 border-t border-card-border">
+                  <div className="space-y-2 pt-2 border-t border-border-slate">
                     <div className="flex justify-between items-center gap-3 py-1">
-                      <span className="text-xs text-slate leading-snug flex-1">{competitorLabel}</span>
-                      <span className="bg-danger-soft text-danger font-bold rounded-lg px-2.5 py-1 text-2xs whitespace-nowrap border border-danger/15">
+                      <span className="font-body-base text-body-base text-ink-secondary leading-snug flex-1">{competitorLabel}</span>
+                      <span className="bg-danger-soft text-danger font-bold rounded-lg px-3 py-1.5 font-label-caps text-label-caps whitespace-nowrap border border-danger/20">
                         {competitorValue}
                       </span>
                     </div>
                     <div className="flex justify-between items-center gap-3 py-1">
-                      <span className="text-xs text-navy font-semibold leading-snug flex-1">{alystechLabel}</span>
-                      <span className="bg-positive-soft text-positive font-extrabold rounded-lg px-2.5 py-1 text-2xs whitespace-nowrap border border-positive/15">
+                      <span className="font-body-base text-body-base text-on-surface font-semibold leading-snug flex-1">{alystechLabel}</span>
+                      <span className="bg-positive-soft text-positive font-extrabold rounded-lg px-3 py-1.5 font-label-caps text-label-caps whitespace-nowrap border border-positive/20">
                         {alystechValue}
                       </span>
                     </div>
                   </div>
 
-                  <p className="text-2xs text-slate/80 italic leading-snug pt-1 border-t border-dashed border-card-border">
+                  <p className="font-body-medium text-body-medium text-ink-muted italic leading-snug pt-2 border-t border-dashed border-border-slate">
                     {savingsText}
                   </p>
                 </motion.div>
               );
             })}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -309,4 +309,28 @@ Formato: `[ ] Tarea — Aceptación — Verificación — Archivos`
 
 ---
 
+## Estado al 2026-07-03
+
+**Hecho (typecheck limpio, lint limpio, 55/55 tests en verde, build en verde):**
+- Payload de addons en `/api/pdf`/`/api/decision` resuelto — `buildSelectionSummaries` (`lib/api.ts`) ahora acepta `addonSelections` y agrega una sección "Complementos seleccionados" en el PDF (`server.js`), sin duplicar cobros de addons ya incluidos en el tier. Tests nuevos en `lib/api.test.ts`.
+- `DecisionModal`/`ConsultaModal`/`Modal.tsx` (formularios de aceptar/rechazar/consulta) rediseñados al sistema GlassPanel/ActionButton — antes seguían con el estilo pre-rediseño (`text-[12px]`, `text-navy`, `border-line`, botones/inputs sin componentizar), siendo la parte más crítica para conversión de toda la app.
+- Reemplazo de `text-[Npx]` restante completado en `layout/` (About, ActionBar, ConditionsAccordion, Hero, NextSteps, StickyTotalBar, TermsFooter), `detail-modal/` y el resto de `CanvasStep.tsx`. Todo lo que queda con `text-[Npx]` en el repo es tamaño de ícono Material Symbols (legítimo, no es texto de cuerpo).
+- Bug de datos encontrado y corregido en `TcoComparisonStep.tsx`: la card de Servidor mostraba cifras inventadas en JSX ("$3.200/año" licencias de virtualización) que no existen en `data/groups/srv.ts`, contradiciendo el dato real (comparativa de hardware). Se removió el override.
+- Bug encontrado y corregido: el título de cada card de comparativa regional se truncaba con un `.split(' y ')[0]` ingenuo, produciendo títulos sin sentido ("Gestión y Blindaje de la Flota..." → solo "Gestión").
+- Bug crítico de deploy encontrado y corregido: la mayoría de componentes importaba `motion/react`, pero `frontend/package.json` solo declaraba `framer-motion` — localmente resolvía por accidente vía un paquete `motion` instalado en la raíz del repo (ausente en el stage aislado de Docker). Se estandarizó todo a `framer-motion`. Esto habría roto el build de Coolify pese a funcionar en local.
+- `vite` fijado a `7.3.6` — la versión `^8.1.1` resolvía a `8.1.3` (rolldown-vite), con una regresión confirmada aguas arriba (vitejs/vite#22835) que rompía el build de producción.
+- `useReducedMotion`/`MotionConfig` de Framer Motion nunca se usaba pese al uso extensivo de `motion.*` — el override CSS de `prefers-reduced-motion` no alcanza a las animaciones JS de Framer Motion. Se agregó `<MotionConfig reducedMotion="user">` global en `main.tsx`.
+- **12 archivos de código muerto eliminados** (cero imports verificados): `OptionCard.tsx`, `GroupSection.tsx`, `OptionDetailModal.tsx`, `GroupDetailModal.tsx`, `ComparisonMatrixTable.tsx`, y los 7 componentes de layout pre-wizard (`Hero`, `About`, `ConditionsAccordion`, `NextSteps`, `TermsFooter`, `ActionBar`, `StickyTotalBar`) — nunca se conectaron al flujo del wizard actual.
+- Rediseño de `Shell`/`WizardHeader`/`WizardFooter` siguiendo una referencia Stitch actualizada provista por el usuario (`stitch_alystech_responsive_wizard_system (1)/code.html` + `screen.png`, 2026-07-03): header y footer pasan a ser píldoras flotantes (`fixed`, `rounded-2xl`) en todos los breakpoints; el footer ahora es oscuro y muestra el total corriente ("Inversión Año 1") junto a Atrás/Continuar. Cards de `OptionsStep`: precio "Desde $X", botón "Ver detalles" como píldora rellena, ícono reactivo al estado de selección (antes era estático por grupo, bug real).
+- Otros bugs de coherencia visual corregidos: fuente Material Symbols nunca se importaba (íconos se veían como texto literal `arrow_back`); `.progress-segment` con `height: 2px` en vez de 8px; overlay de los 3 modales con el mismo `z-50` que el footer fijo, causando que el footer se viera por encima del modal; `bg-bg` resolviendo a casi negro (texto invisible en 2 secciones, ya eliminadas); `text-blue-light`/`text-slate-light` referenciadas pero nunca definidas.
+
+**Pendiente, gateado explícitamente (no es descuido, requiere tu aprobación):**
+1. Tipo de cambio y comparativa MDM SaaS regional (ver tabla arriba) — sin aplicar.
+2. Inversión mínima de desarrollo — sigue fija en `conditions.ts`, no derivada dinámicamente.
+3. Addon de Soporte (D) por volumen — no construido todavía.
+
+**Deploy**: verificación local 100% en verde. Sin `git push` — el usuario confirmó explícitamente esperar antes de pushear ("todavía no, quiero revisar primero").
+
+---
+
 Documento vivo — se actualiza si alguna decisión cambia durante la implementación (ver "Keeping the Spec Alive").

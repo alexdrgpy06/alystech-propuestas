@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { AddonItem, CostLine } from '../../types/proposal';
 import { formatUsd } from '../../lib/currency';
 import { AddonMenu } from '../options/AddonMenu';
+import { GlassPanel, GlassPanelHeader, GlassPanelBody, GlassPanelFooter } from './GlassPanel';
+import { GhostButton } from './ActionButton';
 
 interface CostBreakdownModalProps {
   isOpen: boolean;
@@ -32,10 +34,10 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  hw: 'bg-amber-soft text-amber border-amber/20',
-  lab: 'bg-blue-soft text-blue border-blue/20',
-  lic: 'bg-accent-soft text-accent border-accent/20',
-  svc: 'bg-positive-soft text-positive border-positive/20',
+  hw: 'bg-amber/10 text-amber border-amber/20',
+  lab: 'bg-primary/10 text-primary border-primary/20',
+  lic: 'bg-primary/10 text-primary border-primary/20',
+  svc: 'bg-positive/10 text-positive border-positive/20',
 };
 
 export function CostBreakdownModal({
@@ -80,10 +82,28 @@ export function CostBreakdownModal({
   const recurringCosts = costs.filter((c) => c.recurring);
   const oneTimeCosts = costs.filter((c) => !c.recurring);
 
+  // Material Symbols icon mapping for groupIcon
+  const GROUP_ICONS: Record<string, string> = {
+    mdm: 'devices',
+    srv: 'dns',
+    net: 'hub',
+    aud: 'security',
+    sup: 'support_agent',
+  };
+
+  const getGroupIcon = (id?: string) => {
+    if (!id) return null;
+    return (
+      <span className="material-symbols-outlined text-[28px]" style={{ fontVariationSettings: "'FILL' 0" }}>
+        {GROUP_ICONS[id] || 'settings'}
+      </span>
+    );
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -91,10 +111,11 @@ export function CostBreakdownModal({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="absolute inset-0 bg-surface/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-surface-dark/80 backdrop-blur-md"
+            aria-hidden="true"
           />
 
-          {/* Modal — max-w-2xl for more content space */}
+          {/* Modal — GlassPanel */}
           <motion.div
             role="dialog"
             aria-modal="true"
@@ -103,173 +124,176 @@ export function CostBreakdownModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.18, ease: 'easeIn' } }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="relative bg-card rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden border border-card-border flex flex-col max-h-[90dvh]"
+            className="relative w-full max-w-2xl max-h-[85vh] overflow-hidden"
           >
-            {/* Header */}
-            <div className="shrink-0 bg-navy px-5 sm:px-6 py-4 border-b border-white/10 flex justify-between items-start gap-3">
-              <div className="flex items-start gap-3 min-w-0">
-                {groupIcon && (
-                  <span className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center text-xl shrink-0 mt-0.5">
-                    {groupIcon}
+            <GlassPanel variant="modal" className="h-full flex flex-col">
+              {/* Header */}
+              <GlassPanelHeader className="bg-white/95 border-border-slate">
+                <div className="flex items-start gap-3 min-w-0">
+                  {groupIcon && (
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                      {getGroupIcon(groupIcon)}
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className="font-label-caps text-label-caps text-primary">Ficha de Detalles</span>
+                      {optionCode && (
+                        <span className="font-label-caps text-label-caps bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">
+                          {optionCode}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="font-headline-md text-headline-md text-on-surface leading-snug">
+                      {title}
+                    </h3>
+                  </div>
+                </div>
+                <GhostButton
+                  onClick={onClose}
+                  size="sm"
+                  aria-label="Cerrar detalle"
+                  className="p-2 -m-1 rounded-full"
+                >
+                  <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 0" }}>
+                    close
                   </span>
-                )}
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-3xs font-bold uppercase tracking-wider text-accent/90">Ficha de Detalles</span>
-                    {optionCode && (
-                      <span className="text-3xs font-bold bg-white/10 text-ink-on-dark px-2 py-0.5 rounded-full">
-                        {optionCode}
-                      </span>
-                    )}
+                </GhostButton>
+              </GlassPanelHeader>
+
+              {/* Content (scrollable) */}
+              <GlassPanelBody className="overflow-y-auto p-6 space-y-6">
+                {/* Description */}
+                {description && (
+                  <div className="bg-surface-container-low rounded-lg border border-border-slate p-4">
+                    <p className="font-body-base text-body-base text-ink-secondary leading-relaxed">
+                      {description}
+                    </p>
                   </div>
-                  <h3 className="font-bold text-ink-on-dark text-sm sm:text-base mt-0.5 leading-snug">
-                    {title}
-                  </h3>
-                </div>
-              </div>
-              <button
-                onClick={onClose}
-                aria-label="Cerrar detalle"
-                className="text-ink-on-dark-secondary hover:text-ink-on-dark transition-colors rounded-full p-2 -m-1.5 hover:bg-white/10 shrink-0"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+                )}
 
-            {/* Content (scrollable) */}
-            <div className="flex-1 overflow-y-auto">
-              {/* Description — full width, top of modal */}
-              {description && (
-                <div className="px-5 sm:px-6 pt-5 pb-0">
-                  <p className="text-sm text-ink-secondary leading-relaxed bg-card-hover p-4 rounded-xl border border-card-border/50">
-                    {description}
-                  </p>
-                </div>
-              )}
-
-              {/* Two-column layout on desktop: features left, costs right */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-card-border/50">
-
-                {/* Left: Features */}
-                {features && features.length > 0 && (
-                  <div className="p-5 sm:p-6 space-y-3">
-                    <h4 className="text-2xs font-bold uppercase tracking-wider text-navy flex items-center gap-2">
-                      <span className="w-4 h-4 bg-positive-soft rounded flex items-center justify-center">
-                        <svg className="w-2.5 h-2.5 text-positive" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M2 6l3 3 5-5" />
-                        </svg>
-                      </span>
-                      Características incluidas
-                    </h4>
-                    <ul className="space-y-2">
-                      {features.map((feat, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs text-ink-secondary leading-relaxed">
-                          <span className={`text-xs shrink-0 mt-0.5 font-bold ${
-                            feat.status === 'no' ? 'text-danger' : feat.status === 'partial' ? 'text-amber' : 'text-positive'
-                          }`}>
-                            {feat.status === 'no' ? '✕' : feat.status === 'partial' ? '◑' : '✓'}
+                {/* Two-column layout on desktop: features left, costs right */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Left: Features */}
+                  {features && features.length > 0 && (
+                    <div className="space-y-3">
+                      <h4 className="font-label-caps text-label-caps text-primary flex items-center gap-2">
+                        <span className="w-8 h-8 rounded-lg bg-positive/10 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-[18px] text-positive" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            check_circle
                           </span>
-                          <span>{feat.text}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {/* Right: Cost breakdown */}
-                {costs && costs.length > 0 && (
-                  <div className="p-5 sm:p-6 space-y-4">
-                    <h4 className="text-2xs font-bold uppercase tracking-wider text-navy flex items-center gap-2">
-                      <span className="w-4 h-4 bg-accent-soft rounded flex items-center justify-center">
-                        <svg className="w-2.5 h-2.5 text-accent" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 1v10M3 4h6M3 8h6" />
-                        </svg>
-                      </span>
-                      Desglose de inversión
-                    </h4>
-
-                    {oneTimeCosts.length > 0 && (
-                      <div className="space-y-2">
-                        {recurringCosts.length > 0 && (
-                          <p className="text-3xs font-bold uppercase tracking-wider text-ink-muted">Costo único</p>
-                        )}
-                        {oneTimeCosts.map((cost, idx) => (
-                          <div key={idx} className="flex justify-between items-start gap-2 text-xs py-1 border-b border-card-border/30 last:border-0">
-                            <div className="flex items-start gap-1.5 flex-1 min-w-0">
-                              {cost.category && (
-                                <span className={`text-3xs font-bold border px-1.5 py-0.5 rounded shrink-0 mt-0.5 ${
-                                  CATEGORY_COLORS[cost.category] || 'bg-card-hover text-ink-muted border-card-border'
-                                }`}>
-                                  {CATEGORY_LABELS[cost.category] || cost.category}
-                                </span>
-                              )}
-                              <span className="text-ink-secondary leading-snug">{cost.label}</span>
-                            </div>
-                            <span className="font-semibold text-navy shrink-0 whitespace-nowrap">
-                              {formatUsd(cost.amountUsd)}
+                        </span>
+                        Características incluidas
+                      </h4>
+                      <ul className="space-y-2">
+                        {features.map((feat, idx) => (
+                          <li key={idx} className="flex items-start gap-2 font-body-medium text-body-medium text-body-medium text-ink-secondary leading-relaxed">
+                            <span className={`shrink-0 mt-0.5 ${
+                              feat.status === 'no' ? 'text-danger' : 
+                              feat.status === 'partial' ? 'text-warning' : 'text-positive'
+                            }`}>
+                              <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                {feat.status === 'no' ? 'close' : feat.status === 'partial' ? 'remove' : 'check'}
+                              </span>
                             </span>
-                          </div>
+                            <span>{feat.text}</span>
+                          </li>
                         ))}
-                      </div>
-                    )}
+                      </ul>
+                    </div>
+                  )}
 
-                    {recurringCosts.length > 0 && (
-                      <div className="space-y-2 pt-2">
-                        <p className="text-3xs font-bold uppercase tracking-wider text-ink-muted">Recurrente anual</p>
-                        {recurringCosts.map((cost, idx) => (
-                          <div key={idx} className="flex justify-between items-start gap-2 text-xs py-1 border-b border-card-border/30 last:border-0">
-                            <div className="flex items-start gap-1.5 flex-1 min-w-0">
-                              {cost.category && (
-                                <span className={`text-3xs font-bold border px-1.5 py-0.5 rounded shrink-0 mt-0.5 ${
-                                  CATEGORY_COLORS[cost.category] || 'bg-card-hover text-ink-muted border-card-border'
-                                }`}>
-                                  {CATEGORY_LABELS[cost.category] || cost.category}
-                                </span>
-                              )}
-                              <span className="text-ink-secondary leading-snug">{cost.label}</span>
+                  {/* Right: Cost breakdown */}
+                  {costs && costs.length > 0 && (
+                    <div className="space-y-4">
+                      <h4 className="font-label-caps text-label-caps text-primary flex items-center gap-2">
+                        <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-[18px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            account_balance
+                          </span>
+                        </span>
+                        Desglose de inversión
+                      </h4>
+
+                      {oneTimeCosts.length > 0 && (
+                        <div className="space-y-2">
+                          {recurringCosts.length > 0 && (
+                            <p className="font-label-caps text-label-caps text-ink-muted">Costo único</p>
+                          )}
+                          {oneTimeCosts.map((cost, idx) => (
+                            <div key={idx} className="flex justify-between items-start gap-2 font-body-base text-body-base py-1 border-b border-border-slate/30 last:border-0">
+                              <div className="flex items-start gap-1.5 flex-1 min-w-0">
+                                {cost.category && (
+                                  <span className={`font-label-caps text-label-caps border px-2 py-0.5 rounded shrink-0 mt-0.5 ${CATEGORY_COLORS[cost.category] || 'bg-surface-container-high text-ink-muted border-border-slate'}`}>
+                                    {CATEGORY_LABELS[cost.category] || cost.category}
+                                  </span>
+                                )}
+                                <span className="text-ink-secondary leading-snug">{cost.label}</span>
+                              </div>
+                              <span className="font-headline-md text-headline-md text-ink-navy shrink-0 whitespace-nowrap">
+                                {formatUsd(cost.amountUsd)}
+                              </span>
                             </div>
-                            <span className="font-semibold text-positive shrink-0 whitespace-nowrap">
-                              {formatUsd(cost.amountUsd)}/año
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
+                          ))}
+                        </div>
+                      )}
 
-              {/* Addon menu — full width below the two columns */}
-              {addons && tierId && onToggleAddon && (
-                <div className="px-5 sm:px-6 pb-2">
-                  <AddonMenu
-                    addons={addons}
-                    tierId={tierId}
-                    selectedAddonIds={selectedAddonIds}
-                    onToggle={onToggleAddon}
-                  />
+                      {recurringCosts.length > 0 && (
+                        <div className="space-y-2 pt-2 border-t border-border-slate">
+                          <p className="font-label-caps text-label-caps text-ink-muted">Recurrente anual</p>
+                          {recurringCosts.map((cost, idx) => (
+                            <div key={idx} className="flex justify-between items-start gap-2 font-body-base text-body-base py-1 border-b border-border-slate/30 last:border-0">
+                              <div className="flex items-start gap-1.5 flex-1 min-w-0">
+                                {cost.category && (
+                                  <span className={`font-label-caps text-label-caps border px-2 py-0.5 rounded shrink-0 mt-0.5 ${CATEGORY_COLORS[cost.category] || 'bg-surface-container-high text-ink-muted border-border-slate'}`}>
+                                    {CATEGORY_LABELS[cost.category] || cost.category}
+                                  </span>
+                                )}
+                                <span className="text-ink-secondary leading-snug">{cost.label}</span>
+                              </div>
+                              <span className="font-headline-md text-headline-md text-positive shrink-0 whitespace-nowrap">
+                                {formatUsd(cost.amountUsd)}/año
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                 </div>
-              )}
-            </div>
 
-            {/* Total Footer (fijo, siempre visible) */}
-            <div className="shrink-0 px-5 sm:px-6 py-4 border-t border-card-border bg-navy/5 flex justify-between items-center gap-3">
-              <div>
-                <p className="text-2xs font-bold uppercase tracking-wider text-ink-muted">
-                  {addonsTotal > 0 ? 'Total con addons seleccionados' : 'Total de la alternativa'}
-                </p>
-                {addonsTotal > 0 && (
-                  <p className="text-3xs text-ink-muted mt-0.5">
-                    Base: {formatUsd(total)} + addons: {formatUsd(addonsTotal)}
-                  </p>
+                {/* Addon menu — full width below the two columns */}
+                {addons && tierId && onToggleAddon && (
+                  <div className="pt-2 border-t border-border-slate">
+                    <AddonMenu
+                      addons={addons}
+                      tierId={tierId}
+                      selectedAddonIds={selectedAddonIds}
+                      onToggle={onToggleAddon}
+                    />
+                  </div>
                 )}
-              </div>
-              <span className="text-xl sm:text-2xl font-extrabold text-accent shrink-0">
-                {formatUsd(grandTotal)}
-              </span>
-            </div>
+
+              </GlassPanelBody>
+
+              {/* Total Footer (fixed, always visible) */}
+              <GlassPanelFooter sticky className="bg-white/95 border-border-slate">
+                <div>
+                  <p className="font-label-caps text-label-caps text-ink-muted">
+                    {addonsTotal > 0 ? 'Total con addons seleccionados' : 'Total de la alternativa'}
+                  </p>
+                  {addonsTotal > 0 && (
+                    <p className="font-body-medium text-body-medium text-ink-muted mt-0.5">
+                      Base: {formatUsd(total)} + addons: {formatUsd(addonsTotal)}
+                    </p>
+                  )}
+                </div>
+                <span className="font-display-lg text-display-lg text-primary shrink-0">
+                  {formatUsd(grandTotal)}
+                </span>
+              </GlassPanelFooter>
+            </GlassPanel>
           </motion.div>
         </div>
       )}

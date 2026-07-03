@@ -9,10 +9,14 @@
   },
   "dependencies": {
     "express": "^4.19.2",
+    "motion": "^12.42.2",
     "nodemailer": "^6.9.14",
     "pdfkit": "^0.15.0"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
   }
 }

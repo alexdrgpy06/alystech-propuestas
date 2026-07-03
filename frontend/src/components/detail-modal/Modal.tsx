@@ -1,5 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { GlassPanel, GlassPanelHeader, GlassPanelBody, GlassPanelFooter } from '../ui/GlassPanel';
+import { GhostButton } from '../ui/ActionButton';
 
 interface ModalProps {
   open: boolean;
@@ -26,43 +28,58 @@ export function Modal({ open, onClose, title, children, footer }: ModalProps) {
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-navy/60 backdrop-blur-sm sm:items-center sm:p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.18 }}
-          onClick={onClose}
-          role="presentation"
-        >
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-surface-dark/80 backdrop-blur-md"
+            aria-hidden="true"
+          />
+
+          {/* Modal — GlassPanel */}
           <motion.div
             role="dialog"
             aria-modal="true"
             aria-label={title}
-            className="flex max-h-[90dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:rounded-2xl"
             initial={{ opacity: 0, y: 24, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-2xl max-h-[90dvh] overflow-hidden"
           >
-            <div className="flex items-center justify-between border-b border-line px-5 py-4">
-              <h3 className="text-base font-bold text-navy">{title}</h3>
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Cerrar"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-slate transition-colors hover:bg-line-soft hover:text-navy"
-              >
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <path d="M18 6 6 18M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="overflow-y-auto px-5 py-5">{children}</div>
-            {footer && <div className="border-t border-line px-5 py-4">{footer}</div>}
+            <GlassPanel variant="modal" className="h-full flex flex-col">
+              {/* Header */}
+              <GlassPanelHeader className="bg-white/95 border-border-slate">
+                <h3 className="font-headline-md text-headline-md text-on-surface leading-snug">{title}</h3>
+                <GhostButton
+                  onClick={onClose}
+                  size="sm"
+                  aria-label="Cerrar"
+                  className="p-2 -m-1 rounded-full"
+                >
+                  <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 0" }}>
+                    close
+                  </span>
+                </GhostButton>
+              </GlassPanelHeader>
+
+              {/* Content (scrollable) */}
+              <GlassPanelBody className="overflow-y-auto p-6">{children}</GlassPanelBody>
+
+              {/* Footer */}
+              {footer && (
+                <GlassPanelFooter sticky className="bg-white/95 border-border-slate">
+                  {footer}
+                </GlassPanelFooter>
+              )}
+            </GlassPanel>
           </motion.div>
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );

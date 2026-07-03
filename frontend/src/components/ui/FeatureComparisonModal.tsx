@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GlassPanel, GlassPanelHeader, GlassPanelBody, GlassPanelFooter } from './GlassPanel';
+import { GhostButton } from './ActionButton';
 
 interface FeatureComparisonModalProps {
   isOpen: boolean;
@@ -21,7 +23,6 @@ export function FeatureComparisonModal({
   groupTitle,
   selectedOptionId,
 }: FeatureComparisonModalProps) {
-  // Cerrar con Escape y bloquear el scroll del body mientras el modal está abierto
   useEffect(() => {
     if (!isOpen) return;
     const onKeyDown = (e: KeyboardEvent) => {
@@ -119,7 +120,7 @@ export function FeatureComparisonModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -127,10 +128,11 @@ export function FeatureComparisonModal({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="absolute inset-0 bg-surface/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-surface-dark/80 backdrop-blur-md"
+            aria-hidden="true"
           />
 
-          {/* Modal content */}
+          {/* Modal — GlassPanel */}
           <motion.div
             role="dialog"
             aria-modal="true"
@@ -139,89 +141,103 @@ export function FeatureComparisonModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.18, ease: 'easeIn' } }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="relative bg-card rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden border border-card-border flex flex-col max-h-[85dvh]"
+            className="relative w-full max-w-3xl max-h-[85vh] overflow-hidden"
           >
-            {/* Header */}
-            <div className="shrink-0 bg-card-hover px-6 py-4 border-b border-card-border flex justify-between items-center">
-              <div>
-                <span className="text-2xs font-bold uppercase tracking-wider text-accent">Comparador de Alcance</span>
-                <h3 className="font-bold text-navy text-sm sm:text-base mt-0.5">
-                  Tabla de Características: {groupTitle}
-                </h3>
-              </div>
-              <button
-                onClick={onClose}
-                aria-label="Cerrar comparador"
-                className="text-ink-muted hover:text-ink transition-colors rounded-full p-2.5 -m-1.5 hover:bg-card-border/50"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+            <GlassPanel variant="modal" className="h-full flex flex-col">
+              {/* Header */}
+              <GlassPanelHeader className="bg-white/95 border-border-slate">
+                <div>
+                  <span className="font-label-caps text-label-caps text-primary">Comparador de Alcance</span>
+                  <h3 className="font-headline-md text-headline-md text-on-surface mt-1">
+                    Tabla de Características: {groupTitle}
+                  </h3>
+                </div>
+                <GhostButton
+                  onClick={onClose}
+                  size="sm"
+                  aria-label="Cerrar comparador"
+                  className="p-2 -m-1 rounded-full"
+                >
+                  <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 0" }}>
+                    close
+                  </span>
+                </GhostButton>
+              </GlassPanelHeader>
 
-            <div className="flex-1 p-6 overflow-x-auto overflow-y-auto">
-            <table className="w-full text-left text-xs sm:text-sm border-collapse">
-              <thead>
-                <tr className="border-b-2 border-line bg-slate-50/50">
-                  <th className="py-4 px-5 font-bold text-navy">Característica</th>
-                  {headers.map((h) => {
-                    const isSel = h.id === selectedOptionId;
-                    return (
-                      <th
-                        key={h.id}
-                        className={`py-4 px-5 text-center font-bold ${
-                          isSel ? 'text-blue bg-blue-50/50' : 'text-navy'
-                        }`}
-                      >
-                        <div>{h.code}</div>
-                        <div className="text-2xs font-normal text-slate mt-1">{h.name}</div>
-                        {isSel && (
-                          <span className="inline-block bg-blue text-white text-3xs px-2 py-0.5 rounded-full mt-1.5 shadow-sm">
-                            Seleccionado
-                          </span>
-                        )}
-                      </th>
-                    );
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, rIdx) => (
-                  <tr key={rIdx} className="border-b border-line-soft hover:bg-slate-50 transition-colors">
-                    <td className="py-3.5 px-5 font-semibold text-navy border-r border-line/40">{row.name}</td>
-                    {headers.map((h) => {
-                      const val = row.values[h.id];
-                      const isSel = h.id === selectedOptionId;
+              {/* Content (scrollable) */}
+              <GlassPanelBody className="overflow-x-auto overflow-y-auto p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b-2 border-border-slate bg-surface-container-low/50">
+                        <th className="py-4 px-4 font-bold text-ink-navy sticky left-0 z-10 bg-surface-container-low">Característica</th>
+                        {headers.map((h) => {
+                          const isSel = h.id === selectedOptionId;
+                          return (
+                            <th
+                              key={h.id}
+                              className={`py-4 px-4 text-center font-bold ${isSel ? 'text-primary bg-primary/5' : 'text-ink-navy'}`}
+                            >
+                              <div className="font-label-caps text-label-caps">{h.code}</div>
+                              <div className="font-body-medium text-body-medium text-ink-muted mt-1">{h.name}</div>
+                              {isSel && (
+                                <span className="inline-block bg-primary text-on-primary font-label-caps text-label-caps px-2 py-0.5 rounded-full mt-1.5 shadow-sm">
+                                  Seleccionado
+                                </span>
+                              )}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((row, rIdx) => (
+                        <tr key={rIdx} className="border-b border-border-slate/50 hover:bg-surface-container-low/50 transition-colors">
+                          <td className="py-3.5 px-4 font-semibold text-ink-navy border-r border-border-slate/40 sticky left-0 z-10 bg-white/95">{row.name}</td>
+                          {headers.map((h) => {
+                            const val = row.values[h.id];
+                            const isSel = h.id === selectedOptionId;
 
-                      let cellContent = null;
-                      if (val === true) {
-                        cellContent = <span className="inline-block bg-positive-soft text-positive text-xs font-bold px-2.5 py-0.5 rounded">Sí</span>;
-                      } else if (val === false) {
-                        cellContent = <span className="inline-block text-slate-400 text-xs font-medium">No</span>;
-                      } else {
-                        cellContent = <span className="inline-block bg-amber-100 text-amber-line text-xs font-bold px-2.5 py-0.5 rounded">{val}</span>;
-                      }
+                            let cellContent = null;
+                            if (val === true) {
+                              cellContent = (
+                                <span className="inline-block bg-positive/10 text-positive font-bold px-2.5 py-0.5 rounded border border-positive/20 font-label-caps text-label-caps">
+                                  Sí
+                                </span>
+                              );
+                            } else if (val === false) {
+                              cellContent = <span className="text-ink-muted font-medium">No</span>;
+                            } else {
+                              cellContent = (
+                                <span className="inline-block bg-warning/10 text-warning font-bold px-2.5 py-0.5 rounded border border-warning/20 font-label-caps text-label-caps">
+                                  {val}
+                                </span>
+                              );
+                            }
 
-                      return (
-                        <td
-                          key={h.id}
-                          className={`py-3.5 px-5 text-center align-middle ${isSel ? 'bg-blue-50/20' : ''}`}
-                        >
-                          {cellContent}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                            return (
+                              <td
+                                key={h.id}
+                                className={`py-3.5 px-4 text-center align-middle ${isSel ? 'bg-primary/5' : ''}`}
+                              >
+                                {cellContent}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </GlassPanelBody>
 
-          {/* Footer */}
-          <div className="shrink-0 bg-card-hover px-6 py-3 border-t border-card-border text-2xs text-ink-muted text-right">
-            Diferenciaciones de servicio según propuesta técnica.
-          </div>
+              {/* Footer */}
+              <GlassPanelFooter className="bg-surface-container-low border-border-slate">
+                <p className="font-body-medium text-body-medium text-ink-muted text-right">
+                  Diferenciaciones de servicio según propuesta técnica.
+                </p>
+              </GlassPanelFooter>
+            </GlassPanel>
           </motion.div>
         </div>
       )}
