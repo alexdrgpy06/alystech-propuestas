@@ -295,42 +295,70 @@ export function CanvasStep({
 
       {/* ── 2. Cuadrantes Project Canvas ── */}
       {content.quadrants && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {content.quadrants.map((quad, i) => (
-            <div key={i} className="rounded-xl border border-card-border bg-card p-5 shadow-xs space-y-3">
-              <h4 className="text-[11.5px] font-extrabold uppercase tracking-wider text-navy border-b border-card-border/50 pb-2">{quad.title}</h4>
-              <ul className="space-y-2">
-                {quad.items.map((item, j) => (
-                  <li key={j} className="text-[12px] leading-relaxed text-ink-secondary">• {item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="pt-8 space-y-5">
+          <div className="flex items-center gap-2">
+            <span className="bg-navy text-white rounded p-1">
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+            </span>
+            <h4 className="text-md sm:text-lg font-bold text-navy">Cuadrantes de Estrategia</h4>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {content.quadrants.map((quad, i) => (
+              <div key={i} className="rounded-2xl border border-line-soft bg-slate-50 p-5 shadow-sm transition-shadow hover:shadow-md">
+                <h5 className="text-sm font-extrabold text-navy border-b border-line-soft pb-3 mb-3">{quad.title}</h5>
+                <ul className="space-y-2.5">
+                  {quad.items.map((item, j) => (
+                    <li key={j} className="text-xs leading-relaxed text-ink-secondary flex items-start gap-2">
+                      <span className="text-accent font-bold mt-0.5">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
       {/* ── 3. Plan de Implementación (Roadmap) ── */}
       {content.roadmap && (
-        <div className="rounded-xl border border-card-border bg-card p-5 shadow-xs">
-          <h4 className="mb-4 text-xs sm:text-sm font-bold text-navy">6. Plan de Implementación de Ingeniería (Roadmap de 8 Semanas)</h4>
-          <div className="space-y-5 border-l-2 border-accent-soft pl-4">
-            {content.roadmap.map((phase, i) => (
-              <div key={i} className="relative">
-                <div className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full bg-accent" />
-                <div className="mb-1.5 flex items-center gap-2">
-                  <span className="rounded bg-accent-soft px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-accent">{phase.week}</span>
-                  <span className="text-xs sm:text-[13px] font-bold text-navy">{phase.phase}</span>
+        <div className="pt-8 space-y-5">
+          <div className="flex items-center gap-2">
+            <span className="bg-accent text-white rounded p-1">
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                <line x1="4" y1="22" x2="4" y2="15" />
+              </svg>
+            </span>
+            <h4 className="text-md sm:text-lg font-bold text-navy">Roadmap de Implementación</h4>
+          </div>
+          <div className="rounded-2xl border border-line-soft bg-white p-6 shadow-sm">
+            <div className="space-y-6 border-l-2 border-line pl-5 ml-2">
+              {content.roadmap.map((phase, i) => (
+                <div key={i} className="relative">
+                  <div className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-white bg-accent shadow-sm" />
+                  <div className="mb-2 flex items-center gap-3">
+                    <span className="rounded bg-accent-soft px-2 py-0.5 text-3xs font-bold uppercase tracking-wider text-accent">{phase.week}</span>
+                    <span className="text-sm font-bold text-navy">{phase.phase}</span>
+                  </div>
+                  {phase.milestone && (
+                    <div className="mb-2.5 inline-block rounded border border-positive/30 bg-positive-soft px-2 py-1 text-2xs font-bold text-positive-hover">
+                      Hito: {phase.milestone}
+                    </div>
+                  )}
+                  <ul className="space-y-1.5">
+                    {phase.actions.map((act, j) => (
+                      <li key={j} className="text-xs text-ink-secondary leading-relaxed">— {act}</li>
+                    ))}
+                  </ul>
                 </div>
-                {phase.milestone && (
-                  <p className="mb-2 text-[10.5px] font-bold text-positive">{phase.milestone}</p>
-                )}
-                <ul className="space-y-1">
-                  {phase.actions.map((act, j) => (
-                    <li key={j} className="text-[11.5px] text-ink-secondary leading-relaxed">— {act}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}

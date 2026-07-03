@@ -22,7 +22,7 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
   const savingsPct = Math.round((savingsUsd / saasTotal3Years) * 100);
 
   return (
-    <div className="space-y-8 pb-10 w-full max-w-4xl mx-auto">
+    <div className="space-y-8 pb-10 w-full max-w-4xl mx-auto flex-1 flex flex-col justify-stretch h-full">
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="mb-2 text-xl sm:text-2xl font-extrabold text-navy">{content.title}</h2>
         <p className="text-sm leading-relaxed text-slate">
@@ -30,11 +30,11 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 flex-1 items-stretch">
         <motion.div
           initial={{ opacity: 0, x: -15 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex flex-col rounded-2xl border border-card-border bg-card p-6 shadow-xs"
+          className="flex flex-col rounded-2xl border border-card-border bg-card p-6 shadow-xs h-full"
         >
           <div className="mb-4 text-center">
             <span className="mb-1 block text-2xs font-bold uppercase tracking-widest text-ink-secondary">Servicio SaaS Licenciado Regional</span>
@@ -60,25 +60,28 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
         <motion.div
           initial={{ opacity: 0, x: 15 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex flex-col rounded-2xl border border-navy bg-navy-2 p-6 text-white shadow-md"
+          className="flex flex-col rounded-2xl border-2 border-blue bg-blue-50/40 p-6 shadow-md relative overflow-hidden"
         >
+          {/* Subtle highlight band at the top */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue to-accent" />
+          
           <div className="mb-4 text-center">
-            <span className="mb-1 block text-2xs font-bold uppercase tracking-widest text-blue-300">Alystech (Implementación y Soporte Único)</span>
-            <div className="text-2xl font-black text-white">{formatUsd(alystechTotal3Years)}</div>
-            <div className="text-xs font-medium text-blue-200">Costo acumulado (Desarrollo y Soporte) a {content.years} años</div>
+            <span className="mb-1 block text-2xs font-bold uppercase tracking-widest text-blue">Alystech (Implementación y Soporte Único)</span>
+            <div className="text-2xl font-black text-navy">{formatUsd(alystechTotal3Years)}</div>
+            <div className="text-xs font-medium text-navy/70">Costo acumulado (Desarrollo y Soporte) a {content.years} años</div>
           </div>
-          <div className="mt-4 flex-1 space-y-3.5 border-t border-white/10 pt-4 text-xs text-white/80">
+          <div className="mt-4 flex-1 space-y-3.5 border-t border-blue/20 pt-4 text-xs text-ink-secondary">
             <div className="flex justify-between gap-4">
               <span>Ingeniería, Desarrollo e Implementación (Costo Único)</span>
-              <span className="font-semibold text-white">{formatUsd(alystechDev)}</span>
+              <span className="font-semibold text-navy">{formatUsd(alystechDev)}</span>
             </div>
             <div className="flex justify-between gap-4">
               <span>Licenciamiento de Software Lógico</span>
-              <span className="font-semibold text-white">$0 (Código Abierto)</span>
+              <span className="font-semibold text-positive">$0 (Código Abierto)</span>
             </div>
             <div className="flex justify-between gap-4">
               <span>Abono de Soporte y Suscripciones (3 años acumulados)</span>
-              <span className="font-semibold text-white">{formatUsd(alystechSupport3Years)}</span>
+              <span className="font-semibold text-navy">{formatUsd(alystechSupport3Years)}</span>
             </div>
           </div>
         </motion.div>
@@ -101,11 +104,11 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
       </motion.div>
 
       {/* Module-specific Regional comparisons */}
-      <div className="space-y-4 pt-8 border-t border-card-border">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-ink-muted text-center">
+      <div className="space-y-5 pt-8 border-t border-line-soft">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-slate text-center">
           Comparativa Regional por Módulo Operativo (Excluyendo Hardware)
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
           {groups
             .filter((g) => g.tcoRegional)
             .map((g, idx) => {
@@ -128,28 +131,32 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + idx * 0.05 }}
-                  className="rounded-xl border border-card-border bg-card p-5 space-y-3.5 shadow-xs"
+                  className="rounded-xl border border-line bg-card p-5 space-y-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
                 >
-                  <div className="flex justify-between items-start gap-2">
-                    <span className="text-3xs font-bold uppercase tracking-wider text-accent bg-accent-soft px-2 py-0.5 rounded-full shrink-0">
-                      {g.code}
-                    </span>
-                    <span className="text-xs font-bold text-navy text-right">{g.title}</span>
-                  </div>
-                  <p className="text-2xs text-ink-secondary leading-relaxed">
-                    {g.id === 'srv' ? 'Comparación de costos de licenciamiento lógico para servidores centrales sin contemplar adquisición de fierros:' : g.tcoRegional!.description}
-                  </p>
-                  <div className="space-y-2 text-xs">
-                    <div className="flex justify-between items-center py-1 border-b border-card-border/50 text-danger">
-                      <span>{competitorLabel}</span>
-                      <strong className="font-semibold">{competitorValue}</strong>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="text-3xs font-extrabold uppercase tracking-wider text-blue bg-blue-soft px-2.5 py-1 rounded-md shrink-0 border border-blue/10">
+                        Bloque {g.code}
+                      </span>
+                      <span className="text-sm font-bold text-navy text-right">{g.title.split(' con ')[0].split(' y ')[0]}</span>
                     </div>
-                    <div className="flex justify-between items-center py-1 text-positive">
-                      <span>{alystechLabel}</span>
-                      <strong className="font-bold">{alystechValue}</strong>
+                    <p className="text-xs text-slate leading-relaxed">
+                      {g.id === 'srv' ? 'Comparación de costos de licenciamiento lógico para servidores centrales sin contemplar adquisición de fierros:' : g.tcoRegional!.description}
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2.5 pt-2 border-t border-line-soft">
+                    <div className="flex justify-between items-center text-xs py-1 border-b border-line-soft">
+                      <span className="text-slate">{competitorLabel}</span>
+                      <span className="bg-red-soft text-red font-bold rounded px-2.5 py-0.5 whitespace-nowrap">{competitorValue}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs py-1">
+                      <span className="text-navy font-semibold">{alystechLabel}</span>
+                      <span className="bg-green-soft text-green font-extrabold rounded px-2.5 py-0.5 whitespace-nowrap">{alystechValue}</span>
                     </div>
                   </div>
-                  <p className="text-2xs text-ink-muted italic leading-snug pt-0.5">
+                  
+                  <p className="text-2xs text-slate/80 italic leading-snug pt-2 border-t border-dashed border-line">
                     {g.id === 'srv' ? 'El uso de Proxmox VE evita abonos recurrentes por software de virtualización propietario.' : g.tcoRegional!.savingsText}
                   </p>
                 </motion.div>

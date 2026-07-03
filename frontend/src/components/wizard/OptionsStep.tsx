@@ -27,12 +27,12 @@ export function OptionsStep({
     (content.addons ?? []).some((a) => !a.applicableTiers || a.applicableTiers.includes(optionId));
 
   return (
-    <div className="w-full md:h-full md:flex md:flex-col md:justify-center py-2">
+    <div className="w-full flex-1 flex flex-col justify-stretch h-full py-2">
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="rounded-2xl border border-card-border bg-card p-6 sm:p-10 flex flex-col justify-between shadow-sm md:flex-1 space-y-6 lg:space-y-8"
+        className="rounded-2xl border border-card-border bg-card p-6 sm:p-10 flex flex-col justify-between shadow-sm flex-1 space-y-6 lg:space-y-8 h-full"
       >
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -45,8 +45,8 @@ export function OptionsStep({
           </div>
         </div>
 
-        {/* Options grid - 2 columns on desktop with expanded font sizing */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 flex-1 items-center">
+        {/* Options grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 flex-1 items-stretch">
           {content.options.map((opt, idx) => {
             const isSelected = selectedOptionId === opt.id;
             const isRecommended = opt.badge?.tone === 'recommended';
@@ -60,7 +60,7 @@ export function OptionsStep({
                 whileHover={{ scale: 1.002 }}
                 whileTap={{ scale: 0.998 }}
                 onClick={() => onSelectOption(opt.id)}
-                className={`relative rounded-xl border-2 cursor-pointer transition-all duration-150 p-5 sm:p-6 flex flex-col justify-between h-full shadow-xs ${
+                className={`relative rounded-xl border-2 cursor-pointer transition-all duration-150 p-5 sm:p-6 flex flex-col h-full shadow-xs ${
                   isSelected
                     ? 'border-accent bg-accent-soft/60 shadow-sm'
                     : 'border-card-border bg-card hover:border-ink-muted/30 hover:shadow-sm'
@@ -72,7 +72,7 @@ export function OptionsStep({
                   </span>
                 )}
 
-                <div className="space-y-3.5">
+                <div className="flex-1 flex flex-col space-y-3.5">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
                       {/* Left Radio Selector */}
@@ -91,9 +91,9 @@ export function OptionsStep({
                     </div>
                   </div>
 
-                  {/* Concise description block */}
-                  <p className="text-2xs sm:text-md text-ink-secondary leading-relaxed pl-8.5 font-medium">
-                    {opt.description.split('.')[0] + '.'}
+                  {/* Description block */}
+                  <p className="text-sm sm:text-md text-ink-secondary leading-relaxed pl-8.5 font-medium line-clamp-3">
+                    {opt.description}
                   </p>
                 </div>
 

@@ -201,9 +201,23 @@ app.post('/api/pdf', (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename="Alystech-Presupuesto-Araucanos.pdf"`);
   doc.pipe(res);
 
-  doc.fillColor('#0d1f3c').fontSize(20).font('Helvetica-Bold').text('Alystech', 50, 50);
+  const logoPath = path.join(__dirname, 'public', 'logo.png');
+  let titleX = 50;
+  let subtitleX = 50;
+  
+  if (fs.existsSync(logoPath)) {
+    try {
+      doc.image(logoPath, 50, 45, { height: 35 });
+      titleX = 100; // Shift text right if logo is rendered
+      subtitleX = 100;
+    } catch (e) {
+      console.error('Error cargando logo PDF:', e);
+    }
+  }
+
+  doc.fillColor('#0d1f3c').fontSize(20).font('Helvetica-Bold').text('Alystech', titleX, 50);
   doc.fontSize(9).fillColor('#48546b').font('Helvetica')
-    .text('Soluciones en Software y Seguridad Informática', 50, 74)
+    .text('Soluciones en Software y Seguridad Informática', subtitleX, 74)
     .text(`Ref.: ${proposalId || 'AT-2026-0630-P'}   ·   Generado: ${new Date().toLocaleDateString('es-PY')}`, 50, 88);
   doc.moveTo(50, 108).lineTo(545, 108).strokeColor('#dde3ec').stroke();
 

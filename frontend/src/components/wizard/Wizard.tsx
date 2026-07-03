@@ -40,7 +40,7 @@ export function Wizard({
   const getGroup = (id: GroupId) => proposalContent.groups.find((g) => g.id === id);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex-1 flex flex-col justify-stretch min-h-0 h-full">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentStep}
@@ -48,7 +48,7 @@ export function Wizard({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
-          className="w-full flex justify-center"
+          className="w-full flex-1 flex flex-col justify-stretch min-h-0 h-full"
         >
           {/* Step 0: Welcome */}
           {currentStep === 0 && <IntroStep onStart={onStart} />}

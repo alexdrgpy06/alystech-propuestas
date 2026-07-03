@@ -7,12 +7,12 @@ interface DiagnosticStepProps {
 
 export function DiagnosticStep({ content }: DiagnosticStepProps) {
   return (
-    <div className="w-full md:h-full md:flex md:flex-col md:justify-center py-2">
+    <div className="w-full flex-1 flex flex-col justify-stretch h-full py-2">
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="rounded-2xl border border-card-border bg-card p-6 sm:p-10 flex flex-col justify-between shadow-sm md:flex-1 space-y-6 lg:space-y-8"
+        className="rounded-2xl border border-card-border bg-card p-6 sm:p-10 flex flex-col justify-between shadow-sm flex-1 space-y-6 lg:space-y-8 h-full"
       >
         {/* Header */}
         <div className="space-y-4">

@@ -3,7 +3,7 @@ import type { OptionGroupContent } from '../../types/proposal';
 export const srv: OptionGroupContent = {
   id: 'srv',
   stepIndex: 2,
-  code: 'B',
+  code: 'B.1',
   groupTitle: 'Bloque B.1 · Infraestructura Central',
   title: 'Servidor Local Dedicado con Alta Disponibilidad',
   risk: 'La operación central de Araucanos S.A. se sustenta actualmente sobre un computador de escritorio estándar, sin redundancia de almacenamiento ni protección eléctrica, que cumple funciones de servidor de archivos y base de datos.',

@@ -1,22 +1,25 @@
 import type { ComparisonMatrix } from '@/types/proposal';
 
 const TONE_CLASS: Record<'y' | 'n' | 'p', string> = {
-  y: 'text-green font-bold',
-  n: 'text-red',
-  p: 'text-amber-line font-bold',
+  y: 'bg-positive-soft text-positive font-bold rounded px-2 py-1',
+  n: 'text-slate-400 font-medium',
+  p: 'bg-amber-100 text-amber-line font-bold rounded px-2 py-1',
 };
 
 export function ComparisonMatrixTable({ matrix }: { matrix: ComparisonMatrix }) {
   return (
-    <div className="space-y-2">
-      <h4 className="text-[13px] font-bold text-navy">{matrix.title}</h4>
-      {matrix.intro && <p className="text-[12.5px] text-slate">{matrix.intro}</p>}
-      <div className="overflow-x-auto rounded-lg border border-line">
-        <table className="w-full min-w-[420px] border-collapse text-[12px]">
+    <div className="space-y-4">
+      <div>
+        <h4 className="text-md font-bold text-navy">{matrix.title}</h4>
+        {matrix.intro && <p className="text-sm text-slate mt-1">{matrix.intro}</p>}
+      </div>
+      
+      <div className="overflow-x-auto rounded-xl border border-line-soft shadow-xs">
+        <table className="w-full min-w-[500px] border-collapse text-xs">
           <thead>
-            <tr className="bg-navy text-white">
+            <tr className="bg-navy-2 text-white">
               {matrix.headers.map((h, i) => (
-                <th key={i} className="whitespace-nowrap px-2.5 py-2 text-left text-[11px] font-semibold">
+                <th key={i} className={`whitespace-nowrap px-4 py-3 text-left font-bold tracking-wide uppercase ${i === 0 ? 'bg-navy w-[40%]' : ''}`}>
                   {h}
                 </th>
               ))}
@@ -24,11 +27,13 @@ export function ComparisonMatrixTable({ matrix }: { matrix: ComparisonMatrix }) 
           </thead>
           <tbody>
             {matrix.rows.map((row, i) => (
-              <tr key={i} className="border-t border-line-soft">
-                <td className="bg-bg px-2.5 py-2 font-semibold text-navy">{row.label}</td>
+              <tr key={i} className="border-t border-line hover:bg-slate-50/50 transition-colors">
+                <td className="bg-bg px-4 py-3 font-semibold text-navy border-r border-line/50 leading-snug">{row.label}</td>
                 {row.cells.map((cell, j) => (
-                  <td key={j} className={`px-2.5 py-2 text-center text-ink ${cell.tone ? TONE_CLASS[cell.tone] : ''}`}>
-                    {cell.value}
+                  <td key={j} className="px-4 py-3 text-center align-middle">
+                    <span className={`inline-block text-ink ${cell.tone ? TONE_CLASS[cell.tone] : ''}`}>
+                      {cell.value}
+                    </span>
                   </td>
                 ))}
               </tr>
@@ -36,7 +41,8 @@ export function ComparisonMatrixTable({ matrix }: { matrix: ComparisonMatrix }) 
           </tbody>
         </table>
       </div>
-      {matrix.footnote && <p className="text-[11.5px] italic text-slate">{matrix.footnote}</p>}
+      
+      {matrix.footnote && <p className="text-xs italic text-slate/80">{matrix.footnote}</p>}
     </div>
   );
 }

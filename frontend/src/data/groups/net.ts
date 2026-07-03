@@ -9,6 +9,15 @@ export const net: OptionGroupContent = {
   risk: 'La red local de Araucanos S.A. no implementa segmentación lógica: el tráfico administrativo, la navegación del personal operativo y los accesos de terceros comparten el mismo canal y rango de direcciones IP.',
   impact: 'Esta configuración permite que una infección de malware en cualquier estación de trabajo se propague lateralmente a través de la LAN, comprometiendo directamente el servidor central y las bases de datos críticas.',
   guarantee: { title: 'Garantía de Aislamiento Lógico', text: 'Todas las alternativas contemplan la creación de VLANs seguras y reglas de cortafuegos dedicadas para aislar el tráfico del servidor administrativo del resto de la red corporativa.' },
+  tcoRegional: {
+    title: 'Referencia de Costos de Red Regional',
+    description: 'Estimación de abonos de administración y licenciamiento de firewalls comerciales en el Cono Sur:',
+    competitorLabel: 'Suscripción Fortinet/Meraki (abono anual)',
+    competitorValue: '$1.200 / año',
+    alystechLabel: 'Alystech — OPNsense sin abono de licencias',
+    alystechValue: '$0 / año',
+    savingsText: 'El uso de software lógico open-source (OPNsense) en el cortafuegos elimina los costos anuales de suscripción de firmas propietarias.'
+  },
   engineeringNote: {
     title: 'Nota Técnica: VPN Corporativa WireGuard',
     text: 'Con la opción recomendada se despliega una VPN cifrada basada en WireGuard, lo que permite al equipo directivo de Araucanos S.A. supervisar la consola de gestión móvil y acceder a los archivos corporativos de forma segura desde cualquier ubicación.'

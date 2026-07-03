@@ -127,18 +127,22 @@ function App() {
   return (
     <div className="min-h-screen bg-surface font-sans antialiased flex items-center justify-center px-4 py-4 selection:bg-accent/20 selection:text-accent">
       {/* ── App Shell (wrapped card) ── */}
-      <div className="w-full max-w-6xl flex flex-col shadow-2xl md:h-[calc(100dvh-2rem)] overflow-hidden rounded-2xl">
+      <div className="w-full max-w-[1440px] flex flex-col shadow-2xl md:h-[calc(100dvh-2rem)] overflow-hidden rounded-2xl">
         {/* ── HEADER ── */}
         <header className="bg-navy rounded-t-2xl border border-surface-border border-b-0 px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center font-extrabold text-lg text-white shadow-lg shadow-accent/30">
-              AT
+          <div className="flex items-center gap-4">
+            <div className="h-10 sm:h-12 flex items-center justify-center">
+              <img src="/logo.png" alt="Alystech" className="h-full w-auto object-contain" onError={(e) => {
+                // Fallback in case logo is missing
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.innerHTML = '<span class="font-extrabold text-navy">AT</span>';
+              }} />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-ink-on-dark tracking-tight">
+              <h1 className="text-sm sm:text-base font-bold text-ink-on-dark tracking-tight">
                 Alystech · Propuesta Técnica
               </h1>
-              <p className="text-2xs text-ink-on-dark-secondary">
+              <p className="text-2xs sm:text-xs text-ink-on-dark-secondary mt-0.5">
                 {STEP_LABELS[currentStep]}
               </p>
             </div>
@@ -170,7 +174,7 @@ function App() {
         </header>
 
         {/* ── CONTENT AREA ── */}
-        <main className="flex-1 bg-card border-x border-card-border overflow-y-auto">
+        <main className="flex-1 bg-card border-x border-card-border overflow-hidden flex flex-col min-h-0">
           {/* Skip warning */}
           <AnimatePresence>
             {skipWarning && (
@@ -195,7 +199,7 @@ function App() {
             )}
           </AnimatePresence>
 
-          <div className="p-6 md:p-10 w-full max-w-6xl mx-auto">
+          <div className="p-6 md:p-10 w-full mx-auto flex-1 overflow-y-auto min-h-0 flex flex-col justify-stretch">
             <Wizard
               currentStep={currentStep}
               onStart={() => setCurrentStep(1)}

@@ -101,16 +101,18 @@ export function FeatureComparisonModal({
     ];
   } else if (groupId === 'sup') {
     headers = [
-      { code: 'SUP-A', name: 'Estándar', id: 'sup-estandar' },
-      { code: 'SUP-B', name: 'Business', id: 'sup-premium' },
-      { code: 'SUP-C', name: 'Premium', id: 'sup-corp' },
+      { code: 'SOP-A', name: 'Básico', id: 'sup-basico' },
+      { code: 'SOP-B', name: 'Estándar', id: 'sup-estandar' },
+      { code: 'SOP-C', name: 'Prioritario', id: 'sup-prioritario' },
+      { code: 'SOP-D', name: 'Dedicado', id: 'sup-dedicado' },
     ];
     rows = [
-      { name: 'Soporte Remoto Técnico', values: { 'sup-estandar': '8x5', 'sup-premium': '8x5', 'sup-corp': '24x7 Críticos' } },
-      { name: 'Atención Telefónica Directa', values: { 'sup-estandar': false, 'sup-premium': true, 'sup-corp': true } },
-      { name: 'Monitoreo Activo de Servidores', values: { 'sup-estandar': false, 'sup-premium': false, 'sup-corp': true } },
-      { name: 'Copias de Seguridad en la Nube', values: { 'sup-estandar': false, 'sup-premium': false, 'sup-corp': true } },
-      { name: 'Tiempo de Respuesta (SLA)', values: { 'sup-estandar': '24hs hábiles', 'sup-premium': '12hs hábiles', 'sup-corp': '4hs máximo' } },
+      { name: 'Soporte Técnico', values: { 'sup-basico': 'Remoto (8x5)', 'sup-estandar': 'Remoto (8x5 ampliado)', 'sup-prioritario': 'Remoto (Extendida/Finde)', 'sup-dedicado': '24/7' } },
+      { name: 'Atención Telefónica Directa', values: { 'sup-basico': false, 'sup-estandar': true, 'sup-prioritario': true, 'sup-dedicado': 'Canal dedicado' } },
+      { name: 'Gestión de Alertas y Monitoreo', values: { 'sup-basico': 'No incluida', 'sup-estandar': 'Alertas + Reporte mensual', 'sup-prioritario': 'Permanente proactivo', 'sup-dedicado': 'Permanente proactivo' } },
+      { name: 'Copias de Seguridad en la Nube', values: { 'sup-basico': false, 'sup-estandar': false, 'sup-prioritario': true, 'sup-dedicado': true } },
+      { name: 'Visita Técnica en Sitio', values: { 'sup-basico': 'No incluida', 'sup-estandar': 'No incluida', 'sup-prioritario': '1 trimestral', 'sup-dedicado': '1 mensual' } },
+      { name: 'Tiempo de Respuesta (SLA)', values: { 'sup-basico': '24-48 hs', 'sup-estandar': '8-12 hs', 'sup-prioritario': '2-4 hs críticos', 'sup-dedicado': '1 h críticos' } },
     ];
   }
 
@@ -158,25 +160,24 @@ export function FeatureComparisonModal({
               </button>
             </div>
 
-            {/* Table */}
             <div className="flex-1 p-6 overflow-x-auto overflow-y-auto">
             <table className="w-full text-left text-xs sm:text-sm border-collapse">
               <thead>
-                <tr className="border-b border-card-border bg-card-hover">
-                  <th className="py-3 px-4 font-bold text-navy">Característica</th>
+                <tr className="border-b-2 border-line bg-slate-50/50">
+                  <th className="py-4 px-5 font-bold text-navy">Característica</th>
                   {headers.map((h) => {
                     const isSel = h.id === selectedOptionId;
                     return (
                       <th
                         key={h.id}
-                        className={`py-3 px-4 text-center font-bold ${
-                          isSel ? 'text-accent bg-accent-soft/30' : 'text-navy'
+                        className={`py-4 px-5 text-center font-bold ${
+                          isSel ? 'text-blue bg-blue-50/50' : 'text-navy'
                         }`}
                       >
                         <div>{h.code}</div>
-                        <div className="text-2xs font-normal text-ink-muted mt-0.5">{h.name}</div>
+                        <div className="text-2xs font-normal text-slate mt-1">{h.name}</div>
                         {isSel && (
-                          <span className="inline-block bg-accent text-white text-3xs px-1.5 rounded-full mt-1">
+                          <span className="inline-block bg-blue text-white text-3xs px-2 py-0.5 rounded-full mt-1.5 shadow-sm">
                             Seleccionado
                           </span>
                         )}
@@ -187,25 +188,25 @@ export function FeatureComparisonModal({
               </thead>
               <tbody>
                 {rows.map((row, rIdx) => (
-                  <tr key={rIdx} className="border-b border-card-border hover:bg-card-hover/40">
-                    <td className="py-3 px-4 font-semibold text-ink">{row.name}</td>
+                  <tr key={rIdx} className="border-b border-line-soft hover:bg-slate-50 transition-colors">
+                    <td className="py-3.5 px-5 font-semibold text-navy border-r border-line/40">{row.name}</td>
                     {headers.map((h) => {
                       const val = row.values[h.id];
                       const isSel = h.id === selectedOptionId;
 
                       let cellContent = null;
                       if (val === true) {
-                        cellContent = <span className="text-positive text-lg">✓</span>;
+                        cellContent = <span className="inline-block bg-positive-soft text-positive text-xs font-bold px-2.5 py-0.5 rounded">Sí</span>;
                       } else if (val === false) {
-                        cellContent = <span className="text-danger text-lg">✕</span>;
+                        cellContent = <span className="inline-block text-slate-400 text-xs font-medium">No</span>;
                       } else {
-                        cellContent = <span className="text-ink-secondary text-xs font-medium">{val}</span>;
+                        cellContent = <span className="inline-block bg-amber-100 text-amber-line text-xs font-bold px-2.5 py-0.5 rounded">{val}</span>;
                       }
 
                       return (
                         <td
                           key={h.id}
-                          className={`py-3 px-4 text-center ${isSel ? 'bg-accent-soft/10' : ''}`}
+                          className={`py-3.5 px-5 text-center align-middle ${isSel ? 'bg-blue-50/20' : ''}`}
                         >
                           {cellContent}
                         </td>
