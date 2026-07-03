@@ -7,41 +7,59 @@ interface DiagnosticStepProps {
 
 export function DiagnosticStep({ content }: DiagnosticStepProps) {
   return (
-    <div className="w-full flex-1 flex flex-col justify-stretch h-full py-2">
+    <div className="w-full flex flex-col gap-4 py-2">
+
+      {/* Main card — not stretched, wraps its own content */}
       <motion.div
-        initial={{ opacity: 0, y: 15 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="rounded-2xl border border-card-border bg-card p-6 sm:p-10 flex flex-col justify-between shadow-sm flex-1 space-y-6 lg:space-y-8 h-full"
+        transition={{ duration: 0.35 }}
+        className="rounded-2xl border border-card-border bg-card shadow-sm overflow-hidden"
       >
-        {/* Header */}
-        <div className="space-y-4">
-          <div>
-            <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.15em] text-accent">
-              {content.groupTitle}
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy mt-1.5 leading-tight">{content.title}</h2>
-          </div>
-          <hr className="border-card-border" />
+        {/* Header bar */}
+        <div className="px-6 pt-6 pb-4 border-b border-card-border">
+          <span className="text-2xs font-bold uppercase tracking-[0.18em] text-accent">
+            {content.groupTitle}
+          </span>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-navy mt-1 leading-tight text-balance">
+            {content.title}
+          </h2>
         </div>
 
-        {/* Diagnostic body - 2 columns on desktop to maximize width utilization */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 flex-1 items-center">
-          <div className="space-y-3 h-full flex flex-col justify-center">
-            <span className="font-extrabold text-navy block text-xs sm:text-sm lg:text-base uppercase tracking-wider">
-              🚨 Riesgo Identificado:
-            </span>
-            <p className="bg-card-hover p-5 sm:p-6 rounded-xl border border-card-border/80 text-md sm:text-base lg:text-lg leading-relaxed text-ink-secondary flex-1 flex items-center shadow-xs">
+        {/* Risk + Impact — side by side on md+, stacked on mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-card-border">
+          {/* Risk */}
+          <div className="px-6 py-5 space-y-2.5">
+            <div className="flex items-center gap-2">
+              {/* SVG icon: warning-triangle */}
+              <span className="w-6 h-6 rounded-md bg-danger-soft border border-danger/15 flex items-center justify-center shrink-0">
+                <svg className="w-3.5 h-3.5 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                </svg>
+              </span>
+              <span className="text-2xs font-extrabold uppercase tracking-wider text-danger">
+                Riesgo Identificado
+              </span>
+            </div>
+            <p className="text-sm text-ink-secondary leading-relaxed pl-8">
               {content.risk}
             </p>
           </div>
 
+          {/* Impact */}
           {content.impact && (
-            <div className="space-y-3 h-full flex flex-col justify-center">
-              <span className="font-extrabold text-danger block text-xs sm:text-sm lg:text-base uppercase tracking-wider">
-                ⚠️ Impacto Operacional:
-              </span>
-              <p className="bg-danger-soft/30 p-5 sm:p-6 rounded-xl border border-danger/10 text-md sm:text-base lg:text-lg leading-relaxed text-ink-secondary flex-1 flex items-center shadow-xs">
+            <div className="px-6 py-5 space-y-2.5">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 rounded-md bg-amber-soft border border-amber/15 flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 text-amber" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </span>
+                <span className="text-2xs font-extrabold uppercase tracking-wider text-amber">
+                  Impacto Operacional
+                </span>
+              </div>
+              <p className="text-sm text-ink-secondary leading-relaxed pl-8">
                 {content.impact}
               </p>
             </div>
@@ -50,36 +68,44 @@ export function DiagnosticStep({ content }: DiagnosticStepProps) {
 
         {/* Guarantee */}
         {content.guarantee && (
-          <div className="rounded-xl bg-positive-soft border border-positive/15 p-5 sm:p-6 flex items-start gap-4 shadow-xs">
-            <span className="text-positive text-xl sm:text-2xl shrink-0 mt-0.5">🛡️</span>
+          <div className="border-t border-card-border px-6 py-4 flex items-start gap-3 bg-positive-soft/40">
+            <span className="w-6 h-6 rounded-md bg-positive-soft border border-positive/15 flex items-center justify-center shrink-0 mt-0.5">
+              <svg className="w-3.5 h-3.5 text-positive" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </span>
             <div>
-              <span className="text-xs sm:text-sm font-bold text-positive uppercase tracking-wide block">
+              <span className="text-2xs font-bold uppercase tracking-wider text-positive block">
                 {content.guarantee.title}
               </span>
-              <span className="text-md lg:text-sm text-ink-secondary leading-relaxed block mt-1.5">
+              <p className="text-sm text-ink-secondary leading-relaxed mt-1">
                 {content.guarantee.text}
-              </span>
+              </p>
             </div>
           </div>
         )}
       </motion.div>
 
-      {/* Engineering Note */}
+      {/* Engineering note — separate card below, compact */}
       {content.engineeringNote && (
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.4 }}
-          className="rounded-2xl bg-amber-soft border border-amber/15 p-6 flex items-start gap-4 shadow-sm mt-4 lg:mt-6"
+          transition={{ delay: 0.1, duration: 0.3 }}
+          className="rounded-xl border border-amber/20 bg-amber-soft/40 px-5 py-4 flex items-start gap-3"
         >
-          <span className="text-amber text-xl shrink-0 mt-0.5">💡</span>
+          <span className="w-6 h-6 rounded-md bg-amber-soft border border-amber/20 flex items-center justify-center shrink-0 mt-0.5">
+            <svg className="w-3.5 h-3.5 text-amber" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </span>
           <div>
-            <span className="text-xs sm:text-sm font-bold text-amber uppercase tracking-wide block">
+            <span className="text-2xs font-bold uppercase tracking-wider text-amber block">
               {content.engineeringNote.title}
             </span>
-            <span className="text-xs sm:text-md lg:text-sm text-ink-secondary leading-relaxed block mt-1.5">
+            <p className="text-sm text-ink-secondary leading-relaxed mt-1">
               {content.engineeringNote.text}
-            </span>
+            </p>
           </div>
         </motion.div>
       )}

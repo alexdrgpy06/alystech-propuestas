@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import type {
   AddonItem,
   AddonSelections,
@@ -11,25 +12,130 @@ import { formatUsd, formatGs } from '@/lib/currency';
 import type { Totals } from '@/types/proposal';
 import { CostBreakdownModal } from '../ui/CostBreakdownModal';
 
+// SVG icons — one per group
+function BlockIcon({ id, className = 'w-4 h-4' }: { id: GroupId; className?: string }) {
+  switch (id) {
+    case 'mdm':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth={1.8}>
+          <rect x="7" y="1" width="10" height="18" rx="2" />
+          <circle cx="12" cy="16" r="0.8" fill="currentColor" />
+        </svg>
+      );
+    case 'srv':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth={1.8}>
+          <rect x="2" y="3" width="20" height="5" rx="1.5" />
+          <rect x="2" y="10.5" width="20" height="5" rx="1.5" />
+          <circle cx="18.5" cy="5.5" r="1" fill="currentColor" />
+          <circle cx="18.5" cy="13" r="1" fill="currentColor" />
+        </svg>
+      );
+    case 'net':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth={1.8}>
+          <path strokeLinecap="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+      );
+    case 'aud':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth={1.8}>
+          <circle cx="11" cy="11" r="7" />
+          <path strokeLinecap="round" d="M21 21l-4.35-4.35" />
+        </svg>
+      );
+    case 'sup':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth={1.8}>
+          <path strokeLinecap="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+        </svg>
+      );
+  }
+}
+
 const GROUP_LABELS: Record<GroupId, string> = {
-  mdm: 'A · Plataforma Móvil',
-  srv: 'B.1 · Servidor Central',
-  net: 'B.2 · Red Perimetral',
-  aud: 'C · Auditoría y SIEM',
-  sup: 'D · Soporte Técnico',
+  mdm: 'Plataforma Móvil',
+  srv: 'Servidor Central',
+  net: 'Red Perimetral',
+  aud: 'Auditoría y SIEM',
+  sup: 'Soporte Técnico',
 };
 
-/** Desglose de addons del bloque respecto del tier elegido (misma regla de cobro que computeTotals en @/lib/totals) */
+const GROUP_BLOCK: Record<GroupId, string> = {
+  mdm: 'A',
+  srv: 'B.1',
+  net: 'B.2',
+  aud: 'C',
+  sup: 'D',
+};
+
+const GROUP_COLOR: Record<GroupId, string> = {
+  mdm: 'text-blue bg-blue-soft border-blue/20',
+  srv: 'text-accent bg-accent-soft border-accent/20',
+  net: 'text-positive bg-positive-soft border-positive/20',
+  aud: 'text-amber bg-amber-soft border-amber/20',
+  sup: 'text-ink-secondary bg-card-hover border-card-border',
+};
+
+// Quadrant icons
+const QUAD_ICONS: Record<string, JSX.Element> = {
+  'Diagnóstico Operativo': (
+    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+    </svg>
+  ),
+  'Arquitectura Tecnológica': (
+    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2}>
+      <rect x="2" y="3" width="20" height="5" rx="1.5" />
+      <path strokeLinecap="round" d="M6 8v3m12-3v3M12 8v3M6 11h12" />
+      <rect x="4" y="14" width="4" height="4" rx="1" />
+      <rect x="10" y="14" width="4" height="4" rx="1" />
+      <rect x="16" y="14" width="4" height="4" rx="1" />
+    </svg>
+  ),
+  'Configuración de Alcance': (
+    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2}>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="4" />
+      <path strokeLinecap="round" d="M12 3v2m0 14v2M3 12h2m14 0h2" />
+    </svg>
+  ),
+  'Viabilidad y Cronograma': (
+    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2}>
+      <rect x="3" y="4" width="18" height="17" rx="2" />
+      <path strokeLinecap="round" d="M16 2v4M8 2v4M3 10h18" />
+      <path strokeLinecap="round" d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
+    </svg>
+  ),
+  'Resumen de Presupuesto': (
+    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+    </svg>
+  ),
+};
+
+function BlockInvestment({ option, summary }: { option: PlanOption; summary: BlockAddonSummary }) {
+  const isAño = option.priceUnit === '/año' && summary.year1Usd === summary.recurUsd;
+  return (
+    <div className="text-right">
+      <span className="text-sm font-extrabold text-navy">
+        {formatUsd(summary.year1Usd)}
+      </span>
+      <span className="text-2xs text-ink-muted ml-0.5">{isAño ? '/año' : ' Año 1'}</span>
+      {!isAño && summary.recurUsd > 0 && (
+        <div className="text-2xs text-ink-secondary mt-0.5">
+          +{formatUsd(summary.recurUsd)}<span className="text-ink-muted">/año</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface BlockAddonSummary {
-  /** addons marcados que se cobran sobre el tier elegido */
   charged: AddonItem[];
-  /** addons ya incluidos de forma nativa en el tier elegido (no se cobran) */
   included: AddonItem[];
-  /** addons aplicables al tier elegido que el cliente aún no marcó */
   availableCount: number;
-  /** subtotal Año 1 del bloque: precio del tier + addons cobrados */
   year1Usd: number;
-  /** recurrente anual del bloque: recurrente del tier + addons cobrados recurrentes */
   recurUsd: number;
 }
 
@@ -41,23 +147,14 @@ function summarizeBlockAddons(
   const charged: AddonItem[] = [];
   const included: AddonItem[] = [];
   let availableCount = 0;
-
   (group.addons ?? []).forEach((addon) => {
-    // el addon no aplica sobre el tier elegido
     if (addon.applicableTiers && !addon.applicableTiers.includes(option.id)) return;
-    if (addon.includedInTiers.includes(option.id)) {
-      included.push(addon);
-      return;
-    }
+    if (addon.includedInTiers.includes(option.id)) { included.push(addon); return; }
     if (selectedAddonIds.includes(addon.id)) charged.push(addon);
     else availableCount += 1;
   });
-
-  const chargedUsd = charged.reduce((sum, a) => sum + a.amountUsd, 0);
-  const chargedRecurUsd = charged
-    .filter((a) => a.recurring)
-    .reduce((sum, a) => sum + a.amountUsd, 0);
-
+  const chargedUsd = charged.reduce((s, a) => s + a.amountUsd, 0);
+  const chargedRecurUsd = charged.filter((a) => a.recurring).reduce((s, a) => s + a.amountUsd, 0);
   return {
     charged,
     included,
@@ -65,85 +162,6 @@ function summarizeBlockAddons(
     year1Usd: option.priceUsd + chargedUsd,
     recurUsd: option.recurUsd + chargedRecurUsd,
   };
-}
-
-/** Alternativa elegida + addons cobrados/incluidos + teaser de addons disponibles (compartido por tabla y cards) */
-function SelectionDetails({
-  option,
-  summary,
-}: {
-  option: PlanOption;
-  summary: BlockAddonSummary;
-}) {
-  return (
-    <div>
-      <div>
-        <span className="font-bold text-accent mr-1.5">{option.code}</span>
-        {option.name}
-      </div>
-      {(summary.charged.length > 0 || summary.included.length > 0) && (
-        <ul className="mt-1.5 space-y-1">
-          {summary.charged.map((addon) => (
-            <li key={addon.id} className="text-2xs leading-snug text-ink-secondary">
-              + {addon.label}{' '}
-              <span className="font-semibold text-navy whitespace-nowrap">
-                + {formatUsd(addon.amountUsd)}
-                {addon.recurring ? '/año' : ''}
-              </span>
-            </li>
-          ))}
-          {summary.included.map((addon) => (
-            <li key={addon.id} className="text-2xs leading-snug text-ink-muted">
-              {addon.label}{' '}
-              <span className="ml-0.5 rounded border border-card-border/60 bg-card-hover px-1.5 py-0.5 text-3xs font-bold uppercase tracking-wider text-ink-muted whitespace-nowrap">
-                Incluido
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {summary.availableCount > 0 && (
-        <p className="mt-1.5 text-3xs text-ink-muted">
-          {summary.availableCount === 1
-            ? '1 addon disponible'
-            : `${summary.availableCount} addons disponibles`}{' '}
-          — ver ficha
-        </p>
-      )}
-    </div>
-  );
-}
-
-/** Subtotal del bloque: Año 1 (tier + addons cobrados) y recurrente anual aparte, para que la suma de filas cuadre con el total superior */
-function BlockInvestment({
-  option,
-  summary,
-}: {
-  option: PlanOption;
-  summary: BlockAddonSummary;
-}) {
-  if (option.priceUnit === '/año' && summary.year1Usd === summary.recurUsd) {
-    return (
-      <>
-        {formatUsd(summary.recurUsd)}
-        <span className="text-3xs text-ink-muted font-normal ml-0.5">/año</span>
-      </>
-    );
-  }
-  return (
-    <div className="flex flex-col items-end leading-tight">
-      <span>
-        {formatUsd(summary.year1Usd)}
-        <span className="text-3xs text-ink-muted font-normal ml-0.5">Año 1</span>
-      </span>
-      {summary.recurUsd > 0 && (
-        <span className="text-2xs font-semibold text-ink-secondary">
-          + {formatUsd(summary.recurUsd)}
-          <span className="text-3xs text-ink-muted font-normal ml-0.5">/año</span>
-        </span>
-      )}
-    </div>
-  );
 }
 
 interface CanvasStepProps {
@@ -159,6 +177,8 @@ interface CanvasStepProps {
   onAccept: () => void;
   pdfPending?: boolean;
 }
+
+import type { JSX } from 'react';
 
 export function CanvasStep({
   content,
@@ -177,183 +197,291 @@ export function CanvasStep({
 
   const selectedDetailGroup = groups.find((g) => g.id === detailGroupId);
   const selectedDetailOption = selectedDetailGroup?.options.find(
-    (o) => o.id === selections[detailGroupId!]
+    (o) => o.id === selections[detailGroupId!],
   );
 
-  // una fila por bloque con opción elegida, con el desglose de addons ya resuelto
   const rows = groups.flatMap((group) => {
     const option = group.options.find((o) => o.id === selections[group.id]);
     if (!option) return [];
-    return [
-      {
-        group,
-        option,
-        summary: summarizeBlockAddons(group, option, addonSelections[group.id] ?? []),
-      },
-    ];
+    return [{ group, option, summary: summarizeBlockAddons(group, option, addonSelections[group.id] ?? []) }];
   });
 
   return (
-    <section className="space-y-8 w-full max-w-5xl mx-auto pb-12">
-      <div className="text-center md:text-left">
-        <h3 className="text-xl sm:text-2xl font-extrabold text-navy">{content.title}</h3>
-        <p className="mt-1.5 text-sm text-slate">{content.subtitle}</p>
+    <section className="space-y-5 w-full max-w-4xl mx-auto pb-8">
+
+      {/* ── Executive header ── */}
+      <div className="rounded-2xl overflow-hidden border border-card-border shadow-sm">
+        <div className="bg-navy px-5 py-3.5 flex items-center gap-3">
+          <img
+            src={`${import.meta.env.BASE_URL}logo.png`}
+            alt="Alystech"
+            className="h-7 w-auto object-contain opacity-90 shrink-0"
+            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+          />
+          <div className="flex-1 min-w-0">
+            <p className="text-3xs font-bold uppercase tracking-widest text-accent/90">Resumen Ejecutivo</p>
+            <h3 className="text-sm sm:text-base font-extrabold text-ink-on-dark leading-snug truncate">
+              {content.title}
+            </h3>
+          </div>
+          <div className="hidden sm:block text-right shrink-0">
+            <p className="text-3xs text-ink-on-dark-secondary leading-tight">Ref. AT-2026-0630-P · Rev. 7</p>
+            <p className="text-3xs text-ink-on-dark-secondary leading-tight">Paraguay, junio 2026</p>
+          </div>
+        </div>
+        {content.subtitle && (
+          <div className="bg-card-hover px-5 py-2.5 border-t border-card-border/60">
+            <p className="text-xs text-slate">{content.subtitle}</p>
+          </div>
+        )}
       </div>
 
-      {/* ── 1. Resumen de Inversión y Selecciones (MOVED TO THE TOP) ── */}
-      <div className="space-y-4">
-        <div className="rounded-2xl border-2 border-accent/20 bg-accent-soft/40 p-6 shadow-xs flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+      {/* ── Investment hero ── */}
+      <div className="rounded-2xl border border-accent/20 bg-gradient-to-br from-accent-soft/70 via-blue-50/50 to-card p-5 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-accent block">Inversión Estimada Total (Año 1)</span>
-            <div className="text-3xl font-black text-navy mt-1">{formatUsd(totals.totalUsd)}</div>
-            <p className="mt-1.5 text-xs sm:text-sm text-ink-secondary font-medium">
-              Año 1 (estimativo, IVA incluido) · ≈ {formatGs(totals.totalUsd, exchangeRate)} · Recurrente anual: {formatUsd(totals.recurUsd)}
+            <p className="text-2xs font-bold uppercase tracking-widest text-accent">Inversión Estimada Total</p>
+            <motion.p
+              key={totals.totalUsd}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-4xl font-black text-navy mt-0.5 leading-none"
+            >
+              {formatUsd(totals.totalUsd)}
+            </motion.p>
+            <p className="mt-1.5 text-xs text-ink-secondary">
+              Año 1 estimativo, IVA incluido · <span className="font-semibold">≈ {formatGs(totals.totalUsd, exchangeRate)}</span>
+              {totals.recurUsd > 0 && (
+                <> · Recurrente: <span className="font-semibold text-navy">{formatUsd(totals.recurUsd)}/año</span></>
+              )}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap gap-2 sm:shrink-0">
             <button
               type="button"
               onClick={onConsulta}
-              className="px-4 py-2.5 rounded-xl bg-slate text-xs sm:text-sm font-bold text-white transition-colors hover:bg-slate/90 shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-card-border text-xs font-bold text-navy hover:bg-card-hover shadow-xs transition-colors min-h-[40px]"
             >
+              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
               {content.buttons.consulta}
             </button>
             <button
               type="button"
               onClick={onDownloadPdf}
               disabled={pdfPending}
-              className="px-4 py-2.5 rounded-xl bg-navy text-xs sm:text-sm font-bold text-white shadow-md shadow-navy/25 transition-colors hover:bg-navy-2 disabled:opacity-60"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-navy text-xs font-bold text-white shadow-md shadow-navy/25 hover:bg-navy-2 disabled:opacity-60 transition-colors min-h-[40px]"
             >
+              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 7.414V19a2 2 0 01-2 2z" />
+              </svg>
               {pdfPending ? 'Generando…' : content.buttons.pdf}
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Structured Selection Table - Highly symmetric and neat (≥sm) */}
-        <div className="hidden sm:block rounded-xl border border-card-border bg-card overflow-hidden shadow-xs">
-          <table className="w-full text-left text-xs sm:text-sm border-collapse">
+      {/* ── Selection table ── */}
+      {rows.length > 0 && (
+        <div className="rounded-xl border border-card-border bg-card overflow-hidden shadow-xs">
+          {/* Desktop table */}
+          <table className="hidden sm:table w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-card-border bg-card-hover text-navy font-bold">
-                <th className="py-3 px-4 sm:px-5">Bloque Técnico</th>
-                <th className="py-3 px-4 sm:px-5">Alternativa Seleccionada</th>
-                <th className="py-3 px-4 sm:px-5 text-right">Inversión</th>
-                <th className="py-3 px-4 sm:px-5 text-center">Ficha</th>
+              <tr className="bg-card-hover border-b border-card-border">
+                <th className="py-2.5 px-4 text-2xs font-bold uppercase tracking-wider text-ink-muted">Bloque</th>
+                <th className="py-2.5 px-4 text-2xs font-bold uppercase tracking-wider text-ink-muted">Alternativa seleccionada</th>
+                <th className="py-2.5 px-4 text-2xs font-bold uppercase tracking-wider text-ink-muted text-right">Inversión</th>
+                <th className="py-2.5 px-3 text-2xs font-bold uppercase tracking-wider text-ink-muted text-center w-16">Ficha</th>
               </tr>
             </thead>
-            <tbody>
-              {rows.map(({ group, option, summary }) => (
-                <tr key={group.id} className="border-b border-card-border hover:bg-card-hover/40 last:border-0">
-                  <td className="py-3.5 px-4 sm:px-5 font-bold text-navy whitespace-nowrap align-top">{GROUP_LABELS[group.id]}</td>
-                  <td className="py-3.5 px-4 sm:px-5 text-ink-secondary align-top">
-                    <SelectionDetails option={option} summary={summary} />
-                  </td>
-                  <td className="py-3.5 px-4 sm:px-5 text-right font-extrabold text-navy whitespace-nowrap align-top">
-                    <BlockInvestment option={option} summary={summary} />
-                  </td>
-                  <td className="py-3.5 px-4 sm:px-5 text-center align-top">
+            <tbody className="divide-y divide-card-border/50">
+              {rows.map(({ group, option, summary }) => {
+                const colorCls = GROUP_COLOR[group.id];
+                return (
+                  <tr key={group.id} className="hover:bg-card-hover/30 transition-colors">
+                    <td className="py-3 px-4 align-middle whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <span className={`w-6 h-6 rounded-md border flex items-center justify-center shrink-0 ${colorCls}`}>
+                          <BlockIcon id={group.id} className="w-3.5 h-3.5" />
+                        </span>
+                        <div>
+                          <div className="text-3xs font-bold uppercase tracking-wider text-ink-muted">{GROUP_BLOCK[group.id]}</div>
+                          <div className="text-xs font-bold text-navy">{GROUP_LABELS[group.id]}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 align-middle">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-3xs font-bold bg-accent-soft text-accent border border-accent/20 px-1.5 py-0.5 rounded shrink-0">
+                          {option.code}
+                        </span>
+                        <span className="font-semibold text-navy">{option.name}</span>
+                      </div>
+                      {/* Addons summary */}
+                      {(summary.charged.length > 0 || summary.included.length > 0) && (
+                        <div className="flex flex-wrap gap-1.5 mt-1.5">
+                          {summary.charged.map((a) => (
+                            <span key={a.id} className="text-3xs bg-accent-soft text-accent border border-accent/15 px-1.5 py-0.5 rounded-full">
+                              +{a.label}
+                            </span>
+                          ))}
+                          {summary.included.map((a) => (
+                            <span key={a.id} className="text-3xs bg-card-hover text-ink-muted border border-card-border px-1.5 py-0.5 rounded-full">
+                              ✓ {a.label}
+                            </span>
+                          ))}
+                          {summary.availableCount > 0 && (
+                            <span className="text-3xs text-ink-muted">
+                              +{summary.availableCount} addon{summary.availableCount > 1 ? 's' : ''} disponible{summary.availableCount > 1 ? 's' : ''}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                    <td className="py-3 px-4 align-middle text-right">
+                      <BlockInvestment option={option} summary={summary} />
+                    </td>
+                    <td className="py-3 px-3 align-middle text-center">
+                      <button
+                        type="button"
+                        onClick={() => setDetailGroupId(group.id)}
+                        className="inline-flex items-center gap-1 text-2xs font-bold text-accent hover:text-accent-hover transition-colors min-h-[36px]"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        Ver
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {/* Mobile cards */}
+          <div className="sm:hidden divide-y divide-card-border/50">
+            {rows.map(({ group, option, summary }) => {
+              const colorCls = GROUP_COLOR[group.id];
+              return (
+                <div key={group.id} className="p-4 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-6 h-6 rounded-md border flex items-center justify-center ${colorCls}`}>
+                        <BlockIcon id={group.id} className="w-3.5 h-3.5" />
+                      </span>
+                      <span className="text-xs font-bold text-navy">{GROUP_LABELS[group.id]}</span>
+                    </div>
                     <button
                       type="button"
                       onClick={() => setDetailGroupId(group.id)}
-                      className="text-xs font-bold text-accent hover:text-accent-hover transition-colors"
+                      className="text-2xs font-bold text-accent hover:text-accent-hover"
                     >
-                      Ver detalles
+                      Ver ficha
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Stacked cards per block (<sm) — sin scroll horizontal en 375px */}
-        <div className="sm:hidden space-y-3">
-          {rows.map(({ group, option, summary }) => (
-            <div key={group.id} className="rounded-xl border border-card-border bg-card p-4 shadow-xs">
-              <div className="flex items-start justify-between gap-3">
-                <span className="text-2xs font-bold uppercase tracking-wider text-navy">{GROUP_LABELS[group.id]}</span>
-                <button
-                  type="button"
-                  onClick={() => setDetailGroupId(group.id)}
-                  className="text-2xs font-bold text-accent hover:text-accent-hover transition-colors whitespace-nowrap"
-                >
-                  Ver detalles
-                </button>
-              </div>
-              <div className="mt-2 text-xs text-ink-secondary">
-                <SelectionDetails option={option} summary={summary} />
-              </div>
-              <div className="mt-3 pt-2.5 border-t border-card-border/60 flex items-center justify-between gap-3">
-                <span className="text-3xs font-bold uppercase tracking-wider text-ink-muted">Inversión</span>
-                <div className="text-md font-extrabold text-navy text-right">
-                  <BlockInvestment option={option} summary={summary} />
+                  </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-3xs font-bold bg-accent-soft text-accent border border-accent/20 px-1.5 py-0.5 rounded">
+                        {option.code}
+                      </span>
+                      <span className="text-xs font-semibold text-navy">{option.name}</span>
+                    </div>
+                    <BlockInvestment option={option} summary={summary} />
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── 2. Cuadrantes Project Canvas ── */}
-      {content.quadrants && (
-        <div className="pt-8 space-y-5">
-          <div className="flex items-center gap-2">
-            <span className="bg-navy text-white rounded p-1">
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="3" y="3" width="7" height="7" />
-                <rect x="14" y="3" width="7" height="7" />
-                <rect x="14" y="14" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" />
-              </svg>
-            </span>
-            <h4 className="text-md sm:text-lg font-bold text-navy">Cuadrantes de Estrategia</h4>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {content.quadrants.map((quad, i) => (
-              <div key={i} className="rounded-2xl border border-line-soft bg-slate-50 p-5 shadow-sm transition-shadow hover:shadow-md">
-                <h5 className="text-sm font-extrabold text-navy border-b border-line-soft pb-3 mb-3">{quad.title}</h5>
-                <ul className="space-y-2.5">
-                  {quad.items.map((item, j) => (
-                    <li key={j} className="text-xs leading-relaxed text-ink-secondary flex items-start gap-2">
-                      <span className="text-accent font-bold mt-0.5">•</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* ── 3. Plan de Implementación (Roadmap) ── */}
-      {content.roadmap && (
-        <div className="pt-8 space-y-5">
-          <div className="flex items-center gap-2">
-            <span className="bg-accent text-white rounded p-1">
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
-                <line x1="4" y1="22" x2="4" y2="15" />
+      {/* ── Strategy quadrants ── */}
+      {content.quadrants && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-card-border" />
+            <span className="text-2xs font-bold uppercase tracking-widest text-ink-muted shrink-0 flex items-center gap-1.5">
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-accent" fill="none" stroke="currentColor" strokeWidth={2}>
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
               </svg>
+              Cuadrantes de estrategia
             </span>
-            <h4 className="text-md sm:text-lg font-bold text-navy">Roadmap de Implementación</h4>
+            <div className="flex-1 h-px bg-card-border" />
           </div>
-          <div className="rounded-2xl border border-line-soft bg-white p-6 shadow-sm">
-            <div className="space-y-6 border-l-2 border-line pl-5 ml-2">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {content.quadrants.map((quad, i) => {
+              const icon = QUAD_ICONS[quad.title];
+              return (
+                <div key={i} className="rounded-xl border border-card-border bg-card p-4 space-y-2.5 shadow-xs">
+                  <div className="flex items-center gap-2">
+                    {icon && (
+                      <span className="w-6 h-6 rounded-md bg-accent-soft border border-accent/15 flex items-center justify-center text-accent shrink-0">
+                        {icon}
+                      </span>
+                    )}
+                    <h5 className="text-xs font-extrabold text-navy leading-snug">{quad.title}</h5>
+                  </div>
+                  <ul className="space-y-1.5 pl-1">
+                    {quad.items.map((item, j) => (
+                      <li key={j} className="flex items-start gap-1.5 text-xs text-ink-secondary leading-snug">
+                        <span className="text-accent/50 shrink-0 mt-0.5">·</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── Roadmap ── */}
+      {content.roadmap && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-card-border" />
+            <span className="text-2xs font-bold uppercase tracking-widest text-ink-muted shrink-0 flex items-center gap-1.5">
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-accent" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" d="M9 19V6l12-3v13" />
+                <circle cx="6" cy="19" r="3" />
+                <circle cx="18" cy="16" r="3" />
+              </svg>
+              Roadmap de implementación
+            </span>
+            <div className="flex-1 h-px bg-card-border" />
+          </div>
+          <div className="rounded-xl border border-card-border bg-card p-5 shadow-xs">
+            <div className="space-y-5 border-l-2 border-accent/25 pl-5 ml-2">
               {content.roadmap.map((phase, i) => (
                 <div key={i} className="relative">
                   <div className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-white bg-accent shadow-sm" />
-                  <div className="mb-2 flex items-center gap-3">
-                    <span className="rounded bg-accent-soft px-2 py-0.5 text-3xs font-bold uppercase tracking-wider text-accent">{phase.week}</span>
-                    <span className="text-sm font-bold text-navy">{phase.phase}</span>
+                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                    <span className="rounded-md bg-accent-soft border border-accent/15 px-2 py-0.5 text-3xs font-bold uppercase tracking-wider text-accent">
+                      {phase.week}
+                    </span>
+                    <span className="text-xs font-bold text-navy">{phase.phase}</span>
                   </div>
                   {phase.milestone && (
-                    <div className="mb-2.5 inline-block rounded border border-positive/30 bg-positive-soft px-2 py-1 text-2xs font-bold text-positive-hover">
+                    <div className="mb-2 inline-flex items-center gap-1.5 rounded-md border border-positive/20 bg-positive-soft px-2.5 py-1 text-2xs font-semibold text-positive">
+                      <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
                       Hito: {phase.milestone}
                     </div>
                   )}
-                  <ul className="space-y-1.5">
+                  <ul className="space-y-1">
                     {phase.actions.map((act, j) => (
-                      <li key={j} className="text-xs text-ink-secondary leading-relaxed">— {act}</li>
+                      <li key={j} className="flex items-start gap-1.5 text-xs text-ink-secondary leading-relaxed">
+                        <span className="text-accent/40 shrink-0 mt-0.5">—</span>
+                        {act}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -363,25 +491,31 @@ export function CanvasStep({
         </div>
       )}
 
-      {/* ── Final Accept/Reject Footer Actions ── */}
-      <div className="flex flex-wrap gap-3.5 pt-6 border-t border-card-border justify-end">
+      {/* ── Accept / Reject ── */}
+      <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-card-border">
         <button
           type="button"
           onClick={onReject}
-          className="inline-flex items-center gap-2 rounded-xl bg-red-soft px-6 py-3 text-[13px] font-bold text-red transition-colors hover:bg-red-soft/70 shadow-xs"
+          className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-xl border-2 border-danger/20 bg-danger-soft/60 hover:bg-danger-soft px-6 py-3 text-sm font-bold text-danger transition-colors min-h-[44px]"
         >
+          <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
           {content.buttons.reject}
         </button>
         <button
           type="button"
           onClick={onAccept}
-          className="inline-flex items-center gap-2 rounded-xl bg-green px-7 py-3 text-[13px] font-bold text-white shadow-md shadow-green/25 transition-colors hover:bg-green/90"
+          className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-xl bg-positive hover:bg-positive-hover px-8 py-3 text-sm font-bold text-white shadow-lg shadow-positive/20 transition-colors min-h-[44px]"
         >
+          <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
           {content.buttons.accept}
         </button>
       </div>
 
-      {/* ── Cost/Specs Details Breakdown Modal ── */}
+      {/* Modal */}
       <CostBreakdownModal
         isOpen={detailGroupId !== null}
         onClose={() => setDetailGroupId(null)}
@@ -393,6 +527,8 @@ export function CanvasStep({
         addons={selectedDetailGroup?.addons}
         tierId={selectedDetailOption?.id}
         selectedAddonIds={detailGroupId ? addonSelections[detailGroupId] : undefined}
+        groupIcon={detailGroupId ?? undefined}
+        optionCode={selectedDetailOption?.code}
       />
     </section>
   );

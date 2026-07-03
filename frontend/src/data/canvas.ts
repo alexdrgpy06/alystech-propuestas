@@ -1,16 +1,16 @@
 import type { CanvasContent } from '../types/proposal';
 
 export const canvas: CanvasContent = {
-  title: '5. El Modelo Project Canvas de Trabajo (6 Cuadrantes)',
+  title: 'Resumen Ejecutivo · Plan Estratégico de Ciberseguridad',
   subtitle:
     'El plan de ingeniería se consolida de forma metodológica en el siguiente lienzo ejecutivo de viabilidad técnica:',
   alternativesHeading: 'Otras opciones disponibles por bloque',
   quadrants: [
-    { title: '1. Diagnóstico Operativo', items: ['80 celulares descontrolados en campo (guardias evaden rondas).', '20 PCs administrativas expuestas a infecciones persistentes de LAN.'] },
-    { title: '2. Arquitectura Tecnológica', items: ['Virtualización local Proxmox VE.', 'Consola MDM e informes locales.', 'Aislamiento perimetral por VLANs.', 'Telemetría SIEM unificada local.'] },
-    { title: '3. Configuración de Alcance', items: ['MDM-B: Enrolamiento Knox + SMS.', 'SRV-B: Ingeniería de Servidor.', 'NET-B: Cortafuegos e IPsec.', 'AUD-B: Ingeniería Forense + SIEM.'] },
-    { title: '4. Viabilidad y Cronograma', items: ['Fase de Red/Servidor: S2 a S4.', 'Fase de Endpoints/SIEM: S5 a S6.', 'Fase de Enrolamiento Knox: S7-S8.', 'Hitos de Pago: 50% / 25% / 25%.'] },
-    { title: '5. Resumen de Presupuesto', items: ['Desarrollo Año 1: $14.457 USD', 'Abono Soporte SOP-B: $1.590 USD/a', 'Equivalente: ~90.356.250 Gs', 'Todos los precios incluyen IVA.'] }
+    { title: 'Diagnóstico Operativo', items: ['80 celulares descontrolados en campo (guardias evaden rondas).', '20 PCs administrativas expuestas a infecciones persistentes de LAN.'] },
+    { title: 'Arquitectura Tecnológica', items: ['Virtualización local Proxmox VE.', 'Consola MDM e informes locales.', 'Aislamiento perimetral por VLANs.', 'Telemetría SIEM unificada local.'] },
+    { title: 'Configuración de Alcance', items: ['MDM-B: Enrolamiento Knox + SMS.', 'SRV-B: Ingeniería de Servidor.', 'NET-B: Cortafuegos e IPsec.', 'AUD-B: Ingeniería Forense + SIEM.'] },
+    { title: 'Viabilidad y Cronograma', items: ['Fase de Red/Servidor: S2 a S4.', 'Fase de Endpoints/SIEM: S5 a S6.', 'Fase de Enrolamiento Knox: S7-S8.', 'Hitos de Pago: 50% / 25% / 25%.'] },
+    { title: 'Resumen de Presupuesto', items: ['Desarrollo Año 1: $14.457 USD', 'Abono Soporte SOP-B: $1.590 USD/a', 'Equivalente: ~90.356.250 Gs', 'Todos los precios incluyen IVA.'] }
   ],
   roadmap: [
     { phase: 'Fase 1: Relevamiento y Diseño Lógico de Perímetros', week: 'Semana 1', milestone: 'Aceptación formal de la propuesta técnica de desarrollo. Pago del 50% de desarrollo.', actions: ['Mapeo físico y lógico de los equipos y routers de red en la oficina central.', 'Análisis lógico de puertos abiertos y trazabilidad de tráfico con software sniffer de red.', 'Carga de base de datos de números IMEI corporativos de los 80 teléfonos Samsung en el portal Samsung Knox.'] },

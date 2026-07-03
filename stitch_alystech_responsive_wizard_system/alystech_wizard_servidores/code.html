@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AlysTech - Infraestructura de Servidores</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#2d3133",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#131b2e",
+                      "tertiary": "#4b566a",
+                      "primary-fixed": "#dbe1ff",
+                      "ink-secondary": "#475569",
+                      "ink-muted": "#94a3b8",
+                      "on-tertiary-fixed-variant": "#3c475a",
+                      "on-background": "#191c1e",
+                      "inverse-primary": "#b4c5ff",
+                      "outline": "#737686",
+                      "secondary": "#565e74",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-tertiary-fixed": "#111c2d",
+                      "border-slate": "#e2e8f0",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#dae2fd",
+                      "tertiary-fixed": "#d8e3fb",
+                      "on-error-container": "#93000a",
+                      "on-tertiary": "#ffffff",
+                      "surface-container": "#eceef0",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "outline-variant": "#c3c6d7",
+                      "surface-dim": "#d8dadc",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-container": "#2563eb",
+                      "accent-soft": "#eff6ff",
+                      "on-surface": "#191c1e",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "surface-variant": "#e0e3e5",
+                      "on-error": "#ffffff",
+                      "ink-navy": "#0d1f3c",
+                      "on-secondary-container": "#5c647a",
+                      "on-primary-container": "#eeefff",
+                      "surface-bright": "#f7f9fb",
+                      "on-surface-variant": "#434655",
+                      "on-primary-fixed": "#00174b",
+                      "danger": "#dc2626",
+                      "surface-container-high": "#e6e8ea",
+                      "on-tertiary-container": "#ecf1ff",
+                      "tertiary-container": "#636e83",
+                      "surface-tint": "#0053db",
+                      "success": "#16a34a",
+                      "inverse-on-surface": "#eff1f3",
+                      "secondary-container": "#dae2fd",
+                      "primary": "#004ac6",
+                      "surface": "#f7f9fb",
+                      "on-primary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#bcc7de",
+                      "warning": "#d97706",
+                      "background": "#f7f9fb",
+                      "surface-container-low": "#f2f4f6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "unit": "4px",
+                      "xs": "4px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "margin-desktop": "40px",
+                      "max-width-content": "1024px",
+                      "sm": "8px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "body-base": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-medium": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-caps": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ]
+              },
+              "fontSize": {
+                      "body-base": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "body-medium": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.15em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "30px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col items-center">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-lg py-md max-w-[1440px] mx-auto bg-surface/80 dark:bg-background/80 backdrop-blur-md shadow-xs border-b border-border-slate dark:border-outline-variant docked full-width">
+<div class="flex items-center space-x-4">
+<span class="font-headline-md text-headline-md font-extrabold tracking-tight text-primary dark:text-inverse-primary">AlysTech</span>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-1 text-ink-muted">
+<!-- Progress Indicator -->
+<div class="h-2 w-8 bg-primary rounded-full"></div>
+<div class="h-2 w-8 bg-primary rounded-full"></div>
+<div class="h-2 w-8 bg-primary rounded-full"></div>
+<div class="h-2 w-8 bg-primary rounded-full"></div>
+<div class="h-2 w-8 bg-surface-container-high rounded-full"></div>
+<div class="h-2 w-8 bg-surface-container-high rounded-full"></div>
+<div class="h-2 w-8 bg-surface-container-high rounded-full"></div>
+<div class="h-2 w-8 bg-surface-container-high rounded-full"></div>
+<div class="h-2 w-8 bg-surface-container-high rounded-full"></div>
+<div class="h-2 w-8 bg-surface-container-high rounded-full"></div>
+<div class="h-2 w-8 bg-surface-container-high rounded-full"></div>
+<div class="h-2 w-8 bg-surface-container-high rounded-full"></div>
+<div class="h-2 w-8 bg-surface-container-high rounded-full"></div>
+</div>
+<button class="p-2 rounded-full hover:bg-accent-soft dark:hover:bg-tertiary-container/20 transition-colors text-ink-muted dark:text-on-surface-variant hover:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-max-width-content px-margin-mobile md:px-margin-desktop mt-32 mb-40 flex-grow">
+<!-- Header Section -->
+<div class="mb-12 text-center max-w-3xl mx-auto">
+<span class="inline-block px-3 py-1 mb-4 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">Paso 4 de 13 • Bloque B.1</span>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-ink-navy mb-4">Infraestructura de Servidores</h1>
+<p class="font-body-base text-body-base text-ink-secondary">Potencia el núcleo de tu operación. Selecciona la opción que mejor se adapte a tus necesidades de rendimiento, escalabilidad y presupuesto.</p>
+</div>
+<!-- Selection Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Option 1: Rack Reacondicionado -->
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="server_option" type="radio" value="rack"/>
+<div class="h-full flex flex-col p-6 rounded-2xl bg-surface-container-lowest border border-border-slate hover:border-primary-fixed peer-checked:border-2 peer-checked:border-primary peer-checked:bg-accent-soft transition-all duration-200 shadow-sm hover:shadow-md">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-surface-container rounded-xl text-secondary group-hover:text-primary peer-checked:bg-primary peer-checked:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[32px]">dns</span>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-border-slate peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-colors">
+<div class="w-2 h-2 rounded-full bg-surface-container-lowest opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+</div>
+</div>
+<div class="mb-4">
+<span class="inline-block px-2 py-1 bg-success/20 text-success font-label-caps text-label-caps rounded mb-2">Eficiencia</span>
+<h3 class="font-headline-md text-headline-md text-ink-navy mb-2">Rack Reacondicionado</h3>
+<p class="font-body-medium text-body-medium text-ink-secondary">Servidores empresariales de grado data center con componentes verificados. Ideal para maximizar el retorno de inversión sin comprometer el rendimiento base.</p>
+</div>
+</div>
+</label>
+<!-- Option 2: Torre Nuevo Dell -->
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="server_option" type="radio" value="tower"/>
+<div class="h-full flex flex-col p-6 rounded-2xl bg-surface-container-lowest border border-border-slate hover:border-primary-fixed peer-checked:border-2 peer-checked:border-primary peer-checked:bg-accent-soft transition-all duration-200 shadow-sm hover:shadow-md">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-surface-container rounded-xl text-secondary group-hover:text-primary peer-checked:bg-primary peer-checked:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[32px]">computer</span>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-border-slate peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-colors">
+<div class="w-2 h-2 rounded-full bg-surface-container-lowest opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+</div>
+</div>
+<div class="mb-4">
+<span class="inline-block px-2 py-1 bg-primary/20 text-primary font-label-caps text-label-caps rounded mb-2">Robustez</span>
+<h3 class="font-headline-md text-headline-md text-ink-navy mb-2">Torre Nuevo Dell</h3>
+<p class="font-body-medium text-body-medium text-ink-secondary">Equipamiento de última generación con garantía de fábrica. Diseñado para oficinas sin infraestructura de rack dedicada, ofreciendo un funcionamiento silencioso y potente.</p>
+</div>
+</div>
+</label>
+<!-- Option 3: HA Cluster -->
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="server_option" type="radio" value="cluster"/>
+<div class="h-full flex flex-col p-6 rounded-2xl bg-surface-container-lowest border border-border-slate hover:border-primary-fixed peer-checked:border-2 peer-checked:border-primary peer-checked:bg-accent-soft transition-all duration-200 shadow-sm hover:shadow-md">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-surface-container rounded-xl text-secondary group-hover:text-primary peer-checked:bg-primary peer-checked:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[32px]">hub</span>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-border-slate peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-colors">
+<div class="w-2 h-2 rounded-full bg-surface-container-lowest opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+</div>
+</div>
+<div class="mb-4">
+<span class="inline-block px-2 py-1 bg-warning/20 text-warning font-label-caps text-label-caps rounded mb-2">Alta Disponibilidad</span>
+<h3 class="font-headline-md text-headline-md text-ink-navy mb-2">HA Cluster</h3>
+<p class="font-body-medium text-body-medium text-ink-secondary">Arquitectura redundante con balanceo de carga automático. Garantiza la continuidad del negocio mitigando puntos únicos de falla. Ideal para operaciones críticas 24/7.</p>
+</div>
+</div>
+</label>
+</div>
+</main>
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-lg py-md bg-surface/90 backdrop-blur-sm max-w-5xl mx-auto mb-lg rounded-xl border border-border-slate shadow-xl shadow-accent-soft/25 docked bottom-0 rounded-t-xl">
+<button class="flex items-center justify-center text-secondary border border-border-slate rounded-xl px-xl py-md hover:bg-surface-container-high dark:hover:bg-tertiary-container/30 transition-all font-label-caps text-label-caps min-w-[120px]">
+<span class="material-symbols-outlined mr-2">arrow_back</span>
+            Back
+        </button>
+<button class="flex items-center justify-center bg-primary text-on-primary rounded-xl px-xl py-md font-bold shadow-lg hover:scale-[1.02] transition-transform font-label-caps text-label-caps min-w-[120px]">
+            Continue
+            <span class="material-symbols-outlined ml-2">arrow_forward</span>
+</button>
+</nav>
+</body></html>

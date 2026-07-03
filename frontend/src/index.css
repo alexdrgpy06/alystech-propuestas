@@ -11,7 +11,7 @@
      antes se resolvía con valores arbitrarios sueltos por componente. */
   --text-3xs: 0.5625rem; /* 9px  — eyebrows, badges diminutos */
   --text-2xs: 0.6875rem; /* 11px — labels secundarios, notas al pie */
-  --text-md: 0.8125rem; /* 13px — texto entre xs (12px) y sm (14px), el más usado en cuerpo de tarjetas */
+  --text-md: 0.8125rem;  /* 13px — texto entre xs (12px) y sm (14px), el más usado en cuerpo de tarjetas */
 
   /* ── Surface (dark shell) ── */
   --color-surface: #0f172a;
@@ -35,6 +35,7 @@
   /* ── Semantic ── */
   --color-positive: #16a34a;
   --color-positive-soft: #f0fdf4;
+  --color-positive-hover: #15803d;
   --color-amber: #d97706;
   --color-amber-soft: #fffbeb;
   --color-danger: #dc2626;
@@ -47,12 +48,15 @@
   --color-ink-on-dark: #f1f5f9;
   --color-ink-on-dark-secondary: #94a3b8;
 
-  /* ── Legacy compat (used by TcoComparisonStep, CanvasStep) ── */
+  /* ── Legacy compat ── */
   --color-blue: #2563eb;
   --color-blue-dark: #1d4ed8;
   --color-blue-soft: #eff6ff;
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
   --color-green: #16a34a;
   --color-green-soft: #f0fdf4;
+  --color-green-200: #bbf7d0;
   --color-red: #dc2626;
   --color-red-soft: #fef2f2;
   --color-slate: #475569;
@@ -87,19 +91,7 @@
 }
 
 @layer utilities {
-  @media (width >= 48rem) {
-    .md\:p-10 {
-      padding: calc(var(--spacing) * 10);
-      height: stretch;
-      align-items: stretch;
-      align-content: center;
-    }
-  }
-
-  .p-6 {
-    .w-full {
-      width: 100%;
-      height: stretch;
-    }
+  .text-balance {
+    text-wrap: balance;
   }
 }
