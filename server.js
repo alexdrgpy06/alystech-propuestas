@@ -218,8 +218,11 @@ const CONDITIONS = [
 ];
 
 function drawFooter(doc, pageLabel) {
+  // y=778 stays inside the page's own bottom margin (A4 minus 50pt margin = 791.89);
+  // going past that makes PDFKit auto-paginate while drawing the footer itself,
+  // leaving a near-blank trailing page with nothing but the footer on it.
   doc.fontSize(8).fillColor('#8590a3').font('Helvetica')
-    .text(`Alystech · Soluciones en Software y Seguridad Informática · ${CONTACT_EMAIL}${pageLabel ? '  ·  ' + pageLabel : ''}`, 50, 800, { width: 495, align: 'center' });
+    .text(`Alystech · Soluciones en Software y Seguridad Informática · ${CONTACT_EMAIL}${pageLabel ? '  ·  ' + pageLabel : ''}`, 50, 778, { width: 495, align: 'center', lineBreak: false });
 }
 
 app.post('/api/pdf', (req, res) => {
