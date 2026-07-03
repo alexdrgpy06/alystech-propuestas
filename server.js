@@ -205,8 +205,10 @@ const NEXT_STEPS = [
 ];
 
 const CONDITIONS = [
+  'Todos los costos de esta propuesta pueden ajustarse y mejorarse según las necesidades específicas del cliente. Es una propuesta preliminar elaborada en base a la información recibida, no una cotización cerrada.',
   'Forma de pago (desarrollo/implementación): 50% al aceptar la propuesta, 25% al iniciar la implementación, 25% a la entrega.',
   'Equipos y hardware van por separado, a cargo directo del cliente — no son honorarios de Alystech. Alystech puede oficiar de intermediario de compra a pedido.',
+  'Las visitas presenciales fuera del soporte remoto incluido no están contempladas salvo que se estipule expresamente; de requerirse, se cotizan y facturan aparte.',
   'La visita de relevamiento y la auditoría en sitio pueden detectar hallazgos fuera de este alcance; de aparecer, se cotizan aparte antes de ejecutarlos.',
   'Precios estimativos, con IVA (10%) incluido, sujetos a confirmación tras el relevamiento en sitio. Validez de esta propuesta: 30 días.',
   'Tipo de cambio referencial: 1 USD ≈ 6.250 Gs, sujeto a la cotización del día de pago.',

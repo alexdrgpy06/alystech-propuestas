@@ -2,6 +2,10 @@ import type { ConditionCard } from '../types/proposal';
 
 export const conditions: ConditionCard[] = [
   {
+    title: 'Propuesta ajustable',
+    text: 'Todos los costos de esta propuesta pueden ajustarse y mejorarse según las necesidades específicas del cliente. Es una propuesta preliminar elaborada en base a la información recibida, no una cotización cerrada.',
+  },
+  {
     title: 'Carácter de los precios',
     text: 'Todos los valores de este documento son estimativos y pueden variar según el relevamiento in situ, la disponibilidad de equipos y las condiciones de mercado al momento de la contratación.',
   },
@@ -23,15 +27,11 @@ export const conditions: ConditionCard[] = [
   },
   {
     title: 'Visitas presenciales (on-site)',
-    text: 'Las visitas presenciales fuera del soporte remoto incluido tienen costo adicional. Si la implementación en sitio supera una jornada, se suma $250 por día adicional más viáticos (hospedaje, alimentación) y traslado/peajes, a cargo del cliente.',
+    text: 'Las visitas presenciales fuera del soporte remoto incluido no están contempladas en el alcance salvo que se estipule expresamente en esta propuesta. De requerirse, se cotizan y facturan aparte (incluye día(s) adicional(es), viáticos, hospedaje, alimentación y traslado/peajes), a cargo del cliente.',
   },
   {
     title: 'Configuración de dispositivos móviles',
     text: 'Los dispositivos deben entregarse en las oficinas de Alystech para su configuración inicial. El traslado del equipo técnico a las instalaciones del cliente para esta tarea tiene el costo de visita on-site indicado arriba.',
-  },
-  {
-    title: 'Inversión mínima de desarrollo',
-    text: 'Esta propuesta tiene una inversión mínima de desarrollo de USD 12.000, IVA incluido, sujeta a negociación según el alcance final acordado. La combinación recomendada (MDM-B + AUD-B + SOP-B) ya cubre este mínimo. Incluso la configuración más económica ronda los USD 10.000, IVA incluido.',
   },
   {
     title: 'Costos de implementación',
