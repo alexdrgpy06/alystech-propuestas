@@ -15,11 +15,6 @@ interface WizardProps {
   onToggleAddon: (group: GroupId, addonId: string) => void;
   totals: Totals;
   onSelectOption: (group: GroupId, optionId: string) => void;
-  onAccept: () => void;
-  onReject: () => void;
-  onConsulta: () => void;
-  onDownloadPdf: () => void;
-  pdfPending?: boolean;
 }
 
 export function Wizard({
@@ -31,11 +26,6 @@ export function Wizard({
   onToggleAddon,
   totals,
   onSelectOption,
-  onAccept,
-  onReject,
-  onConsulta,
-  onDownloadPdf,
-  pdfPending,
 }: WizardProps) {
   const getGroup = (id: GroupId) => proposalContent.groups.find((g) => g.id === id);
 
@@ -145,11 +135,10 @@ export function Wizard({
             addonSelections={addonSelections}
             totals={totals}
             exchangeRate={proposalContent.exchangeRate}
-            onConsulta={onConsulta}
-            onDownloadPdf={onDownloadPdf}
-            onReject={onReject}
-            onAccept={onAccept}
-            pdfPending={pdfPending}
+            nextSteps={proposalContent.nextSteps}
+            conditions={proposalContent.conditions}
+            terms={proposalContent.terms}
+            onToggleAddon={onToggleAddon}
           />
         )}
       </motion.div>

@@ -12,6 +12,8 @@ export interface ProgressTrackProps {
   variant?: 'segments' | 'dots';
   /** Show step label (e.g., "Paso 3 de 13") */
   showLabel?: boolean;
+  /** Use light-on-dark colors (for placement on a dark header) */
+  onDark?: boolean;
   /** Custom class name */
   className?: string;
 }
@@ -34,9 +36,12 @@ export const ProgressTrack = ({
   labels,
   variant = 'segments',
   showLabel = true,
+  onDark = false,
   className = '',
 }: ProgressTrackProps) => {
   const steps = Array.from({ length: totalSteps }, (_, i) => i);
+  const inactiveColor = onDark ? 'rgba(255,255,255,0.15)' : 'var(--color-surface-container-high)';
+  const labelColor = onDark ? 'text-white/80' : 'text-primary';
 
   if (variant === 'dots') {
     return (
@@ -46,15 +51,15 @@ export const ProgressTrack = ({
             key={step}
             className={`
               w-2 h-2 rounded-full transition-all duration-300
-              ${step <= currentStep ? 'bg-primary' : 'bg-surface-container-high'}
               ${step === currentStep ? 'scale-125' : ''}
             `}
+            style={{ backgroundColor: step <= currentStep ? 'var(--color-primary)' : inactiveColor }}
             animate={{ scale: step === currentStep ? 1.25 : 1 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
           />
         ))}
         {showLabel && labels && (
-          <span className="font-label-caps text-label-caps text-secondary ml-2">
+          <span className={`font-label-caps text-label-caps ${onDark ? 'text-white/60' : 'text-secondary'} ml-2`}>
             {labels[currentStep] || `Paso ${currentStep + 1} de ${totalSteps}`}
           </span>
         )}
@@ -67,19 +72,16 @@ export const ProgressTrack = ({
       {steps.map((step) => (
         <motion.div
           key={step}
-          className={`
-            progress-segment
-            ${step <= currentStep ? 'active' : 'inactive'}
-          `}
-          animate={{ 
-            backgroundColor: step <= currentStep ? 'var(--color-primary)' : 'var(--color-surface-container-high)',
-            width: step === currentStep ? '2.5rem' : '2rem'
+          className="progress-segment"
+          animate={{
+            backgroundColor: step <= currentStep ? 'var(--color-primary)' : inactiveColor,
+            width: step === currentStep ? '2.5rem' : '2rem',
           }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
         />
       ))}
       {showLabel && labels && (
-        <span className="font-label-caps text-label-caps text-primary ml-sm">
+        <span className={`font-label-caps text-label-caps ${labelColor} ml-sm`}>
           {labels[currentStep] || `Paso ${currentStep + 1} de ${totalSteps}`}
         </span>
       )}

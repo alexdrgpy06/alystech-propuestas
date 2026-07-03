@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -193,42 +194,68 @@ app.post('/api/consulta', async (req, res) => {
   res.json({ ok: true });
 });
 
+const CONTACT_EMAIL = process.env.NOTIFY_EMAIL || 'aramirez@alystechpy.online';
+
+const NEXT_STEPS = [
+  ['Paso 1', 'Aceptación de la propuesta desde la página interactiva (botón «Aceptar propuesta»).'],
+  ['Paso 2', 'Pago inicial (50% del desarrollo) y agenda de la visita de relevamiento en sitio.'],
+  ['Paso 3', 'Implementación del servidor, MDM, red y auditoría. Pago del 25% al llegar a esta fase.'],
+  ['Paso 4', 'Pruebas, capacitación y entrega. Pago final del 25% al completar la entrega.'],
+  ['Continuo', 'Soporte y monitoreo según el plan contratado, con reportes periódicos.'],
+];
+
+const CONDITIONS = [
+  'Forma de pago (desarrollo/implementación): 50% al aceptar la propuesta, 25% al iniciar la implementación, 25% a la entrega.',
+  'Equipos y hardware van por separado, a cargo directo del cliente — no son honorarios de Alystech. Alystech puede oficiar de intermediario de compra a pedido.',
+  'La visita de relevamiento y la auditoría en sitio pueden detectar hallazgos fuera de este alcance; de aparecer, se cotizan aparte antes de ejecutarlos.',
+  'Precios estimativos, con IVA (10%) incluido, sujetos a confirmación tras el relevamiento en sitio. Validez de esta propuesta: 30 días.',
+  'Tipo de cambio referencial: 1 USD ≈ 6.250 Gs, sujeto a la cotización del día de pago.',
+];
+
+function drawFooter(doc, pageLabel) {
+  doc.fontSize(8).fillColor('#8590a3').font('Helvetica')
+    .text(`Alystech · Soluciones en Software y Seguridad Informática · ${CONTACT_EMAIL}${pageLabel ? '  ·  ' + pageLabel : ''}`, 50, 800, { width: 495, align: 'center' });
+}
+
 app.post('/api/pdf', (req, res) => {
   if (!PDFDocument) return res.status(500).json({ ok: false, error: 'PDF no disponible' });
   const { proposalId, selections, totals, clientName } = req.body || {};
-  const doc = new PDFDocument({ margin: 50, size: 'A4' });
+  const doc = new PDFDocument({ margin: 50, size: 'A4', bufferPages: true });
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `attachment; filename="Alystech-Presupuesto-Araucanos.pdf"`);
   doc.pipe(res);
 
   const logoPath = path.join(__dirname, 'public', 'logo.png');
   let titleX = 50;
-  let subtitleX = 50;
-  
   if (fs.existsSync(logoPath)) {
     try {
-      doc.image(logoPath, 50, 45, { height: 35 });
-      titleX = 100; // Shift text right if logo is rendered
-      subtitleX = 100;
+      doc.image(logoPath, 50, 42, { height: 42 });
+      titleX = 104; // Shift text right so it never overlaps the logo
     } catch (e) {
       console.error('Error cargando logo PDF:', e);
     }
   }
 
-  doc.fillColor('#0d1f3c').fontSize(20).font('Helvetica-Bold').text('Alystech', titleX, 50);
+  doc.fillColor('#0d1f3c').fontSize(21).font('Helvetica-Bold').text('Alystech', titleX, 46);
   doc.fontSize(9).fillColor('#48546b').font('Helvetica')
-    .text('Soluciones en Software y Seguridad Informática', subtitleX, 74)
-    .text(`Ref.: ${proposalId || 'AT-2026-0630-P'}   ·   Generado: ${new Date().toLocaleDateString('es-PY')}`, 50, 88);
-  doc.moveTo(50, 108).lineTo(545, 108).strokeColor('#dde3ec').stroke();
+    .text('Soluciones en Software y Seguridad Informática', titleX, 70);
+  doc.fontSize(8.5).fillColor('#8590a3').font('Helvetica')
+    .text(`Ref.: ${proposalId || 'AT-2026-0630-P'}   ·   Generado: ${new Date().toLocaleDateString('es-PY')}`, 400, 46, { width: 145, align: 'right' });
+  doc.moveTo(50, 100).lineTo(545, 100).strokeColor('#2563eb').lineWidth(2).stroke();
+  doc.lineWidth(1);
 
-  doc.fontSize(15).fillColor('#0d1f3c').font('Helvetica-Bold')
-    .text('Presupuesto — Plataforma de gestión móvil y seguridad informática', 50, 122, { width: 495 });
-  let y = 165;
-  doc.fontSize(10).fillColor('#48546b').font('Helvetica').text('Cliente: Araucanos S.A.', 50, y);
+  doc.fontSize(16).fillColor('#0d1f3c').font('Helvetica-Bold')
+    .text('Presupuesto — Plataforma de gestión móvil y seguridad informática', 50, 116, { width: 495 });
+  let y = 148;
+  doc.fontSize(10).fillColor('#48546b').font('Helvetica-Bold').text('Cliente: Araucanos S.A.', 50, y);
   y += 15;
-  if (clientName) { doc.text(`Confirmado por: ${clientName}`, 50, y); y += 15; }
+  if (clientName) { doc.font('Helvetica').fillColor('#48546b').text(`Confirmado por: ${clientName}`, 50, y); y += 15; }
 
-  y += 15;
+  y += 6;
+  const introText = 'Este documento resume la configuración elegida en la propuesta interactiva de Alystech para Araucanos S.A.: los módulos seleccionados, su desglose de inversión y las condiciones comerciales. Los montos son estimativos, sujetos a confirmación tras el relevamiento en sitio.';
+  doc.fontSize(9).fillColor('#48546b').font('Helvetica').text(introText, 50, y, { width: 495, lineGap: 2 });
+  y += doc.heightOfString(introText, { width: 495, fontSize: 9 }) + 18;
+
   doc.fontSize(11).fillColor('#0d1f3c').font('Helvetica-Bold').text('Configuración seleccionada', 50, y);
   y += 22;
   (selections || []).forEach(s => {
@@ -237,7 +264,7 @@ app.post('/api/pdf', (req, res) => {
     doc.fillColor('#182437').font('Helvetica-Bold').fontSize(9.5).text(`${s.code} — ${s.name}`, 160, y, { width: 280 });
     doc.font('Helvetica-Bold').fillColor('#0d1f3c').fontSize(9.5).text(s.price, 450, y, { width: 95, align: 'right' });
     y += 16;
-    
+
     if (s.description) {
       doc.fillColor('#48546b').font('Helvetica').fontSize(8.5).text(s.description, 160, y, { width: 380, lineGap: 2 });
       y += doc.heightOfString(s.description, { width: 380, fontSize: 8.5 }) + 8;
@@ -281,29 +308,48 @@ app.post('/api/pdf', (req, res) => {
     doc.moveTo(50, y - 6).lineTo(545, y - 6).strokeColor('#eef1f6').stroke();
   });
 
+  // Investment summary — one-time and recurring shown as two clearly separated boxes.
+  if (y + 70 > 750) { doc.addPage(); y = 50; }
   y += 12;
-  doc.rect(50, y, 495, 55).fill('#eef3fc');
-  doc.fillColor('#0d1f3c').fontSize(9).font('Helvetica-Bold').text('TOTAL AÑO 1 (estimativo, IVA incluido)', 65, y + 10);
-  doc.fontSize(20).text((totals && totals.total) || '$0', 65, y + 24);
-  doc.fontSize(9).font('Helvetica').fillColor('#1e3d6b').text(`Recurrente anual: ${(totals && totals.recurrent) || '$0'}`, 300, y + 28);
-  y += 80;
+  doc.rect(50, y, 300, 60).fill('#eef3fc');
+  doc.rect(360, y, 185, 60).fill('#f4f7fb');
+  doc.fillColor('#0d1f3c').fontSize(8.5).font('Helvetica-Bold').text('TOTAL AÑO 1 (pago único + recurrente, estimativo con IVA incluido)', 65, y + 10, { width: 270 });
+  doc.fontSize(21).text((totals && totals.total) || '$0', 65, y + 28);
+  doc.fillColor('#48546b').fontSize(8.5).font('Helvetica-Bold').text('RECURRENTE ANUAL', 375, y + 12);
+  doc.fillColor('#1e3d6b').fontSize(15).font('Helvetica-Bold').text((totals && totals.recurrent) || '$0', 375, y + 28);
+  y += 82;
 
-  doc.fontSize(9.5).fillColor('#0d1f3c').font('Helvetica-Bold').text('Condiciones', 50, y);
-  y += 16;
-  const cond = [
-    'Forma de pago (desarrollo/implementación): 50% al aceptar la propuesta, 25% al iniciar la implementación, 25% a la entrega.',
-    'Equipos y hardware van por separado, a cargo del cliente. Alystech puede oficiar de intermediario de compra.',
-    'La visita de relevamiento y la auditoría en sitio pueden detectar hallazgos fuera de este alcance; de aparecer, se cotizan aparte antes de ejecutarlos.',
-    'Precios estimativos, con IVA incluido. Validez de esta propuesta: 30 días. Tipo de cambio: 1 USD ~ 6.250 Gs.'
-  ];
-  doc.fontSize(8.5).fillColor('#48546b').font('Helvetica');
-  cond.forEach(line => {
-    doc.text('•  ' + line, 50, y, { width: 495 });
-    y += doc.heightOfString(line, { width: 480 }) + 6;
+  // Próximos pasos — mirrors the payment/process timeline shown in the interactive proposal.
+  if (y + 26 > 750) { doc.addPage(); y = 50; }
+  doc.fontSize(11).fillColor('#0d1f3c').font('Helvetica-Bold').text('Próximos pasos', 50, y);
+  y += 18;
+  NEXT_STEPS.forEach(([label, text]) => {
+    const textHeight = doc.heightOfString(text, { width: 430, fontSize: 8.5 });
+    const rowHeight = Math.max(textHeight, 10) + 6;
+    if (y + rowHeight > 750) { doc.addPage(); y = 50; }
+    doc.fillColor('#2563eb').font('Helvetica-Bold').fontSize(8).text(label, 50, y, { width: 55 });
+    doc.fillColor('#48546b').font('Helvetica').fontSize(8.5).text(text, 115, y, { width: 430, lineGap: 1 });
+    y += rowHeight;
   });
 
-  doc.fontSize(8).fillColor('#8590a3')
-    .text('Alystech · Soluciones en Software y Seguridad Informática', 50, 780, { width: 495, align: 'center' });
+  y += 10;
+  if (y + 26 > 750) { doc.addPage(); y = 50; }
+  doc.fontSize(9.5).fillColor('#0d1f3c').font('Helvetica-Bold').text('Condiciones', 50, y);
+  y += 16;
+  doc.fontSize(8.5).fillColor('#48546b').font('Helvetica');
+  CONDITIONS.forEach(line => {
+    const lineHeight = doc.heightOfString(line, { width: 480 }) + 6;
+    if (y + lineHeight > 750) { doc.addPage(); y = 50; }
+    doc.text('•  ' + line, 50, y, { width: 495 });
+    y += lineHeight;
+  });
+
+  // Footer with contact + page numbers on every page.
+  const pageRange = doc.bufferedPageRange();
+  for (let i = 0; i < pageRange.count; i++) {
+    doc.switchToPage(pageRange.start + i);
+    drawFooter(doc, pageRange.count > 1 ? `Página ${i + 1} de ${pageRange.count}` : '');
+  }
 
   doc.end();
 });

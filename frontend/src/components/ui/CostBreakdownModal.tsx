@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { AddonItem, CostLine } from '../../types/proposal';
 import { formatUsd } from '../../lib/currency';
 import { AddonMenu } from '../options/AddonMenu';
-import { GlassPanel, GlassPanelHeader, GlassPanelBody, GlassPanelFooter } from './GlassPanel';
+import { GlassPanel, GlassPanelHeader, GlassPanelBody } from './GlassPanel';
 import { GhostButton } from './ActionButton';
 
 interface CostBreakdownModalProps {
@@ -126,9 +126,9 @@ export function CostBreakdownModal({
             transition={{ duration: 0.25, ease: 'easeOut' }}
             className="relative w-full max-w-2xl max-h-[85vh] overflow-hidden"
           >
-            <GlassPanel variant="modal" className="h-full flex flex-col">
+            <GlassPanel variant="light" className="h-full flex flex-col !bg-white">
               {/* Header */}
-              <GlassPanelHeader className="bg-white/95 border-border-slate">
+              <GlassPanelHeader className="border-border-slate px-6 pt-6">
                 <div className="flex items-start gap-3 min-w-0">
                   {groupIcon && (
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
@@ -162,7 +162,7 @@ export function CostBreakdownModal({
               </GlassPanelHeader>
 
               {/* Content (scrollable) */}
-              <GlassPanelBody className="overflow-y-auto p-6 space-y-6">
+              <GlassPanelBody className="flex-1 min-h-0 max-h-[calc(85vh-160px)] overflow-y-auto p-6 space-y-6">
                 {/* Description */}
                 {description && (
                   <div className="bg-surface-container-low rounded-lg border border-border-slate p-4">
@@ -221,7 +221,7 @@ export function CostBreakdownModal({
                             <p className="font-label-caps text-label-caps text-ink-muted">Costo único</p>
                           )}
                           {oneTimeCosts.map((cost, idx) => (
-                            <div key={idx} className="flex justify-between items-start gap-2 font-body-base text-body-base py-1 border-b border-border-slate/30 last:border-0">
+                            <div key={idx} className="flex justify-between items-center gap-2 font-body-base text-body-base py-2 border-b border-border-slate/30 last:border-0">
                               <div className="flex items-start gap-1.5 flex-1 min-w-0">
                                 {cost.category && (
                                   <span className={`font-label-caps text-label-caps border px-2 py-0.5 rounded shrink-0 mt-0.5 ${CATEGORY_COLORS[cost.category] || 'bg-surface-container-high text-ink-muted border-border-slate'}`}>
@@ -230,7 +230,7 @@ export function CostBreakdownModal({
                                 )}
                                 <span className="text-ink-secondary leading-snug">{cost.label}</span>
                               </div>
-                              <span className="font-headline-md text-headline-md text-ink-navy shrink-0 whitespace-nowrap">
+                              <span className="font-body-base text-base font-bold text-ink-navy shrink-0 whitespace-nowrap">
                                 {formatUsd(cost.amountUsd)}
                               </span>
                             </div>
@@ -242,7 +242,7 @@ export function CostBreakdownModal({
                         <div className="space-y-2 pt-2 border-t border-border-slate">
                           <p className="font-label-caps text-label-caps text-ink-muted">Recurrente anual</p>
                           {recurringCosts.map((cost, idx) => (
-                            <div key={idx} className="flex justify-between items-start gap-2 font-body-base text-body-base py-1 border-b border-border-slate/30 last:border-0">
+                            <div key={idx} className="flex justify-between items-center gap-2 font-body-base text-body-base py-2 border-b border-border-slate/30 last:border-0">
                               <div className="flex items-start gap-1.5 flex-1 min-w-0">
                                 {cost.category && (
                                   <span className={`font-label-caps text-label-caps border px-2 py-0.5 rounded shrink-0 mt-0.5 ${CATEGORY_COLORS[cost.category] || 'bg-surface-container-high text-ink-muted border-border-slate'}`}>
@@ -251,7 +251,7 @@ export function CostBreakdownModal({
                                 )}
                                 <span className="text-ink-secondary leading-snug">{cost.label}</span>
                               </div>
-                              <span className="font-headline-md text-headline-md text-positive shrink-0 whitespace-nowrap">
+                              <span className="font-body-base text-base font-bold text-positive shrink-0 whitespace-nowrap">
                                 {formatUsd(cost.amountUsd)}/año
                               </span>
                             </div>
@@ -263,8 +263,8 @@ export function CostBreakdownModal({
 
                 </div>
 
-                {/* Addon menu — full width below the two columns */}
-                {addons && tierId && onToggleAddon && (
+                {/* Addon menu — full width below the two columns. Read-only when no onToggleAddon handler is given. */}
+                {addons && tierId && (
                   <div className="pt-2 border-t border-border-slate">
                     <AddonMenu
                       addons={addons}
@@ -277,8 +277,8 @@ export function CostBreakdownModal({
 
               </GlassPanelBody>
 
-              {/* Total Footer (fixed, always visible) */}
-              <GlassPanelFooter sticky className="bg-white/95 border-border-slate">
+              {/* Total Footer (sticky, always visible) */}
+              <div className="shrink-0 sticky bottom-0 bg-white border-t border-border-slate px-6 py-4 flex items-center justify-between gap-3">
                 <div>
                   <p className="font-label-caps text-label-caps text-ink-muted">
                     {addonsTotal > 0 ? 'Total con addons seleccionados' : 'Total de la alternativa'}
@@ -292,7 +292,7 @@ export function CostBreakdownModal({
                 <span className="font-display-lg text-display-lg text-primary shrink-0">
                   {formatUsd(grandTotal)}
                 </span>
-              </GlassPanelFooter>
+              </div>
             </GlassPanel>
           </motion.div>
         </div>

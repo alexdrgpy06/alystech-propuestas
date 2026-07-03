@@ -98,13 +98,13 @@ export const RadioCard = forwardRef<HTMLDivElement, RadioCardProps>(
           card-option
           rounded-xl
           border
-          p-6
+          p-5
           cursor-pointer
           relative
           flex
           flex-col
           justify-between
-          min-h-[220px]
+          min-h-[180px]
           transition-all
           duration-200
           ${selected ? 'border-2 border-primary bg-accent-soft' : 'border-border-slate bg-surface'}
@@ -115,8 +115,8 @@ export const RadioCard = forwardRef<HTMLDivElement, RadioCardProps>(
         {...props}
       >
         {/* Top section: Icon and Radio Indicator */}
-        <div className="flex justify-between items-start mb-4">
-          <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 transition-colors duration-200 ${selected ? iconBgClasses[iconVariant] : 'bg-surface-container-high'} ${iconColorClasses[iconVariant]}`}>
+        <div className="flex justify-between items-start mb-3">
+          <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 ${selected ? iconBgClasses[iconVariant] : 'bg-surface-container-high'} ${iconColorClasses[iconVariant]}`}>
             {icon}
           </div>
           <div
@@ -130,11 +130,11 @@ export const RadioCard = forwardRef<HTMLDivElement, RadioCardProps>(
 
         {/* Content section */}
         <div className="flex-1">
-          <h3 className="font-headline-md text-headline-md text-on-surface mb-2 text-xl">
+          <h3 className="font-headline-md text-headline-md text-on-surface mb-1.5">
             {title}
           </h3>
           {description && (
-            <p className="font-body-medium text-body-medium text-secondary mb-4">
+            <p className="font-body-base text-body-base text-secondary leading-snug mb-3 line-clamp-3">
               {description}
             </p>
           )}
@@ -150,10 +150,10 @@ export const RadioCard = forwardRef<HTMLDivElement, RadioCardProps>(
                 </span>
               )}
               {price && (
-                <span className="font-bold text-primary text-lg">
+                <span className="font-extrabold text-primary text-2xl leading-tight">
                   {price}
                   {pricePeriod && (
-                    <span className="text-[10px] font-medium text-secondary ml-1">{pricePeriod}</span>
+                    <span className="text-xs font-semibold text-secondary ml-1">{pricePeriod}</span>
                   )}
                 </span>
               )}

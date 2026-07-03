@@ -63,7 +63,7 @@ export function IntroStep({ onStart }: IntroStepProps) {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="flex flex-col items-center gap-3"
       >
-        <div className="w-20 h-20 rounded-2xl bg-ink-navy shadow-lg shadow-primary/20 flex items-center justify-center mb-md overflow-hidden">
+        <div className="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-ink-navy shadow-lg shadow-primary/20 flex items-center justify-center mb-md overflow-hidden">
           <img
             src={`${import.meta.env.BASE_URL}logo.png`}
             alt="AlysTech"

@@ -119,21 +119,59 @@ function App() {
   const isCanvasStep = currentStep === 12;
   const isWelcomeStep = currentStep === 0;
 
+  const canvasFooterActions = isCanvasStep ? (
+    <>
+      <button
+        type="button"
+        onClick={() => setDecisionType('reject')}
+        className="flex items-center justify-center text-ink-muted hover:text-danger hover:bg-danger/5 border border-transparent rounded-xl px-md py-2.5 font-body-medium font-bold transition-all min-h-[44px]"
+      >
+        <span className="material-symbols-outlined mr-1.5 text-[18px]">close</span>
+        Rechazar
+      </button>
+      <button
+        type="button"
+        onClick={() => setConsultaOpen(true)}
+        className="flex items-center justify-center text-ink-secondary hover:text-primary hover:bg-primary/5 border border-transparent rounded-xl px-md py-2.5 font-body-medium font-bold transition-all min-h-[44px]"
+      >
+        <span className="material-symbols-outlined mr-1.5 text-[18px]">chat_bubble</span>
+        Consulta
+      </button>
+      <button
+        type="button"
+        onClick={handleDownloadPdf}
+        disabled={pdfPending}
+        className="flex items-center justify-center text-ink-secondary bg-white hover:bg-surface-container-high disabled:opacity-40 disabled:pointer-events-none border border-border-slate rounded-xl px-lg py-2.5 font-body-medium font-bold transition-all min-h-[44px]"
+      >
+        <span className="material-symbols-outlined mr-1.5 text-[18px]">picture_as_pdf</span>
+        {pdfPending ? 'Generando…' : 'Descargar'}
+      </button>
+      <button
+        type="button"
+        onClick={() => setDecisionType('accept')}
+        className="flex items-center justify-center bg-primary text-on-primary rounded-xl px-lg py-2.5 font-bold shadow-lg shadow-primary/25 hover:scale-[1.02] transition-all font-body-medium min-h-[44px]"
+      >
+        <span className="material-symbols-outlined mr-1.5 text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+        Confirmar Propuesta
+      </button>
+    </>
+  ) : undefined;
+
   return (
     <div className="min-h-screen bg-surface-dark font-sans antialiased selection:bg-accent/20 selection:text-accent">
       <Shell
         currentStep={currentStep}
         totalSteps={TOTAL_STEPS}
         stepLabels={Object.values(STEP_LABELS)}
-        showHelp={true}
-        onHelp={() => { /* Help action */ }}
         onBack={handlePrev}
         onContinue={handleNext}
         backDisabled={isWelcomeStep}
         continueDisabled={isWelcomeStep ? false : !touched.has(MODULE_STEPS[currentStep]) && MODULE_STEPS[currentStep] !== undefined}
         continueLoading={pdfPending}
-        continueText={isWelcomeStep ? 'Empezar' : isCanvasStep ? 'Confirmar' : 'Continuar'}
+        continueText={isWelcomeStep ? 'Empezar' : 'Continuar'}
         totalUsd={isWelcomeStep || isCanvasStep ? undefined : totals.totalUsd}
+        recurUsd={isWelcomeStep || isCanvasStep ? undefined : totals.recurUsd}
+        footerActions={canvasFooterActions}
       >
         {/* Skip warning - shown inside the shell content */}
         <AnimatePresence>
@@ -169,11 +207,6 @@ function App() {
           onToggleAddon={toggleAddon}
           totals={totals}
           onSelectOption={handleSelectOption}
-          onAccept={() => setDecisionType('accept')}
-          onReject={() => setDecisionType('reject')}
-          onConsulta={() => setConsultaOpen(true)}
-          onDownloadPdf={handleDownloadPdf}
-          pdfPending={pdfPending}
         />
 
         {/* ── Modals ── */}

@@ -8,7 +8,7 @@ export const mdm: OptionGroupContent = {
   title: 'Gestión y Blindaje de la Flota de Dispositivos Samsung',
   risk: 'Araucanos S.A. ha identificado que el personal de campo desactiva la geolocalización, apaga los terminales corporativos o ejecuta restablecimientos de fábrica para eludir los controles de ruta y patrullaje establecidos.',
   impact: 'Esta situación genera pérdida total de visibilidad operativa sobre la flota, imposibilita la auditoría de cumplimiento de rutas y expone los activos físicos a sustracción sin posibilidad de bloqueo o localización remota.',
-  guarantee: { title: 'Garantía Tecnológica Común', text: 'Todas las alternativas incorporan la integración con Samsung Knox Platform for Enterprise, el único mecanismo que permite restricciones a nivel de hardware: bloqueo de apagado, protección anti-restablecimiento y control forzado de GPS y datos móviles.' },
+  guarantee: { title: 'Garantía Tecnológica', text: 'Todas las alternativas incorporan la integración con Samsung Knox Platform for Enterprise, el único mecanismo que permite restricciones a nivel de hardware: bloqueo de apagado, protección anti-restablecimiento y control forzado de GPS y datos móviles.' },
   tcoRegional: {
     title: 'Análisis Comparativo de Costos a 3 Años',
     description: 'Proyección del costo total de propiedad para la gestión de 80 dispositivos durante un período de 3 años de operación continua:',

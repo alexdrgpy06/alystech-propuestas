@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { ProgressTrack } from '@/components/ui/ProgressTrack';
-import { GhostButton } from '@/components/ui/ActionButton';
 
 export interface WizardHeaderProps {
   /** Current step (0-indexed) */
@@ -9,10 +8,6 @@ export interface WizardHeaderProps {
   totalSteps: number;
   /** Step labels */
   stepLabels?: string[];
-  /** Show help button */
-  showHelp?: boolean;
-  /** Help button click handler */
-  onHelp?: () => void;
   /** Custom logo/brand */
   logo?: ReactNode;
   /** Custom class name */
@@ -20,22 +15,18 @@ export interface WizardHeaderProps {
 }
 
 /**
- * WizardHeader - Fixed header with logo, progress track, and help button
- * 
- * Based on DESIGN.md:
- * - Fixed position at top
- * - Logo on left
- * - Progress track (segments) in center
- * - Help button on right
- * - Glassmorphism backdrop (surface/80 + backdrop-blur)
- * - Border bottom with border-slate
+ * WizardHeader - Dark strip at the top of the fused Shell card.
+ *
+ * Based on the AlysTech Precision stitch reference:
+ * - Dark navy background (#0f172a), border-b border-white/10
+ * - Logo on a badge, "AlysTech" wordmark + "Propuesta Técnica" eyebrow
+ * - Progress track centered (hidden on mobile)
+ * - "Paso X/13" badge on the right (no help icon)
  */
 export function WizardHeader({
   currentStep,
   totalSteps,
   stepLabels = [],
-  showHelp = true,
-  onHelp,
   logo,
   className = '',
 }: WizardHeaderProps) {
@@ -44,59 +35,52 @@ export function WizardHeader({
   );
 
   return (
-    <header className={`
-      fixed top-4 left-4 right-4 z-50
-      flex justify-between items-center
-      px-lg py-sm
-      max-w-max-width-content mx-auto
-      bg-surface/90 backdrop-blur-md
-      border border-border-slate
-      shadow-lg
-      rounded-2xl
-      ${className}
-    `}>
-      {/* Logo/Brand */}
-      <div className="flex items-center gap-2 flex-shrink-0">
-        {logo || (
-          <>
-            <img
-              src={`${import.meta.env.BASE_URL}logo.png`}
-              alt=""
-              aria-hidden="true"
-              className="h-9 w-14 object-cover object-top"
-            />
-            <span className="font-headline-md text-headline-md font-extrabold tracking-tight text-primary">
-              AlysTech
-            </span>
-          </>
-        )}
-      </div>
+    <header className={`w-full bg-surface-dark border-b border-white/10 shrink-0 ${className}`}>
+      <div className="flex justify-between items-center gap-4 h-20 md:h-24 px-margin-mobile md:px-margin-desktop">
+        {/* Logo/Brand */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          {logo || (
+            <>
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl overflow-hidden flex-shrink-0">
+                <img
+                  src={`${import.meta.env.BASE_URL}logo.png`}
+                  alt=""
+                  aria-hidden="true"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+              <div className="hidden sm:block">
+                <h1 className="font-headline-md text-headline-md md:text-[28px] font-extrabold text-white leading-none">
+                  AlysTech
+                </h1>
+                <p className="font-label-caps text-[10px] text-white/50 uppercase tracking-widest font-bold mt-1">
+                  Propuesta Técnica
+                </p>
+              </div>
+            </>
+          )}
+        </div>
 
-      {/* Center: Progress Track */}
-      <div className="hidden md:flex items-center gap-md flex-1 justify-center">
-        <ProgressTrack
-          currentStep={currentStep}
-          totalSteps={totalSteps}
-          labels={defaultLabels}
-          variant="segments"
-          showLabel={true}
-        />
-      </div>
+        {/* Center: Progress Track */}
+        <div className="hidden md:flex items-center gap-md flex-1 justify-center">
+          <ProgressTrack
+            currentStep={currentStep}
+            totalSteps={totalSteps}
+            labels={defaultLabels}
+            variant="segments"
+            showLabel={true}
+            onDark
+          />
+        </div>
 
-      {/* Right: Help Button */}
-      <div className="flex items-center gap-md flex-shrink-0">
-        {showHelp && (
-          <GhostButton
-            onClick={onHelp}
-            size="sm"
-            aria-label="Ayuda"
-            className="p-sm text-primary hover:bg-accent-soft rounded-full transition-colors"
-          >
-            <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 0" }}>
-              help_outline
+        {/* Right: Step badge */}
+        <div className="flex items-center gap-md flex-shrink-0">
+          <div className="bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-lg">
+            <span className="font-body-medium text-body-medium text-primary font-bold whitespace-nowrap">
+              Paso {currentStep + 1}/{totalSteps}
             </span>
-          </GhostButton>
-        )}
+          </div>
+        </div>
       </div>
     </header>
   );

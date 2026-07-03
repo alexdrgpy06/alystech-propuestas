@@ -13,10 +13,6 @@ export interface ShellProps {
   totalSteps?: number;
   /** Step labels for progress track */
   stepLabels?: string[];
-  /** Show help button in header */
-  showHelp?: boolean;
-  /** Help button handler */
-  onHelp?: () => void;
   /** Back button handler */
   onBack?: () => void;
   /** Continue/Next button handler */
@@ -31,18 +27,24 @@ export interface ShellProps {
   continueText?: string;
   /** Running Año 1 total shown in the footer; omit to hide the total block */
   totalUsd?: number;
+  /** Recurring annual cost shown in the footer next to the Año 1 total */
+  recurUsd?: number;
+  /** Replaces the footer's Continue button with custom actions (e.g. on the final step) */
+  footerActions?: ReactNode;
 }
 
 /**
  * Shell - Main layout wrapper for the wizard
- * 
- * Based on DESIGN.md:
- * - 1440px max-width shell (max-w-[1440px])
- * - 1024px content track (max-w-max-width-content ≈ 1024px)
- * - Dark navy shell backdrop (#0f172a)
- * - Glass panel canvas (white/95 + backdrop-blur)
- * - Fixed header and footer
- * - Grid pattern background with gradient orb
+ *
+ * Based on the AlysTech Precision stitch reference (Downloads/stitch_alystech_responsive_wizard_system (2)),
+ * refined per feedback: header and footer are PINNED (fixed height, never scroll away);
+ * only the content canvas in between scrolls internally. The card itself never exceeds
+ * the viewport height, so there is exactly one scroll region — no page-level scroll,
+ * no nested scroll traps.
+ * - Dark navy backdrop (#0f172a) behind a single fused card
+ * - The card itself: dark header + white content canvas + light-gray footer,
+ *   all inside ONE rounded-[2rem] bordered container (no floating disconnected pills)
+ * - Edge-to-edge on mobile, floating with margin on desktop
  */
 export function Shell({
   header,
@@ -50,8 +52,6 @@ export function Shell({
   currentStep = 0,
   totalSteps = 13,
   stepLabels,
-  showHelp = true,
-  onHelp,
   onBack = () => {},
   onContinue = () => {},
   backDisabled = false,
@@ -59,35 +59,33 @@ export function Shell({
   continueLoading = false,
   continueText = 'Continuar',
   totalUsd,
+  recurUsd,
+  footerActions,
 }: ShellProps) {
   return (
-    <div className="relative min-h-screen bg-surface-dark overflow-hidden">
+    <div className="relative h-dvh bg-surface-dark overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-grid-pattern pointer-events-none z-0" aria-hidden="true" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-orb rounded-full blur-[100px] pointer-events-none z-0" aria-hidden="true" />
 
-      {/* Main Shell Container */}
-      <div className="max-w-[1440px] mx-auto relative min-h-screen">
-        {/* Wizard Header — floating pill, fixed on all breakpoints */}
+      {/* Fused Card: header + canvas + footer as one bordered container, pinned to the viewport */}
+      <div className="relative z-10 mx-auto w-full max-w-5xl h-dvh md:h-[calc(100dvh-4rem)] md:my-8 bg-white md:rounded-[2rem] md:border md:border-border-slate md:shadow-xl overflow-hidden flex flex-col">
         <WizardHeader
           currentStep={currentStep}
           totalSteps={totalSteps}
           stepLabels={stepLabels}
-          showHelp={showHelp}
-          onHelp={onHelp}
         />
 
-        {/* Content Canvas */}
-        <main className="glass-panel min-h-screen md:min-h-[calc(100vh-140px)] w-full md:rounded-b-2xl shadow-xl flex flex-col items-center pt-24 pb-32 px-margin-mobile md:px-margin-desktop border-b border-x border-border-slate">
+        {/* Only this region scrolls — header/footer stay pinned */}
+        <main className="flex-1 min-h-0 overflow-y-auto flex flex-col items-center w-full px-margin-mobile md:px-margin-desktop py-lg md:py-10">
           <div className="w-full max-w-max-width-content">
             {header}
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               {children}
             </div>
           </div>
         </main>
 
-        {/* Wizard Footer — floating dark pill, fixed on all breakpoints */}
         <WizardFooter
           onBack={onBack}
           onContinue={onContinue}
@@ -96,6 +94,8 @@ export function Shell({
           continueLoading={continueLoading}
           continueText={continueText}
           totalUsd={totalUsd}
+          recurUsd={recurUsd}
+          actionsOverride={footerActions}
         />
       </div>
     </div>

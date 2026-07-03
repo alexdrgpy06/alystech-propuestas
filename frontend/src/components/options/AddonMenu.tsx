@@ -7,7 +7,8 @@ interface AddonMenuProps {
   /** id de la opción (tier) abierta en el modal, para resolver "incluido" vs. "disponible" */
   tierId: string;
   selectedAddonIds: string[];
-  onToggle: (addonId: string) => void;
+  /** omitir para renderizar en modo solo-lectura (p.ej. desde el resumen ejecutivo) */
+  onToggle?: (addonId: string) => void;
 }
 
 export function AddonMenu({ addons, tierId, selectedAddonIds, onToggle }: AddonMenuProps) {
@@ -16,6 +17,7 @@ export function AddonMenu({ addons, tierId, selectedAddonIds, onToggle }: AddonM
 
   const included = applicable.filter((a) => a.includedInTiers.includes(tierId));
   const available = applicable.filter((a) => !a.includedInTiers.includes(tierId));
+  const readOnly = !onToggle;
 
   return (
     <GlassPanel variant="light" className="p-4 space-y-4">
@@ -29,16 +31,21 @@ export function AddonMenu({ addons, tierId, selectedAddonIds, onToggle }: AddonM
       </div>
 
       <div className="space-y-2">
-        {/* Available addons (toggleable) */}
+        {/* Available addons (toggleable, or read-only when no onToggle handler is provided) */}
         {available.map((addon) => {
           const checked = selectedAddonIds.includes(addon.id);
+          const Tag = readOnly ? 'div' : 'label';
           return (
-            <label
+            <Tag
               key={addon.id}
-              className={`flex items-start gap-3 rounded-xl border p-4 text-sm cursor-pointer transition-all ${
+              className={`flex items-start gap-3 rounded-xl border p-4 text-sm transition-all ${
+                readOnly ? 'cursor-default' : 'cursor-pointer'
+              } ${
                 checked
                   ? 'border-primary bg-primary/5 shadow-sm'
-                  : 'border-border-slate hover:border-primary/30 hover:bg-surface-container-low/50'
+                  : readOnly
+                    ? 'border-border-slate'
+                    : 'border-border-slate hover:border-primary/30 hover:bg-surface-container-low/50'
               }`}
             >
               <div className={`w-6 h-6 rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center transition-all ${
@@ -50,18 +57,25 @@ export function AddonMenu({ addons, tierId, selectedAddonIds, onToggle }: AddonM
                   </span>
                 )}
               </div>
-              <input
-                type="checkbox"
-                checked={checked}
-                onChange={() => onToggle(addon.id)}
-                className="sr-only"
-              />
+              {!readOnly && (
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() => onToggle(addon.id)}
+                  className="sr-only"
+                />
+              )}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-body-medium text-body-medium text-ink-navy font-bold">{addon.label}</span>
                   {addon.recommended && (
                     <span className="font-label-caps text-label-caps bg-positive/10 text-positive px-2 py-0.5 rounded-full border border-positive/20">
                       Recomendado
+                    </span>
+                  )}
+                  {readOnly && checked && (
+                    <span className="font-label-caps text-label-caps bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">
+                      Seleccionado
                     </span>
                   )}
                 </div>
@@ -75,7 +89,7 @@ export function AddonMenu({ addons, tierId, selectedAddonIds, onToggle }: AddonM
                   <span className="font-body-medium text-body-medium text-ink-muted block">/año</span>
                 )}
               </div>
-            </label>
+            </Tag>
           );
         })}
 

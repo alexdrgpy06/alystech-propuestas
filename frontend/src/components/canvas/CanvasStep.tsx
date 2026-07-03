@@ -4,15 +4,17 @@ import type {
   AddonItem,
   AddonSelections,
   CanvasContent,
+  ConditionCard,
   GroupId,
+  NextStepsContent,
   OptionGroupContent,
   PlanOption,
+  TermsContent,
 } from '@/types/proposal';
 import { formatUsd } from '@/lib/currency';
 import type { Totals } from '@/types/proposal';
 import { CostBreakdownModal } from '../ui/CostBreakdownModal';
 import { GlassPanel } from '@/components/ui/GlassPanel';
-import { PrimaryButton, SecondaryButton, GhostButton } from '@/components/ui/ActionButton';
 
 // Material Symbols icons for each group
 function GroupIcon({ id, className = 'w-4 h-4' }: { id: GroupId; className?: string }) {
@@ -44,6 +46,14 @@ const GROUP_COLOR_BG: Record<GroupId, string> = {
   net: 'bg-positive/10 border-positive/20 text-positive',
   aud: 'bg-warning/10 border-warning/20 text-warning',
   sup: 'bg-surface-container-high border-border-slate text-ink-secondary',
+};
+
+const GROUP_ICON_BADGE: Record<GroupId, string> = {
+  mdm: 'bg-primary/10 text-primary',
+  srv: 'bg-primary/10 text-primary',
+  net: 'bg-positive/10 text-positive',
+  aud: 'bg-warning/10 text-warning',
+  sup: 'bg-surface-container-high text-ink-secondary',
 };
 
 interface BlockAddonSummary {
@@ -102,7 +112,7 @@ function ModuleRow({
       whileHover={{ backgroundColor: 'var(--color-accent-soft)' }}
     >
       <div className="flex items-center space-x-4">
-        <div className={`bg-${group.id === 'mdm' || group.id === 'srv' ? 'primary-container' : group.id === 'net' ? 'positive' : group.id === 'aud' ? 'warning' : 'surface-container-high'} p-3 rounded-lg text-${group.id === 'mdm' || group.id === 'srv' ? 'primary' : group.id === 'net' ? 'positive' : group.id === 'aud' ? 'warning' : 'ink-secondary'}`}>
+        <div className={`p-3 rounded-lg ${GROUP_ICON_BADGE[group.id]}`}>
           <GroupIcon id={group.id} className="w-5 h-5" />
         </div>
         <div>
@@ -129,13 +139,12 @@ interface CanvasStepProps {
   groups: OptionGroupContent[];
   selections: Record<GroupId, string>;
   addonSelections: AddonSelections;
+  onToggleAddon: (group: GroupId, addonId: string) => void;
   totals: Totals;
   exchangeRate: number;
-  onConsulta: () => void;
-  onDownloadPdf: () => void;
-  onReject: () => void;
-  onAccept: () => void;
-  pdfPending?: boolean;
+  nextSteps: NextStepsContent;
+  conditions: ConditionCard[];
+  terms: TermsContent;
 }
 
 export function CanvasStep({
@@ -143,16 +152,16 @@ export function CanvasStep({
   groups,
   selections,
   addonSelections,
+  onToggleAddon,
   totals,
   // exchangeRate reserved for future Gs-equivalent display on this step.
   exchangeRate: _exchangeRate,
-  onConsulta,
-  onDownloadPdf,
-  onReject,
-  onAccept,
-  pdfPending,
+  nextSteps,
+  conditions,
+  terms,
 }: CanvasStepProps) {
   const [detailGroupId, setDetailGroupId] = useState<GroupId | null>(null);
+  const [conditionsOpen, setConditionsOpen] = useState(false);
 
   const selectedDetailGroup = groups.find((g) => g.id === detailGroupId);
   const selectedDetailOption = selectedDetailGroup?.options.find(
@@ -229,60 +238,82 @@ export function CanvasStep({
               </div>
               <p className="font-label-caps text-label-caps text-primary/70 mt-2">NO INCLUYE IMPUESTOS LOCALES</p>
             </div>
-            <div className="space-y-3">
-              <SecondaryButton
-                onClick={onDownloadPdf}
-                disabled={pdfPending}
-                className="w-full"
-                leftIcon={
-                  <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 0" }}>
-                    picture_as_pdf
-                  </span>
-                }
-              >
-                {pdfPending ? 'Generando…' : 'Descargar PDF'}
-              </SecondaryButton>
-              <PrimaryButton
-                onClick={onAccept}
-                className="w-full"
-                leftIcon={
-                  <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    check_circle
-                  </span>
-                }
-              >
-                Confirmar Propuesta
-              </PrimaryButton>
-              <div className="flex items-center justify-center gap-1 pt-1">
-                <GhostButton
-                  onClick={onConsulta}
-                  size="sm"
-                  className="text-ink-secondary hover:text-primary"
-                  leftIcon={
-                    <span className="material-symbols-outlined text-[16px]">
-                      chat_bubble
-                    </span>
-                  }
-                >
-                  Solicitar consulta
-                </GhostButton>
-                <GhostButton
-                  onClick={onReject}
-                  size="sm"
-                  className="text-ink-muted hover:text-danger"
-                  leftIcon={
-                    <span className="material-symbols-outlined text-[16px]">
-                      close
-                    </span>
-                  }
-                >
-                  Rechazar
-                </GhostButton>
-              </div>
-            </div>
+            <p className="font-body-medium text-body-medium text-ink-muted text-center">
+              Confirmar, descargar o consultar: usa los botones fijos abajo.
+            </p>
           </GlassPanel>
         </div>
       </motion.div>
+
+      {/* Metodología de pago y próximos pasos */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.35 }}
+        className="mt-12"
+      >
+        <h2 className="font-headline-md text-headline-md text-ink-navy mb-1">{nextSteps.title}</h2>
+        <p className="font-body-base text-body-base text-ink-secondary mb-6">{nextSteps.intro}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {nextSteps.timeline.map((step, idx) => (
+            <div
+              key={idx}
+              className={`rounded-xl border p-4 ${
+                step.future
+                  ? 'border-dashed border-border-slate bg-surface-container-low/50'
+                  : 'border-border-slate bg-white'
+              }`}
+            >
+              <span className={`font-label-caps text-label-caps px-2 py-0.5 rounded-full border inline-block mb-2 ${
+                step.future
+                  ? 'text-ink-muted border-border-slate bg-surface-container-low'
+                  : 'text-primary border-primary/20 bg-primary/10'
+              }`}>
+                {step.week}
+              </span>
+              <p className="font-body-base text-body-base text-ink-secondary leading-relaxed">{step.text}</p>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Condiciones — colapsado por defecto, letra chica del negocio */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.35 }}
+        className="mt-8 rounded-xl border border-border-slate bg-surface-container-low/50"
+      >
+        <button
+          type="button"
+          onClick={() => setConditionsOpen((v) => !v)}
+          className="w-full flex items-center justify-between gap-3 p-4 text-left min-h-[44px]"
+          aria-expanded={conditionsOpen}
+        >
+          <span className="font-body-medium text-body-medium text-ink-navy font-bold">
+            Condiciones comerciales
+          </span>
+          <span className="material-symbols-outlined text-[20px] text-ink-muted transition-transform" style={{ transform: conditionsOpen ? 'rotate(180deg)' : 'none' }}>
+            expand_more
+          </span>
+        </button>
+        {conditionsOpen && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 pt-0">
+            {conditions.map((cond, idx) => (
+              <div key={idx}>
+                <h3 className="font-body-medium text-body-medium text-ink-navy font-bold mb-1">{cond.title}</h3>
+                <p className="font-body-base text-body-base text-ink-secondary leading-relaxed">{cond.text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </motion.div>
+
+      {/* Términos / pie legal */}
+      <div className="mt-8 pt-4 border-t border-border-slate text-center">
+        <p className="font-body-medium text-body-medium text-ink-muted">{terms.footerLine1}</p>
+        <p className="font-body-medium text-body-medium text-ink-muted">{terms.footerLine2}</p>
+      </div>
 
       {/* Modal */}
       <CostBreakdownModal
@@ -296,6 +327,7 @@ export function CanvasStep({
         addons={selectedDetailGroup?.addons}
         tierId={selectedDetailOption?.id}
         selectedAddonIds={detailGroupId ? addonSelections[detailGroupId] : undefined}
+        onToggleAddon={detailGroupId ? (addonId) => onToggleAddon(detailGroupId, addonId) : undefined}
         groupIcon={detailGroupId ?? undefined}
         optionCode={selectedDetailOption?.code}
       />

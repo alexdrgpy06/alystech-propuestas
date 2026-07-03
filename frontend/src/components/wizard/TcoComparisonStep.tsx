@@ -49,6 +49,14 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
         <p className="font-headline-md text-headline-md text-ink-secondary font-medium">
           Análisis proyectado de costos operativos y profesionales
         </p>
+        {content.intro && (
+          <p className="font-body-base text-body-base text-ink-muted max-w-2xl mx-auto mt-sm flex items-start gap-1.5 text-left">
+            <span className="material-symbols-outlined text-[16px] shrink-0 mt-0.5" style={{ fontVariationSettings: "'FILL' 0" }}>
+              info
+            </span>
+            {content.intro}
+          </p>
+        )}
       </motion.div>
 
       {/* Financial Dashboard Grid */}
@@ -66,7 +74,7 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
                 code_blocks
               </span>
             </div>
-            <span className="font-label-caps text-label-caps text-ink-muted bg-surface-container-low px-sm py-xs rounded-md uppercase">CAPEX</span>
+            <span className="font-label-caps text-label-caps text-ink-muted bg-surface-container-low px-sm py-xs rounded-md uppercase">Pago único</span>
           </div>
           <div>
             <h3 className="font-body-medium text-body-medium text-ink-secondary mb-xs">Costo único de Desarrollo</h3>
@@ -87,7 +95,7 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
                 support_agent
               </span>
             </div>
-            <span className="font-label-caps text-label-caps text-ink-muted bg-surface-container-low px-sm py-xs rounded-md uppercase">OPEX</span>
+            <span className="font-label-caps text-label-caps text-ink-muted bg-surface-container-low px-sm py-xs rounded-md uppercase">Recurrente anual</span>
           </div>
           <div>
             <h3 className="font-body-medium text-body-medium text-ink-secondary mb-xs">Soporte Acumulado (3 años)</h3>
@@ -214,7 +222,7 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
                   <div className="space-y-2 pt-2 border-t border-border-slate">
                     <div className="flex justify-between items-center gap-3 py-1">
                       <span className="font-body-base text-body-base text-ink-secondary leading-snug flex-1">{competitorLabel}</span>
-                      <span className="bg-danger-soft text-danger font-bold rounded-lg px-3 py-1.5 font-label-caps text-label-caps whitespace-nowrap border border-danger/20">
+                      <span className="bg-red-soft text-danger font-bold rounded-lg px-3 py-1.5 font-label-caps text-label-caps whitespace-nowrap border border-danger/20">
                         {competitorValue}
                       </span>
                     </div>

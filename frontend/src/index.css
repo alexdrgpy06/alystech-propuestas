@@ -36,9 +36,9 @@
 
   /* ── Colors (DESIGN.md) ── */
   /* Surface Architecture */
-  --color-surface: #f7f9fb;
+  --color-surface: #f8fafc;
   --color-surface-dim: #d8dadc;
-  --color-surface-bright: #f7f9fb;
+  --color-surface-bright: #f8fafc;
   --color-surface-container-lowest: #ffffff;
   --color-surface-container-low: #f2f4f6;
   --color-surface-container: #eceef0;
@@ -53,7 +53,7 @@
 
   /* Brand & Interactive */
   --color-surface-tint: #0053db;
-  --color-primary: #004ac6;
+  --color-primary: #2563eb;
   --color-on-primary: #ffffff;
   --color-primary-container: #2563eb;
   --color-on-primary-container: #eeefff;
@@ -90,7 +90,7 @@
   --color-on-tertiary-fixed: #111c2d;
   --color-on-tertiary-fixed-variant: #3c475a;
 
-  --color-background: #f7f9fb;
+  --color-background: #f8fafc;
   --color-on-background: #191c1e;
   --color-surface-variant: #e0e3e5;
 
@@ -268,7 +268,7 @@
   .card-option:hover {
     border-color: var(--color-primary);
     background-color: var(--color-accent-soft);
-    box-shadow: 0 4px 20px rgba(0, 74, 198, 0.1);
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.12);
   }
 
   .card-option.selected {

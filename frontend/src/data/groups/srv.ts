@@ -14,9 +14,9 @@ export const srv: OptionGroupContent = {
     description: 'Análisis comparativo del costo de adquisición de hardware de grado servidor en el mercado del Cono Sur, considerando importación y despacho:',
     competitorLabel: 'Cotización regional estimada (importación)',
     competitorValue: '$4.800 - $5.500',
-    alystechLabel: 'Alystech — PowerEdge torre con UPS incluido',
-    alystechValue: '$4.399',
-    savingsText: 'El costo incluye UPS estabilizadora de 2.500 VA, sin intermediación de despachos locales ni costos ocultos de logística.'
+    alystechLabel: 'Estimado de referencia — PowerEdge torre con UPS incluido',
+    alystechValue: '≈ $4.399',
+    savingsText: 'Estimativo de referencia; el equipo lo adquiere directamente el cliente. Alystech puede gestionar la compra a pedido, sin intermediación de despachos locales ni costos ocultos de logística.'
   },
   engineeringNote: {
     title: 'Nota Técnica: Virtualización con Proxmox VE',

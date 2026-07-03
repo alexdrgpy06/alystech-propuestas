@@ -13,18 +13,30 @@ interface OptionsStepProps {
   onToggleAddon?: (addonId: string) => void;
 }
 
-// Material Symbols icons mapping for each block
-function GroupIcon({ id }: { id: string }) {
-  const icons: Record<string, string> = {
-    mdm: 'devices',
-    srv: 'dns',
-    net: 'hub',
-    aud: 'search',
-    sup: 'support_agent',
-  };
+// Material Symbols icons mapping for each block (fallback when the tier letter is unknown)
+const GROUP_ICONS: Record<string, string> = {
+  mdm: 'devices',
+  srv: 'dns',
+  net: 'hub',
+  aud: 'search',
+  sup: 'support_agent',
+};
+
+// Tier-letter icon variants (A=base, B=full, C=custom/bespoke, D=commercial/cloud)
+// so each option card in a row reads as visually distinct, not a repeated icon.
+const TIER_ICONS: Record<string, string> = {
+  A: 'toggle_off',
+  B: 'layers',
+  C: 'auto_awesome',
+  D: 'cloud_done',
+};
+
+function OptionIcon({ groupId, code }: { groupId: string; code?: string }) {
+  const tierLetter = code?.split('-').pop()?.trim().toUpperCase();
+  const iconName = (tierLetter && TIER_ICONS[tierLetter]) || GROUP_ICONS[groupId] || 'settings';
   return (
     <span className="material-symbols-outlined text-[28px]" style={{ fontVariationSettings: "'FILL' 0" }}>
-      {icons[id] || 'settings'}
+      {iconName}
     </span>
   );
 }
@@ -51,18 +63,18 @@ export function OptionsStep({
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 py-4">
+    <div className="w-full flex flex-col gap-4 py-2">
       {/* Step Header */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="text-center md:text-left"
+        className="text-center md:text-left shrink-0"
       >
-        <span className="inline-block px-3 py-1 bg-tertiary-container/20 text-tertiary rounded-full font-label-caps text-label-caps mb-4">
+        <span className="inline-block px-3 py-1 bg-tertiary-container/20 text-tertiary rounded-full font-label-caps text-label-caps mb-2">
           {content.groupTitle} · Alternativas técnicas
         </span>
-        <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-4">
+        <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-2">
           {content.title}
         </h1>
         <p className="font-body-base text-body-base text-secondary max-w-2xl mx-auto md:mx-0">
@@ -75,7 +87,7 @@ export function OptionsStep({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.35 }}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         {content.options.map((opt) => {
           const isSelected = selectedOptionId === opt.id;
@@ -85,17 +97,17 @@ export function OptionsStep({
               key={opt.id}
               selected={isSelected}
               onClick={() => handleSelect(opt.id)}
-              icon={<GroupIcon id={content.id} />}
+              icon={<OptionIcon groupId={content.id} code={opt.code} />}
               iconVariant={iconVariants[content.id] || 'default'}
               title={opt.name}
               description={opt.description}
               priceLabel="Desde"
               price={formatUsd(opt.priceUsd)}
-              pricePeriod={opt.priceUnit === '/año' ? '' : opt.recurUsd > 0 ? `+${formatUsd(opt.recurUsd)}/año` : '/año'}
+              pricePeriod={opt.priceUnit === '/año' ? '/año' : opt.recurUsd > 0 ? `+${formatUsd(opt.recurUsd)}/año` : ''}
               footer={
                 <button
                   type="button"
-                  className="bg-primary/10 text-primary px-4 py-2 rounded-lg font-body-medium text-sm hover:bg-primary hover:text-on-primary transition-all flex items-center gap-1 min-h-[44px]"
+                  className="bg-blue-dark text-white px-4 py-2.5 rounded-lg font-body-medium font-bold text-sm hover:bg-primary transition-all flex items-center gap-1 min-h-[44px] shadow-sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     setMobileModal(opt);
