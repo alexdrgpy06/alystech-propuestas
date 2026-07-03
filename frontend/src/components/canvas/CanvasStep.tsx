@@ -311,7 +311,9 @@ export function CanvasStep({
 
       {/* Términos / pie legal */}
       <div className="mt-8 pt-4 border-t border-border-slate text-center">
-        <p className="font-body-medium text-body-medium text-ink-muted">{terms.footerLine1}</p>
+        <p className="font-body-medium text-body-medium text-ink-muted">
+          {terms.footerLine1} · Generado: {new Date().toLocaleDateString('es-PY', { day: 'numeric', month: 'long', year: 'numeric' })}
+        </p>
         <p className="font-body-medium text-body-medium text-ink-muted">{terms.footerLine2}</p>
       </div>
 

@@ -31,7 +31,7 @@ export const conditions: ConditionCard[] = [
   },
   {
     title: 'Configuración de dispositivos móviles',
-    text: 'Los dispositivos deben entregarse en las oficinas de Alystech para su configuración inicial. El traslado del equipo técnico a las instalaciones del cliente para esta tarea tiene el costo de visita on-site indicado arriba.',
+    text: 'La configuración inicial de los dispositivos se realiza en un día acordado, de forma presencial (on-site), sin costo adicional. Si se requieren visitas o traslados extra fuera de lo acordado, el costo corre a cargo del cliente.',
   },
   {
     title: 'Costos de implementación',

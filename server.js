@@ -165,10 +165,12 @@ app.post('/api/decision', async (req, res) => {
   await notify(subject, html);
 
   // Copia de confirmación al cliente, al email que ingresó en el formulario.
+  const decisionDateEs = new Date(entry.createdAt).toLocaleDateString('es-PY', { day: 'numeric', month: 'long', year: 'numeric' });
   const clientBody = `
     <p style="margin:0 0 16px">Hola ${esc(clientName)}, ${accepted
       ? 'confirmamos que aceptaste la propuesta. Este es un resumen de la configuración registrada:'
       : 'registramos tu decisión de rechazar la propuesta. Este es un resumen de la configuración que estaba en pantalla:'}</p>
+    ${infoRow(accepted ? 'Fecha de aceptación' : 'Fecha de rechazo', esc(decisionDateEs))}
     <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;margin:16px 0;border:1px solid #eef1f6;border-radius:8px;overflow:hidden">
       <tr style="background:#0d1f3c"><th style="padding:9px 10px;text-align:left;color:#fff;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px">Bloque</th><th style="padding:9px 10px;text-align:left;color:#fff;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px">Opción</th><th style="padding:9px 10px;text-align:right;color:#fff;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px">Precio</th></tr>
       ${rows}

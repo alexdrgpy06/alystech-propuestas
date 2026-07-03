@@ -11,5 +11,6 @@ export const terms: TermsContent = {
     'Esta propuesta es independiente del Plan LoRa (documento aparte) y puede contratarse por separado o de forma combinada.',
   ],
   footerLine1: 'Alystech · Propuesta técnica y económica para Araucanos S.A. · Ref. AT-2026-0630-P Rev. 6',
-  footerLine2: '30 de junio de 2026 · Validez 30 días · Tipo de cambio referencial 1 USD ≈ 6.250 Gs',
+  // La fecha de generación se calcula dinámicamente (ver CanvasStep) — no hardcodear una fecha fija acá.
+  footerLine2: 'Validez 30 días desde la fecha de generación · Tipo de cambio referencial 1 USD ≈ 6.250 Gs',
 };
