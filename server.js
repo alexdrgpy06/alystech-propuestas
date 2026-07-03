@@ -45,7 +45,10 @@ function getTransporter() {
       host: SMTP_HOST,
       port: SMTP_PORT,
       secure: SMTP_SECURE || SMTP_PORT === 465,
-      auth: { user: SMTP_USER, pass: SMTP_PASS }
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
+      // Self-hosted Stalwart instance on our own infrastructure without a
+      // trusted cert configured yet — accept its self-signed certificate.
+      tls: { rejectUnauthorized: false }
     });
   }
   return transporter;
