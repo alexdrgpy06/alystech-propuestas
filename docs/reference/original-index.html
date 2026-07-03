@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuestas Técnicas — Alystech para Araucanos S.A.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0d1f3c; --navy2:#17335c; --steel:#2c5788; --blue:#2f6fed; --blue-d:#1a4fc0; --blue-soft:#eef3fc;
+  --green:#0f7a48; --green-soft:#e6f4ec; --amber:#a8710f; --amber-soft:#fbf3e2; --amber-line:#d99a2b;
+  --red:#b23a2b; --red-soft:#fbece9; --slate:#48546b; --line:#dde3ec; --line2:#eef1f6;
+  --bg:#f5f7fa; --card:#fff; --ink:#182437;
+  --shadow:0 1px 3px rgba(13,31,60,.06),0 6px 20px rgba(13,31,60,.06);
+  --font:'Plus Jakarta Sans','Inter','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+  --r-md:12px; --r-lg:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+.icn{width:1em;height:1em;display:inline-block;vertical-align:-0.15em;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+
+/* MASTHEAD */
+.masthead{background:linear-gradient(120deg,var(--navy) 0%,#173a68 55%,var(--steel) 100%);color:#fff;border-bottom:3px solid var(--blue)}
+.masthead .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:22px;padding-bottom:22px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:46px;height:46px;border-radius:11px;background:linear-gradient(135deg,#4f8cf7,var(--steel));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;letter-spacing:-.5px;flex-shrink:0;box-shadow:0 4px 14px rgba(47,111,237,.35)}
+.brand .bt{font-size:17px;font-weight:700;letter-spacing:.2px}
+.brand .bs{font-size:11.5px;opacity:.7;letter-spacing:.4px}
+.docmeta{text-align:right;font-size:11.5px;opacity:.82;line-height:1.7}
+.docmeta b{opacity:1;font-weight:600}
+
+/* DOC TITLE STRIP */
+.titlestrip{background:linear-gradient(90deg,var(--navy2),#1e4373);color:#fff;padding:18px 0}
+.titlestrip h1{font-size:19px;font-weight:600;letter-spacing:.2px}
+.titlestrip p{font-size:12.5px;opacity:.8;margin-top:3px}
+.clientline{display:flex;gap:26px;flex-wrap:wrap;margin-top:12px;font-size:12px}
+.clientline div{opacity:.9}.clientline b{opacity:1;font-weight:600;color:#cddffb}
+
+/* TABS */
+.tabbar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.tabbar .wrap{display:flex;gap:0;overflow-x:auto}
+.tab{padding:15px 20px;font-size:13px;font-weight:600;color:var(--slate);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.15s;display:flex;align-items:center;gap:9px;letter-spacing:.2px}
+.tab .tn{width:22px;height:22px;border-radius:5px;background:var(--line2);color:var(--slate);display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;flex-shrink:0}
+.tab:hover{color:var(--navy);background:#f8fafc}
+.tab.active{color:var(--navy);border-bottom-color:var(--blue);background:linear-gradient(180deg,rgba(47,111,237,.06),transparent)}
+.tab.active .tn{background:linear-gradient(135deg,var(--blue),var(--steel));color:#fff;box-shadow:0 2px 8px rgba(47,111,237,.3)}
+
+/* SUBTOTAL BAR (per section) */
+.subbar{background:linear-gradient(90deg,var(--navy) 0%,#173a68 60%,var(--steel) 100%);color:#fff;padding:14px 0;box-shadow:0 2px 10px rgba(15,33,64,.15)}
+.subbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.subbar .sl{font-size:11px;opacity:.7;text-transform:uppercase;letter-spacing:.6px}
+.subbar .amt{font-size:24px;font-weight:700;letter-spacing:-.3px}
+.subbar .gs{font-size:12px;opacity:.82;margin-top:1px}
+.subbar .aux{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.subbar .chip{font-size:11.5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:6px 12px;border-radius:7px}
+.subbar .reset{background:var(--blue);color:#fff;border:none;padding:8px 15px;border-radius:7px;font-size:12px;cursor:pointer;font-weight:600}
+.subbar .reset:hover{background:var(--blue-d)}
+
+.page{display:none;padding:26px 0 80px}
+.page.active{display:block}
+
+/* PANEL */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 8px rgba(13,31,60,.06),0 10px 28px rgba(13,31,60,.07);margin-bottom:22px;overflow:hidden}
+.panel-head{padding:16px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fcfdfe}
+.panel-head .ph-ic{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue-soft),#dce8fd);color:var(--steel);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(47,111,237,.15)}
+.panel-head h2{font-size:16.5px;color:var(--navy);font-weight:700;letter-spacing:.1px}
+.panel-head .num{font-size:11px;color:#fff;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--steel));padding:4px 11px;border-radius:20px;letter-spacing:.5px}
+.panel-head .tag{margin-left:auto;font-size:10.5px;padding:4px 11px;border-radius:20px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+.tag-main{background:var(--green-soft);color:var(--green)} .tag-future{background:var(--amber-soft);color:var(--amber)}
+.panel-body{padding:22px}
+.lead{color:var(--slate);margin-bottom:6px;font-size:14px}
+h3.blk{font-size:13.5px;color:var(--navy);margin:34px 0 16px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;padding-bottom:9px;border-bottom:1px solid var(--line2);display:flex;align-items:center;gap:8px}
+h3.blk .bn{color:var(--steel);font-size:12px}
+p.para{font-size:13.5px;color:var(--slate);margin-bottom:12px}
+
+/* OPTIONS */
+.opt-hint{font-size:12px;color:var(--slate);margin-bottom:14px}
+.options{display:grid;gap:12px}
+.opt{border:1.5px solid var(--line);border-radius:var(--r-md);padding:17px 19px;cursor:pointer;transition:.16s ease;position:relative;background:#fff}
+.opt:hover{border-color:#b0c4e6;box-shadow:0 6px 18px rgba(47,111,237,.1);transform:translateY(-1px)}
+.opt.sel{border-color:var(--blue);border-width:2px;background:linear-gradient(135deg,var(--blue-soft),#eef4ff);padding:16px 18px;box-shadow:0 4px 16px rgba(47,111,237,.14)}
+.opt.sel::after{content:"✓ SELECCIONADA";position:absolute;top:15px;right:16px;font-size:10px;font-weight:800;color:var(--blue);letter-spacing:.8px}
+.opt-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px;padding-right:100px}
+.opt-code{font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--steel),var(--navy2));border:none;padding:3px 9px;border-radius:6px;letter-spacing:.5px}
+.opt-name{font-size:16px;font-weight:700;color:var(--navy)}
+.opt-badge{font-size:9.5px;color:#fff;padding:3px 9px;border-radius:20px;font-weight:700;letter-spacing:.4px;background:var(--green)}
+.opt-badge.eco{background:var(--amber)} .opt-badge.pro{background:var(--steel)} .opt-badge.warn{background:var(--red)}
+.opt-price{margin-left:auto;font-size:21px;font-weight:800;color:var(--navy);white-space:nowrap;letter-spacing:-.4px}
+.opt-price small{font-size:11px;font-weight:500;color:var(--slate);display:block;text-align:right;letter-spacing:0}
+.opt-desc{font-size:13px;color:var(--slate);margin:8px 0 10px;line-height:1.5}
+.opt-detail{border-top:1px solid var(--line2);padding-top:12px;margin-top:6px}
+.opt-detail.collapsed{display:none}
+.feat{display:flex;gap:9px;font-size:12.5px;margin-bottom:6px;align-items:flex-start;color:#33415a}
+.feat .ic{flex-shrink:0;font-weight:700;width:14px;text-align:center}
+.feat.yes .ic{color:var(--green)} .feat.no .ic{color:var(--red)} .feat.mid .ic{color:var(--amber-line)}
+.feat.no span{color:#8590a3}
+.toggle{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--blue);background:var(--blue-soft);border:1px solid #cfe0f7;border-radius:20px;padding:7px 14px;cursor:pointer;user-select:none;margin-top:10px;transition:.15s}
+.toggle:hover{background:#dce8fd}
+
+/* ====== DE UN VISTAZO (mini, dentro del paso 0) ====== */
+.glancemini{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:16px 0 6px}
+.gmcard{text-align:left;border:1.5px solid var(--line);border-radius:var(--r-md);padding:13px 14px;background:#fff;cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:6px;font-family:inherit}
+.gmcard:hover{border-color:#b0c4e6;box-shadow:0 6px 16px rgba(47,111,237,.1);transform:translateY(-1px)}
+.gmcard .gm-ic{width:30px;height:30px;border-radius:8px;background:var(--blue-soft);color:var(--steel);display:flex;align-items:center;justify-content:center}
+.gmcard .gm-ic .icn{width:15px;height:15px}
+.gmcard h5{font-size:12.5px;color:var(--navy);font-weight:700}
+.gmcard p{font-size:11.3px;color:var(--slate);line-height:1.45}
+.gmcard .gm-range{font-size:10.5px;font-weight:700;color:var(--steel)}
+
+/* COST BREAKDOWN */
+.costgrid{margin-top:13px;border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:12px}
+.costgrid .ch{background:var(--navy);color:#fff;padding:7px 12px;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.costgrid .cr{display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--line2)}
+.costgrid .cr:last-child{border-bottom:none}
+.costgrid .cr .cat{color:#fff;font-size:9px;padding:2px 7px;border-radius:5px;margin-right:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+.cat-hw{background:var(--steel)} .cat-lab{background:var(--amber)} .cat-lic{background:var(--slate)} .cat-svc{background:var(--green)}
+.costgrid .cr.tot{background:var(--blue-soft);font-weight:700;color:var(--navy);font-size:12.5px}
+.costgrid .cr .lbltxt{display:flex;align-items:center}
+.pdev{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:#fff;font-size:11px;padding:5px 11px;border-radius:7px;margin-top:11px;font-weight:600}
+
+/* NOTES */
+.note{border-left:3px solid var(--amber-line);background:var(--amber-soft);padding:13px 16px;border-radius:0 9px 9px 0;font-size:12.8px;line-height:1.55;color:#6d4a10;margin:20px 0}
+.note.info{border-color:var(--steel);background:var(--blue-soft);color:#1e3d6b}
+.note.warn{border-color:var(--red);background:var(--red-soft);color:#7a2a1e}
+.note.good{border-color:var(--green);background:var(--green-soft);color:#0d5735}
+.note b{font-weight:700}
+.note .nt{font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;display:block;margin-bottom:3px;opacity:.75}
+
+/* MATRIX */
+.matrix-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:9px;margin-top:6px}
+.matrix{width:100%;border-collapse:collapse;font-size:12px;min-width:520px}
+.matrix th{background:var(--navy);color:#fff;padding:10px 11px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.2px}
+.matrix td{padding:9px 11px;border-bottom:1px solid var(--line2);text-align:center;color:#33415a}
+.matrix tr:last-child td{border-bottom:none}
+.matrix td:first-child{text-align:left;font-weight:600;color:var(--navy);background:#f8fafc}
+.matrix .y{color:var(--green);font-weight:700} .matrix .n{color:var(--red)} .matrix .p{color:var(--amber-line);font-weight:700}
+
+/* PROCESS / ROUTE */
+.route{display:grid;gap:11px;margin:14px 0}
+.rstep{display:flex;gap:13px;align-items:flex-start;background:#fafbfd;border:1px solid var(--line2);border-radius:10px;padding:14px 16px;border-left:3px solid var(--steel)}
+.rnum{width:25px;height:25px;border-radius:6px;background:var(--steel);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
+.rtxt h5{font-size:13px;color:var(--navy);margin-bottom:3px;font-weight:700}
+.rtxt p{font-size:12.5px;color:var(--slate);line-height:1.5}
+
+/* CARDS GRID */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}
+.pcard{border:1px solid var(--line);border-radius:10px;padding:15px;background:#fff}
+.pcard h4{font-size:13.5px;color:var(--navy);margin-bottom:7px;display:flex;align-items:center;gap:8px;font-weight:700}
+.pcard .em{font-size:17px}
+.pcard p{font-size:12.3px;color:var(--slate);line-height:1.5}
+
+/* CHART */
+.chart{margin:14px 0}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.bar-lbl{width:180px;font-size:12px;color:#33415a;flex-shrink:0;text-align:right;font-weight:500}
+.bar-track{flex:1;background:var(--line2);border-radius:5px;height:28px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;display:flex;align-items:center;padding:0 11px;color:#fff;font-size:12px;font-weight:700}
+.b1{background:var(--steel)} .b2{background:var(--green)} .b3{background:var(--amber)} .b4{background:var(--navy2)}
+
+/* SUMMARY */
+.sumtable{width:100%;border-collapse:collapse;font-size:13px}
+.sumtable th{background:var(--navy);color:#fff;text-align:left;padding:11px 14px;font-size:11.5px;font-weight:600}
+.sumtable td{padding:10px 14px;border-bottom:1px solid var(--line2)}
+.sumtable .rt{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.sumtable tr.total td{background:var(--blue-soft);font-weight:700;color:var(--navy)}
+.sumtable tr.recur td{color:var(--slate);font-style:italic;font-size:12px}
+.mini{color:var(--slate);font-size:11.8px}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:26px;margin-top:8px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl-item{position:relative;margin-bottom:15px}
+.tl-item::before{content:"";position:absolute;left:-22px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--steel);border:2px solid #fff;box-shadow:0 0 0 2px var(--steel)}
+.tl-item.fut::before{background:var(--amber-line);box-shadow:0 0 0 2px var(--amber-line)}
+.tl-week{font-size:11px;font-weight:700;color:var(--steel);letter-spacing:.3px;text-transform:uppercase}
+.tl-item.fut .tl-week{color:var(--amber)}
+.tl-txt{font-size:12.8px;color:#33415a}
+
+.terms{background:#fcfdfe;border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin-top:8px}
+.terms h4{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--slate);margin-bottom:10px;font-weight:700}
+.terms li{font-size:12.3px;color:var(--slate);margin-bottom:6px;list-style:none;padding-left:18px;position:relative}
+.terms li::before{content:"—";position:absolute;left:0;color:var(--steel)}
+
+/* SUPPORT TIER CARDS */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px;margin:14px 0}
+.tier{border:1.5px solid var(--line);border-radius:11px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.tier.feat-t{border-color:var(--steel);box-shadow:0 3px 14px rgba(44,87,136,.12)}
+.tier-h{padding:13px 15px;background:#f8fafc;border-bottom:1px solid var(--line2)}
+.tier.feat-t .tier-h{background:var(--navy);color:#fff}
+.tier-h .tn{font-size:14px;font-weight:700;color:var(--navy)}
+.tier.feat-t .tier-h .tn{color:#fff}
+.tier-h .tp{font-size:19px;font-weight:700;color:var(--navy);margin-top:3px;letter-spacing:-.3px}
+.tier.feat-t .tier-h .tp{color:#fff}
+.tier-h .tp small{font-size:11px;font-weight:500;color:var(--slate)}
+.tier.feat-t .tier-h .tp small{color:#c9d8ef}
+.tier-b{padding:13px 15px;flex:1}
+.tier-b li{font-size:12px;color:#33415a;margin-bottom:7px;list-style:none;padding-left:17px;position:relative;line-height:1.45}
+.tier-b li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+.tier-b li.x::before{content:"—";color:#b8c0cc}
+.tier-b li.x{color:#8590a3}
+/* EXECUTIVE BOX */
+.execbox{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;margin:20px 0}
+.execbox-h{background:linear-gradient(90deg,var(--navy),#2c5788 70%,var(--blue));color:#fff;padding:13px 18px;font-size:13px;font-weight:700;letter-spacing:.3px;display:flex;align-items:center;gap:9px}
+.execbox-b{padding:18px 20px;background:#fcfdfe}
+.execbox-b p{font-size:13.3px;color:#2b3648;margin-bottom:11px;line-height:1.6}
+.execbox-b p:last-child{margin-bottom:0}
+.execbox-b .lead-in{font-weight:700;color:var(--navy)}
+.benefit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
+.benefit{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px}
+.benefit .bicon{width:34px;height:34px;border-radius:8px;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:9px}
+.benefit h5{font-size:13px;color:var(--navy);font-weight:700;margin-bottom:5px}
+.benefit p{font-size:12.2px;color:var(--slate);line-height:1.5}
+/* SCALABILITY BANNER */
+.scale-banner{display:flex;gap:14px;align-items:flex-start;background:var(--blue-soft);border:1px solid #cfe0f7;border-radius:var(--r-md);padding:16px 19px;margin:20px 0}
+.scale-banner .sic{font-size:24px;flex-shrink:0}
+.scale-banner h5{font-size:13px;color:var(--navy);font-weight:700;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.scale-banner p{font-size:12.6px;color:#2b4a75;line-height:1.55}
+/* HOW-IT-WORKS box */
+.hiw{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin:14px 0}
+.hiw-h{background:#f8fafc;padding:11px 16px;font-size:12.5px;font-weight:700;color:var(--navy);border-bottom:1px solid var(--line2);letter-spacing:.2px}
+.hiw-b{padding:15px 18px}
+.hiw-row{display:flex;gap:13px;padding:10px 0;border-bottom:1px dashed var(--line2)}
+.hiw-row:last-child{border-bottom:none}
+.hiw-row .hw-k{width:150px;flex-shrink:0;font-size:12.3px;font-weight:700;color:var(--steel)}
+.hiw-row .hw-v{font-size:12.5px;color:#33415a;line-height:1.5}
+/* comparison strip */
+.vstrip{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.vcol{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.vcol.bad{background:var(--red-soft);border-color:#f0cfc9}
+.vcol.good{background:var(--green-soft);border-color:#c3e3d0}
+.vcol h5{font-size:12.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.vcol.bad h5{color:var(--red)} .vcol.good h5{color:var(--green)}
+.vcol li{font-size:12px;margin-bottom:6px;list-style:none;padding-left:16px;position:relative;color:#33415a;line-height:1.45}
+.vcol.bad li::before{content:"✕";position:absolute;left:0;color:var(--red);font-weight:700}
+.vcol.good li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+@media(max-width:640px){.vstrip{grid-template-columns:1fr}.hiw-row{flex-direction:column;gap:3px}.hiw-row .hw-k{width:auto}}
+footer{border-top:1px solid var(--line);margin-top:8px;padding:22px 0 44px;text-align:center;color:var(--slate);font-size:11.5px;line-height:1.8}
+footer .fbrand{font-weight:700;color:var(--navy)}
+@media(max-width:640px){
+  .opt-top{padding-right:0}.opt.sel::after{position:static;display:block;margin-bottom:7px}
+  .bar-lbl{width:110px}.masthead .wrap{flex-direction:column;align-items:flex-start}.docmeta{text-align:left}
+}
+
+.splitbar{display:flex;height:7px;border-radius:4px;overflow:hidden;margin-top:6px;width:220px;background:rgba(255,255,255,.12)}
+.splitbar .sb-dev{background:#5b9bf5}
+.splitbar .sb-hw{background:#f5c15b}
+.splitlegend{display:flex;gap:12px;margin-top:5px;font-size:10.5px;opacity:.85}
+.splitlegend span{display:flex;align-items:center;gap:4px}
+.splitlegend i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.condstrip{background:#fff9ec;border-top:1px solid #f0dfb0;border-bottom:1px solid #f0dfb0}
+.condstrip .wrap{padding:12px 22px}
+.condstrip summary{cursor:pointer;font-size:12.5px;font-weight:700;color:#7a5a10;list-style:none;display:flex;align-items:center;gap:8px}
+.condstrip summary::-webkit-details-marker{display:none}
+.condstrip summary::before{content:"⚠";font-size:13px}
+.condstrip summary .arrow{margin-left:auto;font-size:11px;color:#7a5a10}
+.condgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.condcard{background:#fff;border:1px solid #f0dfb0;border-radius:9px;padding:12px 14px}
+.condcard h5{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:#8a6510;font-weight:700;margin-bottom:7px}
+.condcard p{font-size:12.3px;color:#42352a;line-height:1.55;margin-bottom:6px}
+.condcard p:last-child{margin-bottom:0}
+.condcard b{color:#241c10}
+
+html{scroll-behavior:smooth}
+#wizard,#proximos-pasos,#condiciones{scroll-margin-top:52px}
+
+/* ====== HERO ====== */
+.hero{background:radial-gradient(1100px 460px at 15% -10%,rgba(79,140,247,.35),transparent 60%),linear-gradient(150deg,#0a1830 0%,#0d1f3c 42%,#173a68 78%,#2c5788 100%);color:#fff;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(800px 380px at 90% 110%,rgba(47,111,237,.25),transparent 60%)}
+.hero .wrap{position:relative;padding:48px 22px 40px;max-width:900px}
+.hero .heroeyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:6px 13px;border-radius:20px;margin-bottom:16px}
+.hero h1{font-size:clamp(22px,4.2vw,32px);font-weight:800;letter-spacing:-.5px;line-height:1.18;margin-bottom:11px}
+.hero .herosub{font-size:13.5px;color:#cddffb;max-width:620px;line-height:1.6;margin-bottom:20px}
+.hero .heroletter{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:16px 18px;margin-bottom:20px;backdrop-filter:blur(2px)}
+.hero .heroletter p{font-size:12.6px;color:#e7edf9;line-height:1.6;margin-bottom:8px}
+.hero .heroletter p:last-child{margin-bottom:0}
+.hero .herosign{font-size:12px;color:#fff;font-weight:700;margin-top:10px}
+.hero .herosign span{display:block;font-weight:400;color:#aebde0;font-size:10.5px;margin-top:2px}
+.hero .herometa{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 18px;font-size:11px;color:#bcd0f2;margin-bottom:22px}
+.hero .herometa b{color:#fff;display:block;font-size:12.5px;margin-top:2px}
+.hero .herocta{display:flex;gap:10px;flex-wrap:wrap}
+.hero .btn{border:none;cursor:pointer;font-weight:700;font-size:13px;padding:12px 20px;border-radius:9px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:.15s}
+.hero .btn-primary{background:#2f6fed;color:#fff;box-shadow:0 8px 22px rgba(47,111,237,.4)}
+.hero .btn-primary:hover{background:#1a4fc0}
+.hero .btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.28)}
+.hero .btn-ghost:hover{background:rgba(255,255,255,.16)}
+
+/* ====== ABOUT ====== */
+.about{background:#fff;border-bottom:1px solid var(--line)}
+.about .wrap{padding:30px 22px}
+.about .abouthead{max-width:640px;margin-bottom:18px}
+.about .kicker{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:7px}
+.about h2{font-size:18px;color:var(--navy);font-weight:800;letter-spacing:-.3px;margin-bottom:8px}
+.about h3.subkicker{font-size:14px;color:var(--navy);font-weight:800;margin:24px 0 4px}
+.about .aboutlead{font-size:13px;color:var(--slate);line-height:1.6}
+.benefit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+.benefit{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px}
+.benefit .bicon{width:32px;height:32px;border-radius:8px;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:9px}
+.benefit h5{font-size:12.8px;color:var(--navy);font-weight:700;margin-bottom:5px}
+.benefit p{font-size:12px;color:var(--slate);line-height:1.5}
+.pay-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
+.paycard{display:grid;grid-template-columns:32px 1fr;column-gap:11px;background:#fbfcfe;border:1px solid var(--line);border-radius:10px;padding:14px}
+.paycard .pcicon{grid-column:1;grid-row:1 / 3;align-self:start;width:32px;height:32px;border-radius:8px;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:15px}
+.paycard h5{grid-column:2;grid-row:1;font-size:12.8px;color:var(--navy);font-weight:700;margin-bottom:4px}
+.paycard p{grid-column:2;grid-row:2;font-size:12px;color:var(--slate);line-height:1.5;margin:0}
+
+/* ====== NAV RÁPIDA (sticky, con marca integrada) ====== */
+.quicknav{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.quicknav .qn-inner{display:flex;align-items:center;gap:8px;max-width:1080px;margin:0 auto;padding:0 22px}
+.qn-brand{display:flex;align-items:center;gap:7px;flex-shrink:0;padding:10px 10px 10px 0;border-right:1px solid var(--line2);margin-right:2px}
+.qn-brand .qn-logo{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--blue),var(--steel));color:#fff;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.qn-brand span:last-child{font-size:12px;font-weight:700;color:var(--navy);white-space:nowrap}
+.quicknav .qn-scroll{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;min-width:0}
+.quicknav .qn-scroll::-webkit-scrollbar{display:none}
+.quicknav a{flex-shrink:0;padding:13px 12px;font-size:12px;font-weight:600;color:var(--slate);text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap;transition:.15s;cursor:pointer}
+.quicknav a:hover{color:var(--navy);background:#f8fafc}
+.quicknav a.active{color:var(--navy);border-bottom-color:var(--blue)}
+
+/* ====== TOTALSTRIP (reemplaza el subbar grande) ====== */
+.totalstrip{background:#fafbfd;border-bottom:1px solid var(--line)}
+.totalstrip .wrap{padding:9px 22px}
+.ts-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.ts-amt-wrap{display:flex;align-items:baseline;gap:7px}
+.ts-lbl{font-size:10px;color:var(--slate);text-transform:uppercase;letter-spacing:.4px}
+.ts-amt{font-size:16px;font-weight:800;color:var(--navy)}
+.ts-detail{font-size:10.5px;color:var(--slate);display:flex;flex-direction:column;gap:1px}
+.ts-bar-wrap{display:flex;align-items:center;gap:8px}
+.splitbar{display:flex;height:5px;border-radius:3px;overflow:hidden;width:110px;background:var(--line2)}
+.splitbar .sb-dev{background:#5b9bf5}
+.splitbar .sb-hw{background:#f5c15b}
+.splitlegend{display:flex;gap:8px;font-size:9.5px;color:var(--slate)}
+.splitlegend span{display:flex;align-items:center;gap:3px}
+.splitlegend i{width:7px;height:7px;border-radius:2px;display:inline-block}
+.ts-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.ts-actions .chip{font-size:10.5px;background:var(--blue-soft);color:var(--steel);padding:4px 9px;border-radius:6px;font-weight:600}
+.ts-actions .reset{background:none;border:1px solid var(--line);color:var(--slate);padding:5px 10px;border-radius:6px;font-size:10.5px;cursor:pointer;font-weight:600}
+.ts-actions .reset:hover{background:#f0f2f5}
+@media(max-width:640px){.ts-row{gap:8px 14px}.ts-bar-wrap{display:none}.ts-actions{margin-left:0;width:100%;justify-content:space-between}}
+
+/* ====== TARJETA "EN SIMPLE" por paso ====== */
+.stepcard{display:flex;gap:12px;background:var(--green-soft);border:1px solid #c3e3d0;border-radius:var(--r-md);padding:15px 17px;margin:16px 0 22px}
+.stepcard-ic{font-size:19px;flex-shrink:0}
+.stepcard-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#0d5735;display:block;margin-bottom:3px}
+.stepcard p{font-size:12.8px;color:#0d3d28;line-height:1.55;margin:0}
+
+/* ====== DETALLE TÉCNICO COLAPSABLE ====== */
+.techdetail{border:1px solid var(--line);border-radius:var(--r-md);margin:22px 0;overflow:hidden;background:#fcfdfe}
+.techdetail summary{cursor:pointer;padding:12px 16px;font-size:12.5px;font-weight:700;color:var(--steel);list-style:none;display:flex;align-items:center;gap:8px}
+.techdetail summary::-webkit-details-marker{display:none}
+.techdetail summary::before{content:"▸";color:var(--blue);font-size:11px}
+.techdetail[open] summary::before{content:"▾"}
+.techdetail summary::after{content:"click para expandir";margin-left:auto;font-size:10.5px;color:#9aa5b8;font-weight:500}
+.techdetail[open] summary::after{content:"click para colapsar"}
+.techdetail-body{padding:4px 16px 16px;border-top:1px solid var(--line2)}
+
+/* ====== NAV RÁPIDA WIZARD ====== */
+.wizard{display:flex;flex-direction:column}
+.wizard-progress{padding:16px 22px 0}
+.wp-track{height:6px;background:var(--line2);border-radius:4px;overflow:hidden}
+.wp-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--steel));border-radius:4px;transition:width .35s ease;width:0%}
+.wp-label{font-size:11.5px;color:var(--slate);margin-top:9px;font-weight:600}
+.wp-label #wp-title{color:var(--navy);font-weight:700}
+.wizard-viewport{position:relative;padding:18px 22px 12px;min-height:120px}
+.wstep{display:none}
+.wstep.active{display:block;animation:wfade .35s ease}
+@keyframes wfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.wizard-nav{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 22px 22px;border-top:1px solid var(--line2);margin-top:14px;flex-wrap:wrap}
+.wnav-btn{border:none;cursor:pointer;font-weight:700;font-size:13px;padding:11px 20px;border-radius:9px}
+.wnav-back{background:#eef1f6;color:var(--slate)}
+.wnav-next{background:var(--blue);color:#fff;margin-left:auto}
+.wnav-dots{display:flex;gap:6px;order:2}
+.wnav-dots span{width:7px;height:7px;border-radius:50%;background:var(--line);transition:.2s;cursor:pointer}
+.wnav-dots span.on{background:var(--blue);width:20px;border-radius:4px}
+
+/* ====== PANEL HEAD MINIMAL ====== */
+.panel-head.slim{padding:13px 22px;background:#fff}
+.panel-head.slim h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--steel);font-weight:700}
+
+/* ====== RESUMEN FINAL ====== */
+.finalsum-h{font-size:19px;color:var(--navy);font-weight:800;margin-bottom:6px}
+.finalsum-sub{font-size:13px;color:var(--slate);margin-bottom:20px}
+.finalsum-total{background:var(--blue-soft);border:1px solid #cfe0f7;border-radius:12px;padding:20px;margin-bottom:20px;text-align:center}
+.ft-amt{font-size:32px;font-weight:800;color:var(--navy);letter-spacing:-.5px}
+.ft-sub{font-size:12px;color:#1e3d6b;margin-top:5px}
+.finalsum-items{display:grid;gap:8px;margin-bottom:22px}
+.fs-item{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fafbfd;border:1px solid var(--line2);border-radius:9px;padding:11px 14px;font-size:12.6px}
+.fs-item-g{color:var(--steel);font-weight:700;flex-shrink:0;width:118px}
+.fs-item-n{color:var(--ink);flex:1}
+.fs-item-p{color:var(--navy);font-weight:800;white-space:nowrap}
+.finalsum-alt-h{font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+.finalsum-alt{margin-bottom:22px}
+.fs-alt-block{border:1px solid var(--line);border-radius:9px;margin-bottom:8px;overflow:hidden}
+.fs-alt-block summary{cursor:pointer;padding:11px 14px;font-size:12.5px;font-weight:700;color:var(--navy);background:#f8fafc;list-style:none}
+.fs-alt-block summary::-webkit-details-marker{display:none}
+.fs-alt-block summary::before{content:"▸ ";color:var(--blue)}
+.fs-alt-block[open] summary::before{content:"▾ "}
+.fs-alt-list{padding:4px 14px 10px}
+.fs-alt-opt{font-size:12px;color:var(--slate);padding:6px 0;border-bottom:1px dashed var(--line2);display:flex;justify-content:space-between;gap:10px}
+.fs-alt-opt:last-child{border-bottom:none}
+.fs-alt-opt.chosen{color:var(--green);font-weight:700}
+.finalsum-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.finalsum-actions .abtn{padding:13px 14px;font-size:13px;border-radius:10px;justify-content:center}
+.finalsum-actions .abtn-accept{background:var(--green);color:#fff}
+.finalsum-actions .abtn-reject{background:var(--red-soft);color:var(--red);border:1px solid #f0cfc9}
+.finalsum-actions .abtn-consulta{background:var(--blue-soft);color:var(--steel);border:1px solid #cfe0f7}
+.finalsum-actions .abtn-pdf{background:var(--navy);color:#fff}
+@media(max-width:560px){.finalsum-actions{grid-template-columns:1fr}.fs-item{flex-direction:column;align-items:flex-start;gap:3px}.fs-item-g{width:auto}}
+
+/* ====== ACTION BAR ====== */
+.action-bar{position:sticky;bottom:0;z-index:70;background:linear-gradient(90deg,var(--navy) 0%,#173a68 55%,var(--steel) 100%);border-top:2px solid var(--blue);box-shadow:0 -6px 24px rgba(13,31,60,.25)}
+.action-bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;flex-wrap:wrap}
+.action-bar .ab-msg{color:#cddffb;font-size:11.5px}
+.action-bar .ab-msg b{color:#fff}
+.action-bar .ab-btns{display:flex;gap:8px;flex-wrap:wrap}
+.abtn{border:none;cursor:pointer;font-weight:700;font-size:12.2px;padding:9px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:6px;transition:.15s;white-space:nowrap}
+.abtn-accept{background:var(--green);color:#fff}
+.abtn-accept:hover{background:#0c5f39}
+.abtn-reject{background:transparent;color:#ffb8ac;border:1px solid rgba(255,255,255,.3)}
+.abtn-reject:hover{background:rgba(178,58,43,.25)}
+.abtn-consulta{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.22)}
+.abtn-consulta:hover{background:rgba(255,255,255,.18)}
+.abtn-pdf{background:var(--blue);color:#fff}
+.abtn-pdf:hover{background:var(--blue-d)}
+
+/* ====== MODALES ====== */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,20,40,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:480px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.modal-h{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;background:#fff}
+.modal-h h3{font-size:15.5px;color:var(--navy);font-weight:800}
+.modal-h .mclose{cursor:pointer;font-size:20px;color:var(--slate);background:none;border:none;line-height:1;padding:4px}
+.modal-b{padding:18px 20px}
+.modal-b p.mhint{font-size:12.3px;color:var(--slate);margin-bottom:14px;line-height:1.55}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--navy);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.field input,.field textarea{width:100%;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;color:var(--ink)}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--blue)}
+.field textarea{resize:vertical;min-height:76px}
+.modal-summary{background:var(--blue-soft);border:1px solid #cfe0f7;border-radius:10px;padding:11px 13px;margin-bottom:14px;font-size:11.8px;color:#1e3d6b;line-height:1.5}
+.modal-summary b{display:block;margin-bottom:4px;color:var(--navy)}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px 18px;flex-wrap:wrap}
+.mbtn{border:none;cursor:pointer;font-weight:700;font-size:13px;padding:11px 18px;border-radius:8px;flex:1}
+.mbtn-cancel{background:#eef1f6;color:var(--slate);flex:none}
+.mbtn-submit{background:var(--blue);color:#fff}
+.mbtn-submit.accept{background:var(--green)}
+.mbtn-submit.reject{background:var(--red)}
+.modal-ok{display:none;text-align:center;padding:26px 20px}
+.modal-ok .mo-ic{font-size:38px;margin-bottom:10px}
+.modal-ok h4{font-size:15.5px;color:var(--navy);margin-bottom:6px}
+.modal-ok p{font-size:12.8px;color:var(--slate)}
+
+/* ====== RESPONSIVE ====== */
+@media(max-width:760px){
+  .hero .herometa{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .action-bar .wrap{flex-direction:column;align-items:stretch;gap:8px}
+  .action-bar .ab-msg{text-align:center}
+  .action-bar .ab-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .abtn{justify-content:center;padding:11px 10px}
+  .hero .wrap{padding:32px 16px 28px}
+  .hero h1{font-size:21px}
+  .hero .heroletter{padding:14px 15px}
+  .hero .herocta{flex-direction:column}
+  .hero .btn{justify-content:center;width:100%}
+  .about .wrap{padding:24px 16px}
+  .quicknav a{padding:11px 10px;font-size:11.5px}
+  .qn-brand span:last-child{display:none}
+  .pay-grid{grid-template-columns:1fr}
+  .modal{border-radius:14px 14px 0 0;max-height:92vh;align-self:flex-end}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .panel-head.slim{padding:11px 16px}
+  .wrap{padding:0 16px}
+  .wizard-progress,.wizard-viewport,.wizard-nav{padding-left:16px;padding-right:16px}
+  .wnav-next{margin-left:0}
+  .wizard-nav{justify-content:center}
+  .wnav-back{order:1}.wnav-dots{order:2}.wnav-next{order:3;width:100%}
+  .stepcard{padding:12px 13px;gap:9px}
+  .techdetail summary::after{display:none}
+  .panel-body{padding:16px}
+  h3.blk{margin:28px 0 14px}
+  .note,.execbox,.scale-banner,.techdetail{margin:16px 0}
+  .opt{padding:15px 16px}
+  .opt.sel{padding:14px 15px}
+  .toggle{width:100%;justify-content:center}
+  .glancemini{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:400px){
+  .hero .herometa{grid-template-columns:1fr 1fr;gap:12px 14px}
+  .hero .heroeyebrow{font-size:10px;padding:5px 10px}
+}
+
+</style>
+</head>
+<body>
+
+<div class="hero" id="portada">
+  <div class="wrap">
+    <div class="heroeyebrow"><svg class="icn" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6M9 9h2"/></svg> Propuesta técnica y económica · Ref. AT-2026-0630-P</div>
+    <h1>Plataforma de gestión móvil y seguridad informática para Araucanos S.A.</h1>
+    <p class="herosub">Control total de la flota móvil, servidor local dedicado, auditoría del parque informático y un plan de soporte unificado. Recorré cada bloque paso a paso, elegí la opción que mejor se ajuste y llegá a un resumen con tu configuración.</p>
+    <div class="heroletter">
+      <p><b>Estimados Araucanos S.A.,</b></p>
+      <p>Les presentamos esta propuesta a partir del relevamiento de su operación: la necesidad de controlar y rastrear la flota de aproximadamente 80 dispositivos Samsung, y de proteger un parque informático de unos 20 equipos que ya registró incidentes de intrusión y software malicioso.</p>
+      <p>Priorizamos una arquitectura <b>local y de código abierto</b>: la plataforma de gestión móvil, el servidor y el monitoreo de seguridad operan dentro de su propia infraestructura, sin licenciamiento perpetuo por dispositivo y sin depender de un proveedor externo para seguir operando.</p>
+      <p>Esta propuesta es interactiva: avancen paso a paso por cada bloque, comparen opciones, vean el desglose de costos en tiempo real y, al final, acéptenla, recházenla o déjennos una consulta directamente desde esta página.</p>
+      <div class="herosign">Equipo Alystech<span>Soluciones en Software y Seguridad Informática</span></div>
+    </div>
+    <div class="herometa">
+      <div>Cliente<b>Araucanos S.A.</b></div>
+      <div>Rubro<b>Servicios de seguridad</b></div>
+      <div>Validez de la propuesta<b>30 días</b></div>
+      <div>Referencia<b>AT-2026-0630-P · Rev. 6</b></div>
+    </div>
+    <div class="herocta">
+      <a href="#wizard" class="btn btn-primary">Empezar a configurar mi plan →</a>
+      <a href="#proximos-pasos" class="btn btn-ghost">Cómo sigue el proceso</a>
+    </div>
+  </div>
+</div>
+
+<div class="about">
+  <div class="wrap">
+    <div class="abouthead">
+      <div class="kicker">Quiénes somos</div>
+      <h2>Cómo trabajamos en Alystech</h2>
+      <p class="aboutlead">Diseñamos e implementamos infraestructura de seguridad y gestión de dispositivos priorizando soluciones auditables, alojadas en la infraestructura del cliente y sin dependencia de licenciamiento externo cuando existe una alternativa de código abierto igual de sólida.</p>
+    </div>
+    <div class="benefit-grid">
+      <div class="benefit"><div class="bicon">🧩</div><h5>Infraestructura local primero</h5><p>Servidor, consola y monitoreo alojados en el sitio del cliente. Los datos no salen de la empresa.</p></div>
+      <div class="benefit"><div class="bicon">🔓</div><h5>Código abierto donde tiene sentido</h5><p>Evitamos licenciamiento perpetuo por dispositivo cuando el código abierto cubre el mismo requisito.</p></div>
+      <div class="benefit"><div class="bicon">🧾</div><h5>Costos desglosados</h5><p>Cada opción muestra su desglose real: hardware, desarrollo, licencias y recurrente, sin cifras cerradas.</p></div>
+      <div class="benefit"><div class="bicon">📈</div><h5>Pensado para escalar</h5><p>Las soluciones crecen en dispositivos, cobertura o soporte sin rehacer lo ya implementado.</p></div>
+    </div>
+
+    <h3 class="subkicker">Cómo se paga y qué puede variar</h3>
+    <div class="pay-grid">
+      <div class="paycard"><div class="pcicon">💳</div><h5>Desarrollo e implementación</h5><p>Se paga en 3 partes: <b>50%</b> al aceptar, <b>25%</b> al iniciar la implementación y <b>25%</b> a la entrega. Aplica solo al costo de desarrollo/implementación.</p></div>
+      <div class="paycard"><div class="pcicon">📦</div><h5>Equipos y hardware</h5><p>Van <b>por separado</b>, a cargo del <b>cliente</b>: no forman parte del 50/25/25. Alystech puede intermediar la compra si lo prefieren.</p></div>
+      <div class="paycard"><div class="pcicon">🔍</div><h5>El relevamiento puede sumar costos</h5><p>La visita inicial y la auditoría en sitio pueden revelar hallazgos fuera de este alcance. Si aparecen, se cotizan aparte antes de ejecutarlos.</p></div>
+    </div>
+  </div>
+</div>
+
+<nav class="quicknav">
+  <div class="qn-inner">
+    <div class="qn-brand"><span class="qn-logo">AT</span><span>Alystech</span></div>
+    <div class="qn-scroll">
+      <a href="#wizard" data-step="0">Resumen</a>
+      <a href="#wizard" data-step="1">A· Móvil</a>
+      <a href="#wizard" data-step="2">B· Servidor</a>
+      <a href="#wizard" data-step="3">C· Auditoría</a>
+      <a href="#wizard" data-step="4">D· Soporte</a>
+      <a href="#wizard" data-step="5">Tu selección</a>
+      <a href="#proximos-pasos">Próximos pasos</a>
+      <a href="#condiciones">Condiciones</a>
+    </div>
+  </div>
+</nav>
+
+<details class="condstrip" id="condiciones">
+  <summary>Condiciones comerciales y forma de pago — leer antes de presupuestar <span class="arrow">▾ desplegar</span></summary>
+  <div class="wrap" style="padding-top:0">
+    <div class="condgrid">
+      <div class="condcard">
+        <h5>Carácter de los precios</h5>
+        <p>Todos los valores de este documento son <b>estimativos</b> y pueden variar según el relevamiento in situ, la disponibilidad de equipos y las condiciones de mercado al momento de la contratación.</p>
+      </div>
+      <div class="condcard">
+        <h5>Moneda y tipo de cambio</h5>
+        <p>Tipo de cambio referencial: <b>1 USD ≈ 6.250 Gs</b>, sujeto a la cotización del día de pago. Si el pago se realiza en dólares, la comisión bancaria o cambiaria vigente corre por cuenta del cliente.</p>
+      </div>
+      <div class="condcard">
+        <h5>IVA y retenciones</h5>
+        <p>Todos los precios de este documento <b>incluyen IVA</b> (10%, tasa vigente en Paraguay). Las retenciones aplicables corren a cargo de quien corresponda según la modalidad de facturación.</p>
+      </div>
+      <div class="condcard">
+        <h5>Forma de pago — desarrollo e implementación</h5>
+        <p><b>50%</b> al aceptar la propuesta (inicio) · <b>25%</b> al llegar a la fase de implementación · <b>25%</b> a la finalización y entrega.</p>
+      </div>
+      <div class="condcard">
+        <h5>Equipos y hardware</h5>
+        <p>La adquisición de equipos corre por cuenta directa del cliente y se presenta <b>separada</b> del costo de desarrollo/implementación. Alystech puede oficiar de intermediario de compra a pedido.</p>
+      </div>
+      <div class="condcard">
+        <h5>Visitas presenciales (on-site)</h5>
+        <p>Las visitas presenciales fuera del soporte remoto incluido tienen costo adicional. Si la implementación en sitio supera una jornada, se suma <b>$250 por día adicional</b> más viáticos (hospedaje, alimentación) y traslado/peajes, a cargo del cliente.</p>
+      </div>
+      <div class="condcard">
+        <h5>Configuración de dispositivos móviles</h5>
+        <p>Los dispositivos deben entregarse en las oficinas de Alystech para su configuración inicial. El traslado del equipo técnico a las instalaciones del cliente para esta tarea tiene el costo de visita on-site indicado arriba.</p>
+      </div>
+      <div class="condcard">
+        <h5>Inversión mínima de desarrollo</h5>
+        <p>Esta propuesta tiene una inversión mínima de desarrollo de <b>USD 12.000, IVA incluido</b>, sujeta a negociación según el alcance final acordado. La combinación recomendada (MDM-B + AUD-B + SOP-B) ya cubre este mínimo. Incluso la configuración más económica ronda los <b>USD 10.000, IVA incluido</b>.</p>
+      </div>
+      <div class="condcard">
+        <h5>Costos de implementación</h5>
+        <p>Toda opción de desarrollo incluye un <b>cargo base de implementación</b> (puesta en marcha, pruebas, entrega y documentación), independientemente del alcance elegido. Este costo es real y no se reduce a cero en ninguna configuración, incluida la económica.</p>
+      </div>
+      <div class="condcard">
+        <h5>Propiedad intelectual</h5>
+        <p>El software, las configuraciones y las integraciones desarrolladas son <b>propiedad de Alystech</b>, licenciadas a Araucanos S.A. para su uso operativo. La entrega del código fuente es un servicio adicional opcional, con costo aparte (ver detalle en la opción Ideal).</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<div class="totalstrip">
+  <div class="wrap">
+    <div class="ts-row">
+      <div class="ts-amt-wrap"><span class="ts-lbl" id="p1-sl">Total Año 1</span><span class="ts-amt" id="p1-amt">$0</span></div>
+      <div class="ts-detail"><span id="p1-gs">≈ 0 Gs · Recurrente anual: <span id="p1-recur">$0</span></span><span id="p1-split">Desarrollo/implementación: $0 · Equipos: $0</span></div>
+      <div class="ts-bar-wrap">
+        <div class="splitbar"><div class="sb-dev" id="p1-bar-dev" style="width:100%"></div><div class="sb-hw" id="p1-bar-hw" style="width:0%"></div></div>
+        <div class="splitlegend"><span><i style="background:#5b9bf5"></i>Desarrollo</span><span><i style="background:#f5c15b"></i>Equipos</span></div>
+      </div>
+      <div class="ts-actions">
+        <span class="chip" id="p1-perdev">Por dispositivo: $0</span>
+        <button class="reset" onclick="resetGroups(['mdm','srv','net','aud','sup'])">↺ Restablecer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+<div class="panel" id="resumen">
+  <div class="panel-head slim"><h2>Configurá tu propuesta</h2></div>
+  <div class="panel-body"><div class="wizard" id="wizard">
+  <div class="wizard-progress">
+    <div class="wp-track"><div class="wp-fill" id="wp-fill"></div></div>
+    <div class="wp-label"><span id="wp-current">Paso 1</span> de 6 · <span id="wp-title">Resumen ejecutivo</span></div>
+  </div>
+  <div class="wizard-viewport">
+    <section class="wstep active" data-step="0">
+    <p class="lead">Alcance integral sobre una misma infraestructura: gestión y control total de la flota móvil (aproximadamente 80 dispositivos Samsung), servidor local dedicado, auditoría y remediación del parque informático (aproximadamente 20 equipos), aseguramiento de la red y un plan de soporte único que cubre tanto la plataforma móvil como el monitoreo de seguridad.</p>
+
+    <div class="execbox">
+      <div class="execbox-h"><svg class="icn" viewBox="0 0 24 24" style="width:15px;height:15px"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M9 3v2h6V3M9 9h6M9 13h6M9 17h3"/></svg> Resumen para dirección — sin tecnicismos</div>
+      <div class="execbox-b">
+        <p><span class="lead-in">El problema.</span> Hoy no hay control real sobre los 80 celulares de la operación: un guardia puede apagar el equipo, desactivar el GPS o los datos, y quedar sin rastreo. En paralelo, la empresa opera con una PC de escritorio como servidor, sin protección, y ya tuvo incidentes de intrusión y malware en sus equipos.</p>
+        <p><span class="lead-in">La solución, en simple.</span> Se instala un sistema que toma control total de los celulares —no se pueden apagar, no se puede sacar el GPS ni los datos— y reporta la posición de cada guardia en tiempo real, con un canal de respaldo por SMS si se corta la señal. En paralelo, se pone un servidor propio, dedicado y protegido, y se hace una limpieza y blindaje de los 20 equipos de oficina.</p>
+        <p><span class="lead-in">Qué gana la empresa.</span> Visibilidad total de la flota en todo momento, protección real contra los incidentes que ya ocurrieron, y una sola infraestructura y un solo plan de soporte cubriendo ambas cosas — en vez de pagar dos sistemas separados.</p>
+        <p><span class="lead-in">Inversión.</span> Configuración modular: cuatro niveles de plataforma móvil, cuatro de servidor, tres de auditoría y tres de soporte, para ajustar el proyecto al presupuesto sin resignar los puntos críticos: anti-apagado y GPS forzado están en las cuatro opciones de plataforma móvil; el respaldo por SMS se suma desde MDM-B en adelante.</p>
+      </div>
+    </div>
+
+    <div class="scale-banner">
+      <div class="sic">🧩</div>
+      <div><h5>Una sola infraestructura, dos capacidades</h5><p>El servidor local dedicado cumple una doble función: aloja la plataforma de gestión móvil (MDM) y, a la vez, concentra el monitoreo de seguridad de los equipos. Por eso ambas capacidades se presentan en una sola propuesta y comparten un único plan de soporte. Esto evita duplicar infraestructura y costos, y ofrece al cliente un solo punto de gestión.</p></div>
+    </div>
+
+    <h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:20px 0 8px">De un vistazo — los cuatro bloques a configurar</h4>
+    <div class="glancemini" id="glance-mini">
+      <button type="button" class="gmcard" data-goto="1" data-range-group="mdm">
+        <div class="gm-ic"><svg class="icn" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/></svg></div>
+        <h5>A · Flota móvil</h5><p>Control total de los ~80 celulares.</p><span class="gm-range">$0 – $0</span>
+      </button>
+      <button type="button" class="gmcard" data-goto="2" data-range-group="srv">
+        <div class="gm-ic"><svg class="icn" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="7" rx="1.5"/><rect x="4" y="14" width="16" height="7" rx="1.5"/></svg></div>
+        <h5>B · Servidor y red</h5><p>Servidor local dedicado y red segmentada.</p><span class="gm-range">$0 – $0</span>
+      </button>
+      <button type="button" class="gmcard" data-goto="3" data-range-group="aud">
+        <div class="gm-ic"><svg class="icn" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <h5>C · Auditoría</h5><p>Limpieza, blindaje y monitoreo de ~20 equipos.</p><span class="gm-range">$0 – $0</span>
+      </button>
+      <button type="button" class="gmcard" data-goto="4" data-range-group="sup">
+        <div class="gm-ic"><svg class="icn" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 18 0"/><path d="M21 12v5a2 2 0 0 1-2 2h-1v-7Z"/><path d="M3 12v5a2 2 0 0 0 2 2h1v-7Z"/></svg></div>
+        <h5>D · Soporte</h5><p>Un solo plan cubre app y seguridad.</p><span class="gm-range">$0 – $0</span>
+      </button>
+    </div>
+
+    <!-- ====== A) MDM ====== -->
+    </section>
+    <section class="wstep" data-step="1"><h3 class="blk" id="bloque-a"><span class="bn">A</span> Gestión de dispositivos móviles — control total</h3>
+    <div class="stepcard"><div class="stepcard-ic">💡</div><div><span class="stepcard-tag">En simple</span><p>Tus ~80 celulares no se van a poder apagar ni perder el GPS, y vas a ver la posición de cada uno en tiempo real — con respaldo por SMS si se corta la señal.</p></div></div>
+    <p class="para">Puesta en marcha de una plataforma MDM sobre los dispositivos Samsung, con control total del equipo: bloqueo de apagado, imposibilidad de desactivar GPS o datos, rastreo en tiempo real y comandos de respaldo por SMS cuando el equipo carece de datos o WiFi.</p>
+    <div class="pgrid">
+      <div class="pcard"><h4><span class="em">⛔</span>Bloqueo de apagado</h4><p>El personal no puede apagar el dispositivo. Restricción a nivel de sistema mediante Samsung Knox.</p></div>
+      <div class="pcard"><h4><span class="em">📍</span>GPS y datos forzados</h4><p>Imposibilidad de desactivar ubicación o datos móviles. Garantiza la continuidad del rastreo.</p></div>
+      <div class="pcard"><h4><span class="em">🛰️</span>Rastreo en tiempo real</h4><p>Posición, batería y estado reportados a la consola local, con histórico de recorrido.</p></div>
+      <div class="pcard"><h4><span class="em">✉️</span>Respaldo por SMS</h4><p>Comandos críticos (localizar, bloquear, borrar) por SMS ante ausencia de datos o WiFi.</p></div>
+    </div>
+    <div class="note info"><span class="nt">Alcance común a todas las opciones</span>El bloqueo de apagado, el bloqueo de GPS/datos y el rastreo en tiempo real forman parte de la base de Knox y están presentes en <b>las cuatro opciones</b> de la sección A.3, incluida la más económica. Lo que distingue a cada opción es si el respaldo por SMS viene implementado desde el inicio, el tipo de consola (funcional o a medida) y si el soporte continuo está incluido o se contrata aparte.</div>
+    <div class="note info"><span class="nt">Fundamento técnico</span>Las restricciones anti-manipulación (anti-apagado, bloqueo de GPS/datos, protección ante restablecimiento de fábrica) exceden lo que ofrece Android estándar y solo son confiables en equipos Samsung mediante <b>Knox Platform for Enterprise</b>, licencia sin costo provista por Samsung e integrada tanto en soluciones comerciales como de código abierto.</div>
+
+    <details class="techdetail"><summary>Ver detalle técnico — arquitectura, catálogo de ítems y comparativa</summary><div class="techdetail-body"><h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:18px 0 11px">Arquitectura de la solución</h4>
+    <div class="route">
+      <div class="rstep"><div class="rnum">1</div><div class="rtxt"><h5>Registro masivo (Knox Mobile Enrollment)</h5><p>Los equipos se registran de fábrica y se autoconfiguran al encender, sin intervención manual. La configuración persiste tras un restablecimiento de fábrica.</p></div></div>
+      <div class="rstep"><div class="rnum">2</div><div class="rtxt"><h5>Modo propietario del dispositivo + Knox</h5><p>El agente MDM asume control total: restricciones anti-apagado, bloqueo de ajustes de GPS y datos, modo kiosco y protección anti-restablecimiento.</p></div></div>
+      <div class="rstep"><div class="rnum">3</div><div class="rtxt"><h5>Consola de rastreo</h5><p>El servidor local recibe posición y telemetría. Panel con mapa en vivo, histórico de recorrido y estado de cada dispositivo.</p></div></div>
+      <div class="rstep"><div class="rnum">4</div><div class="rtxt"><h5>Canal de respaldo SMS</h5><p>Ante pérdida de datos/WiFi, los comandos críticos viajan por SMS a través de un gateway, de forma independiente a internet.</p></div></div>
+    </div>
+
+    <h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:20px 0 11px">Catálogo de ítems (mismo costo unitario en todas las opciones)</h4>
+    <p class="para">Cada ítem tiene un costo fijo, sin importar en qué opción aparece. Lo que cambia entre A, B e Ideal es <b>cuáles ítems están incluidos</b>, no su precio. Documentación técnica está incluida en las tres opciones de desarrollo propio.</p>
+    <div class="matrix-scroll">
+    <table class="matrix">
+      <tr><th>Ítem</th><th>Costo unitario</th><th>A · Base</th><th>B · Recomendada</th><th>Ideal</th></tr>
+      <tr><td>Instalación y aseguramiento del servidor MDM</td><td>$2.200</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>Integración Knox + registro masivo (KME)</td><td>$1.800</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>Cargo base de implementación</td><td>$770</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>Capacitación de supervisores</td><td>$880</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>Documentación técnica</td><td>$550</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>Canal de respaldo SMS (gateway + pruebas)</td><td>$1.600</td><td class="n">✕</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>Configuración de políticas avanzadas (geocercas, kiosco)</td><td>$700</td><td class="n">✕</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>Consola y panel a medida (desarrollo Alystech)</td><td>$3.300</td><td class="n">✕</td><td class="n">✕</td><td class="y">✓</td></tr>
+      <tr><td><b>Subtotal</b></td><td></td><td><b>$6.200</b></td><td><b>$8.500</b></td><td><b>$11.800</b></td></tr>
+    </table>
+    </div>
+
+    <div class="chart">
+      <div class="bar-row"><div class="bar-lbl">A · Base</div><div class="bar-track"><div class="bar-fill b3" style="width:48%">$6.200</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">B · Recomendada</div><div class="bar-track"><div class="bar-fill b2" style="width:66%">$8.500</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">Ideal · A medida</div><div class="bar-track"><div class="bar-fill b1" style="width:91%">$11.800</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">Comercial (cloud)</div><div class="bar-track"><div class="bar-fill b4" style="width:100%">$12.900</div></div></div>
+    </div>
+
+    <h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:20px 0 11px">Comparativa de plataformas</h4>
+    <div class="matrix-scroll">
+    <table class="matrix">
+      <tr><th>Criterio</th><th>A · Base</th><th>B · Recomendada</th><th>Ideal · A medida</th><th>Comercial (cloud)</th></tr>
+      <tr><td>Licencia por dispositivo / año</td><td class="y">$0</td><td class="y">$0</td><td class="y">$0</td><td class="n">≈ $82</td></tr>
+      <tr><td>Restricciones Knox</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+      <tr><td>Respaldo por SMS</td><td class="p">Ampliación</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Nativo</td></tr>
+      <tr><td>Interfaz / consola</td><td class="p">Funcional</td><td class="p">Funcional</td><td class="y">A medida</td><td class="y">Madura</td></tr>
+      <tr><td>Documentación técnica</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td><td class="p">Del fabricante</td></tr>
+      <tr><td>Operación 100% local</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td><td class="p">Opcional (cloud por defecto)</td></tr>
+      <tr><td>Independencia de proveedor</td><td class="y">Total</td><td class="y">Total</td><td class="y">Total</td><td class="n">Limitada</td></tr>
+    </table>
+    </div>
+
+    </div></details>
+    <h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:20px 0 11px">Opciones de plataforma MDM</h4>
+    <p class="opt-hint">Seleccione una opción. Incluye desarrollo, implementación y puesta en marcha. El soporte continuo se selecciona por separado en el bloque D (plan unificado).</p>
+    <div class="options" data-group="mdm" data-default="mdm-hybrid">
+
+      <div class="opt" data-price="6200" data-hw="0" data-dev="6200" data-recur="0" data-id="mdm-oss">
+        <div class="opt-top"><span class="opt-code">MDM-A</span><span class="opt-name">Plataforma de código abierto — base</span><span class="opt-badge eco">MENOR INVERSIÓN</span><span class="opt-price">$6.200<small>implementación</small></span></div>
+        <div class="opt-desc">Plataforma MDM de código abierto (licencia Apache 2.0) autohospedada en el servidor local, con integración a Samsung Knox. Cumple los cuatro requisitos base (anti-apagado, bloqueo GPS/datos, rastreo en tiempo real). No incluye el canal de respaldo por SMS ni el soporte continuo.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Operación íntegra en el servidor local (LAN/WiFi), sin dependencia de la nube</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Integración con Knox: anti-apagado, protección anti-restablecimiento, control de tráfico</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Registro masivo, modo kiosco, rastreo GPS en tiempo real, sin límite de dispositivos</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Documentación técnica incluida</span></div>
+          <div class="feat no"><span class="ic">✕</span><span>No incluye el canal de respaldo por SMS (disponible como ampliación, ver nota debajo)</span></div>
+          <div class="feat no"><span class="ic">✕</span><span>Consola de tipo funcional; sin soporte incluido (ver bloque D)</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose — implementación (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Instalación y aseguramiento del servidor MDM</span><span>$2.200</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Integración Knox + registro masivo (KME)</span><span>$1.800</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Cargo base de implementación</span><span>$770</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Capacitación de supervisores</span><span>$880</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Documentación técnica</span><span>$550</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lic">Licencia</span>Headwind + Knox</span><span>$0</span></div>
+            <div class="cr tot"><span>Subtotal implementación</span><span>$6.200</span></div>
+          </div>
+          <span class="pdev">≈ $77,50 por dispositivo (implementación) · Plazo estimado: 2 a 3 semanas</span>
+          <p class="mini" style="margin-top:9px">Ampliación posterior — canal de respaldo por SMS: $1.600 (mismo costo unitario que en B/Ideal), en cualquier momento posterior sin reinstalar la plataforma.</p>
+        </div>
+      </div>
+
+      <div class="opt sel" data-price="8500" data-hw="0" data-dev="8500" data-recur="0" data-id="mdm-hybrid">
+        <div class="opt-top"><span class="opt-code">MDM-B</span><span class="opt-name">Código abierto con implementación completa</span><span class="opt-badge">RECOMENDADA</span><span class="opt-price">$8.500<small>implementación</small></span></div>
+        <div class="opt-desc">Incluye todo el alcance de MDM-A, sumando el canal de respaldo por SMS ya implementado y probado, y una configuración de políticas más completa (geocercas, modo kiosco y automatizaciones base). El soporte continuo se contrata en el plan unificado (bloque D).</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Todo el alcance de MDM-A, con servidor y consola bajo control del cliente</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Respaldo por SMS implementado y verificado</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Políticas de flota, geocercas base y modo kiosco configurados</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Sin costo por dispositivo: ampliar la flota no incrementa el licenciamiento</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose — implementación (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Instalación y aseguramiento del servidor MDM</span><span>$2.200</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Integración Knox + registro masivo (KME)</span><span>$1.800</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Cargo base de implementación</span><span>$770</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Canal de respaldo SMS (gateway + pruebas)</span><span>$1.600</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Configuración de políticas avanzadas</span><span>$700</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Capacitación de supervisores</span><span>$880</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Documentación técnica</span><span>$550</span></div>
+            <div class="cr tot"><span>Subtotal implementación</span><span>$8.500</span></div>
+          </div>
+          <span class="pdev">≈ $106,25 por dispositivo (implementación) · Plazo estimado: 3 a 4 semanas</span>
+        </div>
+      </div>
+
+      <div class="opt" data-price="11800" data-hw="0" data-dev="11800" data-recur="0" data-id="mdm-custom">
+        <div class="opt-top"><span class="opt-code">MDM-C</span><span class="opt-name">Ideal — consola a medida (Headwind + desarrollo Alystech)</span><span class="opt-badge pro">SOLUCIÓN PROPIA</span><span class="opt-price">$11.800<small>implementación</small></span></div>
+        <div class="opt-desc">Todo el alcance de MDM-B, sumando una consola y panel de control desarrollados a medida por Alystech: identidad visual propia, mapa en vivo, roles de supervisor y reportes. Diferencia frente a MDM-B: exactamente $3.300, correspondientes solo al desarrollo de la consola.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Todo el alcance de MDM-B (SMS, políticas avanzadas, capacitación, documentación)</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Panel a medida: mapa en vivo, alertas, roles de supervisor y reportes</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Identidad visual propia; base auditable + capa propia = independencia total de proveedor</span></div>
+          <div class="feat mid"><span class="ic">!</span><span>Mayor plazo de desarrollo inicial (2 a 3 semanas adicionales sobre MDM-B)</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose — implementación (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Instalación y aseguramiento del servidor MDM</span><span>$2.200</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Integración Knox + registro masivo (KME)</span><span>$1.800</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Cargo base de implementación</span><span>$770</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Canal de respaldo SMS (gateway + pruebas)</span><span>$1.600</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Configuración de políticas avanzadas</span><span>$700</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Capacitación de supervisores</span><span>$880</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Documentación técnica</span><span>$550</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Consola y panel a medida</span><span>$3.300</span></div>
+            <div class="cr tot"><span>Subtotal implementación</span><span>$11.800</span></div>
+          </div>
+          <span class="pdev">≈ $147,50 por dispositivo (implementación) · Plazo estimado: 5 a 6 semanas</span>
+          <p class="mini" style="margin-top:9px">El código desarrollado es propiedad de Alystech, licenciado a Araucanos S.A. para su uso. Entrega de código fuente (opcional): +$3.500 (ver condiciones comerciales).</p>
+        </div>
+      </div>
+
+      <div class="opt" data-price="12900" data-hw="0" data-dev="12900" data-recur="6560" data-id="mdm-com">
+        <div class="opt-top"><span class="opt-code">MDM-D</span><span class="opt-name">Plataforma comercial en la nube (SureMDM)</span><span class="opt-price">$12.900<small>Año 1</small></span></div>
+        <div class="opt-desc">SureMDM (42Gears), consola en la nube del fabricante, con Samsung Knox. Consola madura, soporte 24/7 del fabricante y respaldo por SMS nativo. Máxima madurez, con licenciamiento recurrente por dispositivo.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Respaldo por SMS nativo (bloquear, localizar, borrar)</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Knox completo + geocercas + histórico de recorrido</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Soporte 24/7 del fabricante y actualizaciones automáticas</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Documentación del fabricante + guía de configuración de Alystech</span></div>
+          <div class="feat no"><span class="ic">✕</span><span>Licencia recurrente ≈ $82/dispositivo/año (80 equipos = $6.560/año); consola en la nube, no local</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose — Año 1 (precios estimativos, IVA incluido; licencia sujeta a tarifa del proveedor)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lic">Licencia</span>SureMDM cloud 80 × $82</span><span>$6.560</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Implementación, registro y políticas</span><span>$4.900</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Capacitación de supervisores</span><span>$880</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Documentación técnica</span><span>$560</span></div>
+            <div class="cr tot"><span>Subtotal Año 1</span><span>$12.900</span></div>
+          </div>
+          <span class="pdev">≈ $161,25 por dispositivo (Año 1) · recurrente $82/dispositivo/año · Plazo estimado: 1 a 2 semanas</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="note good"><span class="nt">Recomendación de Alystech</span>La opción <b>MDM-B</b> ofrece el mejor equilibrio: el motor de código abierto elimina el licenciamiento perpetuo por dispositivo (frente a ≈ $6.560/año de licencia de la alternativa comercial, sin contar implementación) y, combinada con el plan de soporte unificado del bloque D, aporta continuidad operativa. El salto a <b>Ideal</b> agrega solo $3.300 por la consola a medida, sobre el mismo desarrollo funcional de B. Cifras estimativas, IVA incluido.</div>
+
+    <!-- ====== B) SERVIDOR ====== -->
+    </section>
+    <section class="wstep" data-step="2"><h3 class="blk" id="bloque-b"><span class="bn">B</span> Servidor local e infraestructura</h3>
+    <div class="stepcard"><div class="stepcard-ic">💡</div><div><span class="stepcard-tag">En simple</span><p>Reemplazamos la PC de escritorio sin protección por un servidor propio y dedicado en tu local, separado y protegido.</p></div></div>
+    <p class="para">La operación actual concentra los servicios en un equipo de escritorio sin separación de funciones ni aseguramiento, con antecedentes de intrusión y software malicioso. Se propone un servidor dedicado en sitio que aloja la consola MDM, los archivos, el respaldo y el monitoreo de seguridad, priorizando una arquitectura local por sobre servicios en la nube.</p>
+    <div class="pgrid">
+      <div class="pcard"><h4><span class="em">📱</span>Consola MDM</h4><p>Aloja la plataforma de gestión móvil del bloque A, en operación local.</p></div>
+      <div class="pcard"><h4><span class="em">🗄️</span>Archivos y respaldo</h4><p>Repositorio central y respaldo automatizado cifrado, con copia externa.</p></div>
+      <div class="pcard"><h4><span class="em">🧱</span>Virtualización</h4><p>Proxmox VE (sin costo de licencia) para separar funciones en máquinas virtuales aisladas.</p></div>
+      <div class="pcard"><h4><span class="em">📊</span>Monitoreo</h4><p>Aloja la plataforma de monitoreo de seguridad y el registro de eventos.</p></div>
+    </div>
+
+    <h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:18px 0 11px">Opciones de servidor</h4>
+    <p class="opt-hint">Seleccione una opción de servidor.</p>
+    <div class="options" data-group="srv" data-default="srv-mid">
+
+      <div class="opt" data-price="2299" data-hw="1880" data-dev="419" data-recur="0" data-id="srv-refurb">
+        <div class="opt-top"><span class="opt-code">SRV-A</span><span class="opt-name">Servidor rack reacondicionado</span><span class="opt-badge warn">NO RECOMENDADO</span><span class="opt-price">$2.299<small>único</small></span></div>
+        <div class="opt-desc">Servidor rack 1U reacondicionado (HPE ProLiant DL20 Gen9 o equivalente): Xeon E3, 32 GB ECC, 2×2 TB en RAID 1, gestión remota iLO, UPS 2500 VA. Se incluye como opción de menor costo, pero Alystech no la recomienda como primera alternativa para esta operación.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat no"><span class="ic">✕</span><span>No recomendada: equipo reacondicionado, garantía acotada y vida útil restante menor que un servidor nuevo</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Xeon E3 de cuatro núcleos, 32 GB ECC, RAID 1 (2×2 TB), gestión remota iLO</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Proxmox y respaldo de código abierto; formato 1U de mínimo espacio</span></div>
+          <div class="feat mid"><span class="ic">!</span><span>Máximo 64 GB de RAM y 4 discos: margen de crecimiento limitado a largo plazo</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Servidor reacondicionado + discos</span><span>$1.200</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>UPS 2500 VA</span><span>$680</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Instalación y aseguramiento</span><span>$419</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lic">Software</span>Proxmox + respaldo</span><span>$0</span></div>
+            <div class="cr tot"><span>Subtotal</span><span>$2.299</span></div>
+          </div>
+          <p class="mini" style="margin-top:9px">Plazo estimado: entrega de equipo 1 a 2 semanas (importación) + instalación en sitio 1 jornada.</p>
+        </div>
+      </div>
+
+      <div class="opt sel" data-price="4399" data-hw="3630" data-dev="769" data-recur="0" data-id="srv-mid">
+        <div class="opt-top"><span class="opt-code">SRV-B</span><span class="opt-name">Servidor torre nuevo</span><span class="opt-badge">RECOMENDADA</span><span class="opt-price">$4.399<small>único</small></span></div>
+        <div class="opt-desc">Servidor torre nuevo (Dell PowerEdge T150/T350 o Lenovo ThinkSystem ST250): Xeon E-2300, 32 GB ECC, RAID 1 (2×2 TB), UPS 2500 VA, garantía en sitio. Amplio margen de crecimiento.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Xeon E-2300, 32 GB ECC (ampliable a 128 GB), RAID 1, garantía en sitio</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Proxmox con funciones separadas (MDM, archivos, respaldo, monitoreo)</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>UPS 2500 VA incluido</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Equipo nuevo: mayor vida útil y soporte de fabricante</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Servidor torre nuevo</span><span>$2.880</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>UPS 2500 VA</span><span>$750</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Instalación y aseguramiento</span><span>$769</span></div>
+            <div class="cr tot"><span>Subtotal</span><span>$4.399</span></div>
+          </div>
+          <p class="mini" style="margin-top:9px">Plazo estimado: entrega de equipo 2 a 4 semanas (importación) + instalación en sitio 1 a 2 jornadas.</p>
+        </div>
+      </div>
+
+      <div class="opt" data-price="3479" data-hw="2880" data-dev="599" data-recur="0" data-id="srv-micro">
+        <div class="opt-top"><span class="opt-code">SRV-C</span><span class="opt-name">Servidor compacto nuevo</span><span class="opt-price">$3.479<small>único</small></span></div>
+        <div class="opt-desc">Torre compacta nueva (HPE ProLiant MicroServer Gen11): Xeon 6300P, 16–32 GB ECC, 2×2 TB, UPS 2500 VA. Equipo nuevo, silencioso, apto para oficina sin sala de servidores.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Nuevo con garantía, silencioso, apto para entorno de oficina</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>16–32 GB ECC, RAID 1, Proxmox y respaldo de código abierto</span></div>
+          <div class="feat mid"><span class="ic">!</span><span>Menor expansión que la torre PowerEdge, suficiente para la carga prevista</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Servidor compacto + discos</span><span>$2.160</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>UPS 2500 VA</span><span>$720</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Instalación y aseguramiento</span><span>$599</span></div>
+            <div class="cr tot"><span>Subtotal</span><span>$3.479</span></div>
+          </div>
+          <p class="mini" style="margin-top:9px">Plazo estimado: entrega de equipo 2 a 4 semanas (importación) + instalación en sitio 1 jornada.</p>
+        </div>
+      </div>
+
+      <div class="opt" data-price="6799" data-hw="6080" data-dev="719" data-recur="0" data-id="srv-ha">
+        <div class="opt-top"><span class="opt-code">SRV-D</span><span class="opt-name">Alta disponibilidad (dos nodos)</span><span class="opt-badge pro">MÁXIMA CONTINUIDAD</span><span class="opt-price">$6.799<small>único</small></span></div>
+        <div class="opt-desc">Servidor SRV-B más un segundo nodo con replicación, ambos con UPS 2500 VA. Ante falla de un servidor, los servicios y datos continúan operando. Tolerancia a fallos real.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Todo el alcance de SRV-B más segundo nodo con replicación y conmutación por error</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Continuidad ante falla de hardware; doble UPS 2500 VA; respaldo 3-2-1</span></div>
+          <div class="feat mid"><span class="ic">!</span><span>Inversión mayor; recomendable cuando la operación no admite interrupciones</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Nodo principal</span><span>$2.880</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Nodo secundario</span><span>$1.800</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>UPS 2500 VA ×2</span><span>$1.400</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Instalación, replicación y aseguramiento</span><span>$719</span></div>
+            <div class="cr tot"><span>Subtotal</span><span>$6.799</span></div>
+          </div>
+          <p class="mini" style="margin-top:9px">Plazo estimado: entrega de equipos 2 a 4 semanas (importación) + instalación y replicación en sitio 2 a 3 jornadas.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="note"><span class="nt">Importación</span>Los costos de hardware son referenciales de la región y quedan sujetos a aranceles y flete al momento de la compra. El equipo reacondicionado (SRV-A) reduce aproximadamente un 30% respecto de un equipo nuevo equivalente.</div>
+
+    <h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:20px 0 11px">Equipamiento de red</h4>
+    <p class="para">El aseguramiento de la red requiere separar el tráfico de administración del operativo. Según el relevamiento, podría ser necesario incorporar cortafuegos (firewall) dedicado, conmutador (switch) administrable y punto de acceso. Se ofrecen tres niveles; si el equipamiento existente resulta adecuado, se selecciona la opción sin costo.</p>
+    <p class="opt-hint">Seleccione un nivel de equipamiento de red.</p>
+    <div class="options" data-group="net" data-default="net-base">
+
+      <div class="opt" data-price="0" data-hw="0" data-dev="0" data-recur="0" data-id="net-none">
+        <div class="opt-top"><span class="opt-code">NET-A</span><span class="opt-name">Reutilizar equipamiento existente</span><span class="opt-badge warn">NO RECOMENDADO</span><span class="opt-price">$0<small>a validar</small></span></div>
+        <div class="opt-desc">Se reconfigura el equipamiento de red actual sin reemplazo. No recomendado dados los antecedentes de intrusión: el equipamiento existente no fue diseñado para segmentar administración de operación, y perpetúa la misma exposición que originó los incidentes previos.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat no"><span class="ic">✕</span><span>No recomendado: no resuelve la falta de segmentación que facilitó incidentes previos</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Reconfiguración segura del router y la red existentes, dentro de sus límites</span></div>
+          <div class="feat mid"><span class="ic">!</span><span>Sujeto a validación en relevamiento; en la mayoría de los casos no permite segmentación real</span></div>
+        </div>
+      </div>
+
+      <div class="opt sel" data-price="899" data-hw="700" data-dev="199" data-recur="0" data-id="net-base">
+        <div class="opt-top"><span class="opt-code">NET-B</span><span class="opt-name">Cortafuegos + switch administrable</span><span class="opt-badge">RECOMENDADA</span><span class="opt-price">$899<small>único</small></span></div>
+        <div class="opt-desc">Cortafuegos dedicado (OPNsense sobre hardware) y switch administrable para segmentar la red. Base sólida para separar administración de operación.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Cortafuegos dedicado con OPNsense (sin costo de licencia)</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Switch administrable para VLAN y segmentación</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>VPN para acceso remoto seguro</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Appliance cortafuegos</span><span>$420</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Switch administrable 8–16 puertos</span><span>$280</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Configuración y segmentación</span><span>$199</span></div>
+            <div class="cr tot"><span>Subtotal</span><span>$899</span></div>
+          </div>
+          <p class="mini" style="margin-top:9px">Plazo estimado: 1 jornada en sitio.</p>
+        </div>
+      </div>
+
+      <div class="opt" data-price="1899" data-hw="1470" data-dev="429" data-recur="0" data-id="net-full">
+        <div class="opt-top"><span class="opt-code">NET-C</span><span class="opt-name">Red segmentada completa</span><span class="opt-price">$1.899<small>único</small></span></div>
+        <div class="opt-desc">Cortafuegos, switch administrable de mayor capacidad y punto de acceso WiFi empresarial con red de invitados aislada. Para una red corporativa robusta y ordenada.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Cortafuegos + switch administrable de mayor capacidad (24 puertos)</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Punto de acceso empresarial con SSID de invitados aislado</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Segmentación por VLAN de administración, operación e invitados</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Cortafuegos</span><span>$490</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Switch administrable 24 puertos</span><span>$630</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-hw">Equipo</span>Punto de acceso empresarial</span><span>$350</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Configuración y segmentación</span><span>$429</span></div>
+            <div class="cr tot"><span>Subtotal</span><span>$1.899</span></div>
+          </div>
+          <p class="mini" style="margin-top:9px">Plazo estimado: 1 a 2 jornadas en sitio.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ====== C) AUDITORÍA + MONITOREO ====== -->
+    </section>
+    <section class="wstep" data-step="3"><h3 class="blk" id="bloque-c"><span class="bn">C</span> Auditoría, remediación y monitoreo de seguridad</h3>
+    <div class="stepcard"><div class="stepcard-ic">💡</div><div><span class="stepcard-tag">En simple</span><p>Limpiamos y blindamos los ~20 equipos de oficina, y dejamos instalado el monitoreo que avisa si algo raro pasa en la red o el servidor.</p></div></div>
+    <p class="para">Auditoría y remediación del parque informático (aproximadamente 20 equipos) ante los antecedentes de intrusión y software malicioso, y aseguramiento de la red. La solución deja la operación limpia, documentada y protegida, con monitoreo de seguridad alojado en el mismo servidor.</p>
+
+    <details class="techdetail"><summary>Ver detalle técnico — metodología, monitoreo y alcance por nivel</summary><div class="techdetail-body"><h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:18px 0 11px">Metodología de auditoría</h4>
+    <div class="route">
+      <div class="rstep"><div class="rnum">1</div><div class="rtxt"><h5>Inventario y descubrimiento</h5><p>Relevamiento de los 20 equipos, red, router y servidor actual. Identificación de la superficie de exposición.</p></div></div>
+      <div class="rstep"><div class="rnum">2</div><div class="rtxt"><h5>Análisis de vulnerabilidades</h5><p>Evaluación de nivel de actualización, cuentas, privilegios y servicios. Análisis forense básico en los equipos con antecedentes de software malicioso.</p></div></div>
+      <div class="rstep"><div class="rnum">3</div><div class="rtxt"><h5>Remediación y endurecimiento</h5><p>Depuración de software malicioso, cierre de cuentas y puertos, aplicación de actualizaciones, segmentación de red y políticas de seguridad.</p></div></div>
+      <div class="rstep"><div class="rnum">4</div><div class="rtxt"><h5>Informe y protección continua</h5><p>Informe con hallazgos priorizados (crítico, alto, medio, bajo) y plan de acción. Protección de puntos finales gestionada y, según el plan de soporte, monitoreo permanente.</p></div></div>
+    </div>
+
+    <h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:20px 0 11px">Qué es el monitoreo de seguridad y cómo funciona</h4>
+    <p class="para">El monitoreo continuo consiste en observar de forma permanente lo que ocurre en la red, los equipos y el servidor, para detectar y responder ante actividad anómala antes de que se convierta en un incidente. Se implementa mediante una plataforma de código abierto de gestión de eventos de seguridad (SIEM) y detección en puntos finales (XDR), sin costo de licencia, alojada en el mismo servidor local del bloque B. Alystech evalúa y recomienda la herramienta específica según el entorno del cliente al momento de la implementación.</p>
+    <div class="hiw">
+      <div class="hiw-h">Cómo opera el monitoreo, paso a paso</div>
+      <div class="hiw-b">
+        <div class="hiw-row"><div class="hw-k">Agentes en los equipos</div><div class="hw-v">Un pequeño componente instalado en cada equipo recopila eventos: inicios de sesión, procesos, cambios en archivos críticos y presencia de software malicioso.</div></div>
+        <div class="hiw-row"><div class="hw-k">Recolección central</div><div class="hw-v">La información se concentra en el servidor local, en un panel único. No se envía a servicios externos: la operación permanece dentro de la empresa.</div></div>
+        <div class="hiw-row"><div class="hw-k">Reglas de detección</div><div class="hw-v">El sistema compara la actividad contra reglas conocidas de ataque (accesos indebidos, fuerza bruta, malware, cambios no autorizados) y marca lo sospechoso.</div></div>
+        <div class="hiw-row"><div class="hw-k">Alertas y respuesta</div><div class="hw-v">Ante un evento relevante se genera una alerta. Según el plan de soporte, Alystech investiga y responde: aísla el equipo, bloquea la amenaza y documenta el incidente.</div></div>
+        <div class="hiw-row"><div class="hw-k">Reportes</div><div class="hw-v">Informes periódicos con el estado de seguridad, incidentes atendidos y recomendaciones, en lenguaje claro para la dirección.</div></div>
+      </div>
+    </div>
+    <div class="vstrip">
+      <div class="vcol bad"><h5>⚠ Sin monitoreo (situación actual)</h5><ul>
+        <li>Las intrusiones se descubren cuando ya causaron daño</li>
+        <li>Sin registro de qué ocurrió ni cómo entró la amenaza</li>
+        <li>El malware puede permanecer semanas sin ser detectado</li>
+        <li>Imposible saber si un equipo está comprometido</li>
+      </ul></div>
+      <div class="vcol good"><h5>✓ Con monitoreo</h5><ul>
+        <li>Detección temprana de actividad anómala</li>
+        <li>Registro completo y auditable de eventos</li>
+        <li>Respuesta ante incidentes antes de que escalen</li>
+        <li>Visibilidad permanente del estado de cada equipo</li>
+      </ul></div>
+    </div>
+    <div class="note info"><span class="nt">Integración con el soporte</span>El monitoreo de seguridad se opera desde el mismo servidor y por el mismo equipo que gestiona la plataforma MDM. Por eso no se cobra como un servicio separado: la respuesta ante alertas y la gestión del monitoreo están incluidas en el plan de soporte unificado del bloque D, según el nivel contratado.</div>
+
+    <h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:20px 0 11px">Alcance por nivel de auditoría</h4>
+    <div class="matrix-scroll">
+    <table class="matrix">
+      <tr><th>Actividad</th><th>Básica</th><th>Completa</th><th>Integral</th></tr>
+      <tr><td>Inventario y escaneo de vulnerabilidades</td><td class="n">No</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+      <tr><td>Hardening de endpoints</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+      <tr><td>Auditoría de red y servidor</td><td class="n">No</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+      <tr><td>Informe de recomendaciones priorizadas</td><td class="n">No</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+      <tr><td>Análisis forense de equipos afectados</td><td class="n">No</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+      <tr><td>Protección de puntos finales gestionada</td><td class="y">Sí</td><td class="y">Sí</td><td class="y">Sí</td></tr>
+      <tr><td>Implementación de monitoreo (SIEM)</td><td class="n">No</td><td class="p">Base</td><td class="y">Completo</td></tr>
+      <tr><td>Prueba de intrusión interna</td><td class="n">No</td><td class="n">No</td><td class="y">Sí</td></tr>
+    </table>
+    </div>
+    <p class="mini">El monitoreo continuo y la respuesta a incidentes se gestionan mediante el plan de soporte del bloque D. La auditoría deja la infraestructura de monitoreo instalada; el nivel de gestión posterior lo define el plan de soporte.</p>
+
+    </div></details>
+    <h4 style="font-size:13px;color:#0d1f3c;font-weight:700;margin:20px 0 11px">Opciones de auditoría y remediación</h4>
+    <p class="opt-hint">Seleccione un nivel de auditoría. Incluye la ejecución en sitio, el informe con recomendaciones priorizadas y la protección de puntos finales del primer año. Precios estimativos, IVA incluido.</p>
+    <div class="note warn"><span class="nt">Importante — el relevamiento puede sumar costos</span>AUD-A cubre exclusivamente el hardening de endpoints, sin inventario de red ni informe de recomendaciones. AUD-B y AUD-C sí entregan informe con hallazgos y <b>recomendaciones priorizadas</b>, con remediación de los hallazgos estándar incluida (parches, cuentas, configuración, malware conocido). <b>Hallazgos que requieran reemplazo de hardware, licencias de software específicas, recuperación de datos u otra intervención mayor no están incluidos en este precio</b> y se presupuestan por separado, una vez detectados durante la auditoría en sitio.</div>
+
+    <div class="options" data-group="aud" data-default="aud-full">
+
+      <div class="opt" data-price="1548" data-hw="0" data-dev="1548" data-recur="349" data-id="aud-basic">
+        <div class="opt-top"><span class="opt-code">AUD-A</span><span class="opt-name">Básica — solo hardening de endpoints</span><span class="opt-badge eco">ENTRADA</span><span class="opt-price">$1.548<small>Año 1</small></span></div>
+        <div class="opt-desc">Alcance acotado: endurecimiento de los 20 equipos (cuentas, parches, configuración local). No incluye inventario de red, análisis forense, ni informe de recomendaciones a nivel de infraestructura. Recomendada solo como punto de partida mínimo.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Hardening de los 20 endpoints: cuentas, parches, configuración local</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Protección de puntos finales gestionada</span></div>
+          <div class="feat no"><span class="ic">✕</span><span>No incluye auditoría de red, servidor, análisis forense ni informe de recomendaciones</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose — Año 1 (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Hardening de endpoints, 2 jornadas</span><span>$1.199</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-svc">Servicio</span>Protección de puntos finales (20)</span><span>$349/año</span></div>
+            <div class="cr tot"><span>Subtotal Año 1</span><span>$1.548</span></div>
+          </div>
+          <span class="pdev">≈ $77,40 por equipo · Plazo estimado: 2 jornadas en sitio</span>
+        </div>
+      </div>
+
+      <div class="opt sel" data-price="2699" data-hw="0" data-dev="2699" data-recur="659" data-id="aud-full">
+        <div class="opt-top"><span class="opt-code">AUD-B</span><span class="opt-name">Completa con remediación estándar</span><span class="opt-badge">RECOMENDADA</span><span class="opt-price">$2.699<small>Año 1</small></span></div>
+        <div class="opt-desc">Todo el alcance de la básica, con endurecimiento ejecutado, análisis forense de equipos afectados, depuración de software malicioso, aseguramiento de red e instalación de la base de monitoreo. Hallazgos mayores se cotizan aparte (ver nota superior).</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Auditoría completa (equipos, red y servidor actual), 4–5 días</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Análisis forense básico y depuración de software malicioso</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Endurecimiento ejecutado, protección de puntos finales y base de monitoreo instalada</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose — Año 1 (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Auditoría y remediación estándar (4–5 días)</span><span>$2.040</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-svc">Servicio</span>Protección de puntos finales (20)</span><span>$659/año</span></div>
+            <div class="cr tot"><span>Subtotal Año 1</span><span>$2.699</span></div>
+          </div>
+          <span class="pdev">≈ $134,95 por equipo auditado · Plazo estimado: 4 a 5 jornadas en sitio</span>
+        </div>
+      </div>
+
+      <div class="opt" data-price="4859" data-hw="0" data-dev="4859" data-recur="659" data-id="aud-soc">
+        <div class="opt-top"><span class="opt-code">AUD-C</span><span class="opt-name">Integral con prueba de intrusión</span><span class="opt-badge pro">MÁXIMA</span><span class="opt-price">$4.859<small>Año 1</small></span></div>
+        <div class="opt-desc">Todo el alcance de la completa, más implementación de monitoreo avanzado (SIEM/XDR completo) y prueba de intrusión interna que simula un ataque real para validar las defensas.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance y desglose de costos ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Todo el alcance de AUD-B</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Implementación de monitoreo avanzado (SIEM/XDR completo)</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Prueba de intrusión interna (simulación de ataque) e informe de remediación</span></div>
+          <div class="costgrid">
+            <div class="ch">Desglose — Año 1 (precios estimativos, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Auditoría y remediación estándar</span><span>$2.040</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Implementación SIEM/XDR completo</span><span>$1.320</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-lab">Desarrollo</span>Prueba de intrusión interna</span><span>$840</span></div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-svc">Servicio</span>Protección de puntos finales (20)</span><span>$659/año</span></div>
+            <div class="cr tot"><span>Subtotal Año 1</span><span>$4.859</span></div>
+          </div>
+          <span class="pdev">≈ $242,95 por equipo auditado · Plazo estimado: 6 a 8 jornadas en sitio</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="note good"><span class="nt">Herramientas de código abierto</span>El monitoreo se implementa con plataformas SIEM/XDR de código abierto y la protección de puntos finales con soluciones de bajo costo, evitando licenciamientos elevados. Solución robusta y auditable, en línea con la arquitectura local del proyecto.</div>
+
+    <!-- ====== D) SOPORTE UNIFICADO + ONBOARDING ====== -->
+    </section>
+    <section class="wstep" data-step="4"><h3 class="blk" id="bloque-d"><span class="bn">D</span> Plan de soporte unificado (MDM + seguridad)</h3>
+    <div class="stepcard"><div class="stepcard-ic">💡</div><div><span class="stepcard-tag">En simple</span><p>Un solo plan de soporte cubre tanto la app de rastreo como la seguridad de los equipos — no se paga por dos servicios separados.</p></div></div>
+    <p class="para">Un único plan de soporte cubre tanto la plataforma de gestión móvil como el monitoreo de seguridad, dado que ambos operan sobre el mismo servidor y son gestionados por el mismo equipo. Esto evita cobrar dos servicios superpuestos: con un solo plan, el cliente tiene un punto único de gestión y un solo costo recurrente. Incluye disponibilidad del servicio, atención de incidentes, actualizaciones de seguridad, altas y bajas de dispositivos, ajustes de políticas, gestión del monitoreo y reportes.</p>
+    <p class="opt-hint">Seleccione un plan de soporte. Es el único costo recurrente de la propuesta y cubre ambas capacidades.</p>
+    <div class="options" data-group="sup" data-default="sup-estandar">
+
+      <div class="opt" data-price="890" data-hw="0" data-dev="890" data-recur="890" data-id="sup-basico">
+        <div class="opt-top"><span class="opt-code">SOP-A</span><span class="opt-name">Básico</span><span class="opt-badge eco">ESENCIAL</span><span class="opt-price">$890<small>/año</small></span></div>
+        <div class="opt-desc">Cobertura esencial remota en horario laboral para operaciones que gestionan la mayor parte de forma interna y requieren respaldo puntual. No incluye visitas presenciales (ver condiciones comerciales).</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Atención remota en horario laboral (lunes a viernes)</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Respuesta ante incidentes en 24–48 h</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Actualizaciones de seguridad trimestrales (MDM y servidor)</span></div>
+          <div class="feat no"><span class="ic">✕</span><span>Altas, bajas y reconfiguración de dispositivos NO incluidas: se cobran por unidad (ver bloque E, incorporación posterior)</span></div>
+          <div class="feat mid"><span class="ic">!</span><span>Monitoreo instalado, pero sin gestión proactiva de alertas incluida</span></div>
+          <div class="costgrid">
+            <div class="ch">Servicio anual (precio estimativo, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-svc">Servicio</span>Soporte Básico (MDM + seguridad)</span><span>$890/año</span></div>
+            <div class="cr tot"><span>Subtotal / año</span><span>$890</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="opt sel" data-price="1590" data-hw="0" data-dev="1590" data-recur="1590" data-id="sup-estandar">
+        <div class="opt-top"><span class="opt-code">SOP-B</span><span class="opt-name">Estándar</span><span class="opt-badge">RECOMENDADA</span><span class="opt-price">$1.590<small>/año</small></span></div>
+        <div class="opt-desc">Cobertura remota equilibrada con gestión proactiva del monitoreo y respuesta ante incidentes. Adecuado para la operación de Araucanos. No incluye visitas presenciales (ver condiciones comerciales).</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Atención remota en horario laboral ampliado</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Respuesta ante incidentes en 8–12 h</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Actualizaciones de seguridad mensuales</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Altas, bajas y ajustes de políticas incluidos, sin cargo por dispositivo</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Gestión del monitoreo con respuesta a alertas + reporte mensual</span></div>
+          <div class="costgrid">
+            <div class="ch">Servicio anual (precio estimativo, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-svc">Servicio</span>Soporte Estándar (MDM + seguridad)</span><span>$1.590/año</span></div>
+            <div class="cr tot"><span>Subtotal / año</span><span>$1.590</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="opt" data-price="2890" data-hw="0" data-dev="2890" data-recur="2890" data-id="sup-prioritario">
+        <div class="opt-top"><span class="opt-code">SOP-C</span><span class="opt-name">Prioritario</span><span class="opt-badge pro">COBERTURA EXTENDIDA</span><span class="opt-price">$2.890<small>/año</small></span></div>
+        <div class="opt-desc">Cobertura extendida con respuesta rápida ante incidentes críticos, monitoreo proactivo permanente y una revisión trimestral en sitio incluida. Para operaciones que no admiten interrupciones prolongadas.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Atención extendida, incluye fines de semana</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Respuesta ante incidentes críticos en 2–4 h</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Actualizaciones continuas y gestión completa de políticas y dispositivos</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Monitoreo proactivo permanente con alertas y respuesta a incidentes</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Una (1) revisión trimestral en sitio incluida; visitas adicionales según condiciones comerciales</span></div>
+          <div class="costgrid">
+            <div class="ch">Servicio anual (precio estimativo, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-svc">Servicio</span>Soporte Prioritario (MDM + seguridad)</span><span>$2.890/año</span></div>
+            <div class="cr tot"><span>Subtotal / año</span><span>$2.890</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="opt" data-price="4900" data-hw="0" data-dev="4900" data-recur="4900" data-id="sup-dedicado">
+        <div class="opt-top"><span class="opt-code">SOP-D</span><span class="opt-name">Dedicado</span><span class="opt-badge pro">MÁXIMA COBERTURA</span><span class="opt-price">$4.900<small>/año</small></span></div>
+        <div class="opt-desc">Cobertura 24/7 con técnico asignado a la cuenta, SLA agresivo y presencia mensual en sitio. Para operaciones críticas donde cada incidente tiene impacto directo en el servicio de seguridad al cliente final.</div>
+        <span class="toggle" onclick="tgl(this)">Ver alcance ▾</span>
+        <div class="opt-detail collapsed">
+          <div class="feat yes"><span class="ic">✓</span><span>Atención 24/7, todos los días del año</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Respuesta ante incidentes críticos en 1 h; técnico asignado a la cuenta</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Actualizaciones continuas, gestión completa de políticas y dispositivos sin límite</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Monitoreo proactivo permanente, con umbrales de alerta ajustados a la operación</span></div>
+          <div class="feat yes"><span class="ic">✓</span><span>Revisión mensual en sitio incluida; canal directo de escalamiento</span></div>
+          <div class="costgrid">
+            <div class="ch">Servicio anual (precio estimativo, IVA incluido)</div>
+            <div class="cr"><span class="lbltxt"><span class="cat cat-svc">Servicio</span>Soporte Dedicado (MDM + seguridad)</span><span>$4.900/año</span></div>
+            <div class="cr tot"><span>Subtotal / año</span><span>$4.900</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="note info"><span class="nt">Por qué un solo plan</span>Si la plataforma MDM y el monitoreo de seguridad se contrataran por separado, buena parte del trabajo se duplicaría: el mismo servidor, el mismo equipo técnico y la misma consola de gestión. Al unificarlos, el cliente ve un único costo recurrente en lugar de dos, con un ahorro respecto de contratar ambos servicios de forma independiente. El plan puede escalarse o reducirse de nivel en cualquier momento.</div>
+
+    <details class="techdetail"><summary>Ver detalle: incorporación posterior de dispositivos (onboarding)</summary><div class="techdetail-body"><h3 class="blk"><span class="bn">E</span> Incorporación posterior de dispositivos (onboarding)</h3>
+    <p class="para">La implementación cubre el registro inicial de los aproximadamente 80 dispositivos. El personal de Araucanos queda capacitado para incorporar equipos nuevos por su cuenta sin costo adicional. Si en el futuro se prefiere que Alystech realice esa incorporación, se aplican los siguientes valores por servicio (precios estimativos, IVA incluido), con descuento a mayor volumen:</p>
+    <div class="hiw">
+      <div class="hiw-h">Servicio de incorporación posterior — a solicitud</div>
+      <div class="hiw-b">
+        <div class="hiw-row"><div class="hw-k">1 a 5 equipos</div><div class="hw-v">$24 por dispositivo. Registro, aplicación de políticas y verificación de restricciones.</div></div>
+        <div class="hiw-row"><div class="hw-k">6 a 20 equipos</div><div class="hw-v">$19 por dispositivo. Incluye preparación en lote y prueba del canal SMS.</div></div>
+        <div class="hiw-row"><div class="hw-k">Más de 20 equipos</div><div class="hw-v">$14 por dispositivo. Registro masivo por Knox Mobile Enrollment.</div></div>
+        <div class="hiw-row"><div class="hw-k">Reconfiguración</div><div class="hw-v">$12 por dispositivo. Restablecimiento de políticas en equipos reasignados o restaurados.</div></div>
+      </div>
+    </div>
+    <div class="note"><span class="nt">Modalidad de entrega</span>Este servicio se presta en las oficinas de Alystech: los dispositivos deben ser entregados allí para su configuración. Si se requiere que el equipo técnico se traslade a las instalaciones del cliente, se aplica el costo de visita on-site descripto en las condiciones comerciales, además del valor por dispositivo.</div>
+    <p class="mini">Los planes de soporte Estándar y Prioritario incluyen las altas y bajas de dispositivos sin costo adicional siempre que se realicen en oficinas de Alystech; los valores anteriores aplican cuando no existe un plan de soporte vigente que las cubra, o para volúmenes fuera del plan.</p>
+
+    </div></details>
+    <div class="scale-banner">
+      <div class="sic">📈</div>
+      <div><h5>Escalable y mejorable</h5><p>Toda la plataforma admite crecimiento sin rehacer el trabajo: la flota puede pasar de 80 a varios cientos de dispositivos sin cambiar de motor ni pagar licencias adicionales; el servidor amplía memoria y almacenamiento; la red se segmenta en más niveles; y el plan de soporte sube o baja de nivel según la necesidad. Se parte de una base sólida y se agregan capacidades a medida que la operación lo requiera, incluida la integración con la red LoRa (ver documento «Plan LoRa»).</p></div>
+    </div>
+  </section>
+    <section class="wstep" data-step="5">
+<div class="finalsum">
+  <h3 class="finalsum-h">Tu selección</h3>
+  <p class="finalsum-sub">Así queda armada la propuesta con las opciones elegidas. Podés volver atrás para cambiar cualquier bloque, o desplegar "ver todas las opciones" para comparar antes de decidir.</p>
+  <div class="finalsum-total">
+    <div class="ft-amt" id="fs-total">$0</div>
+    <div class="ft-sub">Año 1 (estimativo, IVA incluido) · Recurrente anual: <span id="fs-recur">$0</span></div>
+  </div>
+  <div class="finalsum-items" id="fs-items"></div>
+  <div class="finalsum-alt-h">Otras opciones disponibles por bloque</div>
+  <div class="finalsum-alt" id="fs-alt"></div>
+  <div class="finalsum-actions">
+    <button class="abtn abtn-consulta" onclick="openModal('consulta')"><svg class="icn" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Hacer una consulta</button>
+    <button class="abtn abtn-pdf" onclick="downloadSelection()"><svg class="icn" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg> Descargar presupuesto (PDF)</button>
+    <button class="abtn abtn-reject" onclick="openModal('reject')"><svg class="icn" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg> Rechazar</button>
+    <button class="abtn abtn-accept" onclick="openModal('accept')"><svg class="icn" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Aceptar propuesta</button>
+  </div>
+</div>
+</section>
+  </div>
+  <div class="wizard-nav">
+    <button class="wnav-btn wnav-back" id="wnav-back" onclick="wizardPrev()">← Atrás</button>
+    <div class="wnav-dots" id="wnav-dots"></div>
+    <button class="wnav-btn wnav-next" id="wnav-next" onclick="wizardNext()">Siguiente →</button>
+  </div>
+</div></div>
+</div>
+</div>
+
+
+<div class="nextsteps" id="proximos-pasos">
+  <div class="wrap">
+    <div class="panel">
+      <div class="panel-head"><div class="ph-ic"><svg class="icn" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3-6-3Z"/><path d="M9 3v15M15 6v15"/></svg></div><h2>Próximos pasos</h2></div>
+      <div class="panel-body">
+        <p class="para">Así continúa el proceso una vez definida la configuración y aceptada la propuesta.</p>
+        <div class="tl">
+          <div class="tl-item"><div class="tl-week">Paso 1</div><div class="tl-txt"><b>Aceptación de la propuesta.</b> Confirman la configuración elegida desde esta misma página (botón «Aceptar propuesta»).</div></div>
+          <div class="tl-item"><div class="tl-week">Paso 2</div><div class="tl-txt"><b>Pago inicial (50% del desarrollo)</b> y agenda de la visita de relevamiento en sitio. Esta visita puede detectar hallazgos fuera del alcance cotizado (hardware, licencias puntuales, cableado); de aparecer, se presupuestan aparte antes de ejecutarlos.</div></div>
+          <div class="tl-item"><div class="tl-week">Paso 3</div><div class="tl-txt"><b>Implementación.</b> Servidor, MDM, red y auditoría según lo seleccionado. Pago del 25% (desarrollo) al llegar a esta fase. Los equipos se facturan aparte, a cargo del cliente.</div></div>
+          <div class="tl-item"><div class="tl-week">Paso 4</div><div class="tl-txt"><b>Pruebas, capacitación y entrega.</b> Verificación de rastreo, respaldo por SMS y documentación entregada. Pago final del 25% (desarrollo).</div></div>
+          <div class="tl-item fut"><div class="tl-week">Continuo</div><div class="tl-txt"><b>Soporte y monitoreo</b> según el plan unificado contratado, con reportes periódicos.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+<div class="terms">
+  <h4>Condiciones generales</h4>
+  <ul>
+    <li>Todas las soluciones son escalables y mejorables: se puede comenzar por una configuración base y ampliar capacidades, cobertura o niveles de servicio en cualquier momento, reutilizando lo ya implementado.</li>
+    <li>Los montos son de carácter tentativo y quedan sujetos a confirmación tras la visita de relevamiento.</li>
+    <li>Los precios de licenciamiento se expresan en dólares (tarifa de lista) y pueden variar según el revendedor local.</li>
+    <li>Los costos de hardware son referenciales de la región y quedan sujetos a disponibilidad, aranceles y flete.</li>
+    <li>Los valores incluyen IVA (10%). Las retenciones impositivas, cuando correspondan, se aplican según la modalidad de facturación.</li>
+    <li>Esta propuesta es independiente del Plan LoRa (documento aparte) y puede contratarse por separado o de forma combinada.</li>
+  </ul>
+</div>
+
+<footer>
+  <span class="fbrand">Alystech</span> · Propuesta técnica y económica para Araucanos S.A. · Ref. AT-2026-0630-P Rev. 6<br>
+  30 de junio de 2026 · Validez 30 días · Tipo de cambio referencial 1 USD ≈ 6.250 Gs
+</footer>
+</div>
+
+<script>
+const RATE=6250, DEVICES=80;
+const P1=['mdm','srv','net','aud','sup'];
+function fUSD(n){return '$'+n.toLocaleString('en-US')}
+function fGS(n){return (n*RATE).toLocaleString('es-PY')+' Gs'}
+function tgl(el){const d=el.nextElementSibling;const open=d.classList.contains('collapsed');d.classList.toggle('collapsed');el.textContent=open?'Ocultar detalle ▴':(el.textContent.includes('alcance')?'Ver alcance y desglose de costos ▾':'Ver alcance ▾')}
+function selectOpt(o){const g=o.closest('.options');g.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));o.classList.add('sel');recalc()}
+function sumGroups(arr){let t=0,r=0,hw=0,dev=0;arr.forEach(g=>{const grp=document.querySelector(`.options[data-group="${g}"]`);if(!grp)return;const s=grp.querySelector('.opt.sel');if(!s)return;t+=+s.dataset.price;r+=+s.dataset.recur;hw+=+(s.dataset.hw||0);dev+=+(s.dataset.dev||0)});return{t,r,hw,dev}}
+function setBar(prefix,dev,hw){
+  const total=dev+hw;
+  const devPct = total>0 ? (dev/total*100) : 100;
+  const hwPct = total>0 ? (hw/total*100) : 0;
+  document.getElementById(prefix+'-bar-dev').style.width=devPct+'%';
+  document.getElementById(prefix+'-bar-hw').style.width=hwPct+'%';
+}
+function recalc(){
+  const a=sumGroups(P1);
+  document.getElementById('p1-amt').textContent=fUSD(a.t);
+  document.getElementById('p1-gs').innerHTML='≈ '+fGS(a.t)+' · Recurrente anual: <span id="p1-recur">'+fUSD(a.r)+'</span>';
+  document.getElementById('p1-perdev').textContent='Por dispositivo: '+fUSD(Math.round(a.t/DEVICES));
+  document.getElementById('p1-split').textContent='Desarrollo/implementación: '+fUSD(a.dev)+' · Equipos: '+fUSD(a.hw);
+  setBar('p1',a.dev,a.hw);
+}
+function resetGroups(list){list.forEach(g=>{const grp=document.querySelector(`.options[data-group="${g}"]`);if(!grp)return;const d=grp.dataset.default;grp.querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel',o.dataset.id===d))});recalc()}
+document.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',e=>{if(e.target.classList.contains('toggle'))return;selectOpt(o)}));
+recalc();
+</script>
+
+<div class="action-bar">
+  <div class="wrap">
+    <div class="ab-msg">Total actual: <b id="ab-total">$0</b></div>
+    <div class="ab-btns">
+      <button class="abtn abtn-consulta" onclick="openModal('consulta')"><svg class="icn" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Consulta</button>
+      <button class="abtn abtn-pdf" onclick="downloadSelection()"><svg class="icn" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg> PDF</button>
+      <button class="abtn abtn-reject" onclick="openModal('reject')"><svg class="icn" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg> Rechazar</button>
+      <button class="abtn abtn-accept" onclick="openModal('accept')"><svg class="icn" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-decision">
+  <div class="modal">
+    <div class="modal-h"><h3 id="md-title">Aceptar propuesta</h3><button class="mclose" onclick="closeModal('decision')">×</button></div>
+    <div class="modal-b" id="md-body">
+      <p class="mhint" id="md-hint">Confirmá tus datos de contacto. Vamos a registrar la configuración exactamente como quedó seleccionada en esta página.</p>
+      <div class="modal-summary"><b>Resumen de tu selección</b><span id="md-summary">—</span></div>
+      <div class="field"><label>Nombre y apellido</label><input type="text" id="md-name" placeholder="Nombre de quien confirma"></div>
+      <div class="field"><label>Email</label><input type="email" id="md-email" placeholder="tu@empresa.com"></div>
+      <div class="field"><label>Teléfono (opcional)</label><input type="text" id="md-phone" placeholder="+595..."></div>
+      <div class="field"><label>Comentarios (opcional)</label><textarea id="md-comments" placeholder="Alguna aclaración sobre la decisión..."></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="mbtn mbtn-cancel" onclick="closeModal('decision')">Cancelar</button>
+      <button class="mbtn mbtn-submit" id="md-submit" onclick="submitDecision()">Confirmar</button>
+    </div>
+    <div class="modal-ok" id="md-ok">
+      <div class="mo-ic"><svg class="icn" viewBox="0 0 24 24" style="width:38px;height:38px;color:var(--green)"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></div>
+      <h4>¡Listo, gracias!</h4>
+      <p>Registramos tu respuesta. El equipo de Alystech se va a contactar a la brevedad.</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-consulta">
+  <div class="modal">
+    <div class="modal-h"><h3>Hacer una consulta</h3><button class="mclose" onclick="closeModal('consulta')">×</button></div>
+    <div class="modal-b">
+      <p class="mhint">¿Tenés dudas sobre alguna opción, precio o plazo? Escribinos y te respondemos por email.</p>
+      <div class="field"><label>Nombre y apellido</label><input type="text" id="cq-name"></div>
+      <div class="field"><label>Email</label><input type="email" id="cq-email"></div>
+      <div class="field"><label>Teléfono (opcional)</label><input type="text" id="cq-phone"></div>
+      <div class="field"><label>Tu consulta</label><textarea id="cq-message" placeholder="Escribí tu pregunta acá..."></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="mbtn mbtn-cancel" onclick="closeModal('consulta')">Cancelar</button>
+      <button class="mbtn mbtn-submit" onclick="submitConsulta()">Enviar consulta</button>
+    </div>
+    <div class="modal-ok" id="cq-ok">
+      <div class="mo-ic"><svg class="icn" viewBox="0 0 24 24" style="width:38px;height:38px;color:var(--blue)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <h4>¡Consulta enviada!</h4>
+      <p>Te respondemos a la brevedad al email que dejaste.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const PROPOSAL_ID = "AT-2026-0630-P";
+const PROPOSAL_GROUPS = ['mdm','srv','net','aud','sup'];
+const GROUP_LABELS = {mdm:'A · Plataforma móvil', srv:'B · Servidor', net:'B · Red', aud:'C · Auditoría', sup:'D · Soporte'};
+
+function getSelections(){
+  const out = [];
+  PROPOSAL_GROUPS.forEach(g => {
+    const grp = document.querySelector(`.options[data-group="${g}"]`);
+    if(!grp) return;
+    const s = grp.querySelector('.opt.sel');
+    if(!s) return;
+    const code = s.querySelector('.opt-code') ? s.querySelector('.opt-code').textContent : g;
+    const name = s.querySelector('.opt-name') ? s.querySelector('.opt-name').textContent : s.dataset.id;
+    out.push({ group:g, code, name, price:'$'+(+s.dataset.price).toLocaleString('en-US'), id:s.dataset.id });
+  });
+  return out;
+}
+function getTotals(){
+  const amt = document.getElementById('p1-amt');
+  const recur = document.getElementById('p1-recur');
+  return { total: amt ? amt.textContent : '$0', recurrent: recur ? recur.textContent : '$0' };
+}
+function refreshActionBarTotal(){
+  const el = document.getElementById('ab-total');
+  if(el){ const t = getTotals(); el.textContent = t.total; }
+}
+const _origRecalc = window.recalc;
+if(typeof _origRecalc === 'function'){
+  window.recalc = function(){ _origRecalc(); refreshActionBarTotal(); if(wizardStep === 5) renderFinalSummary(); };
+}
+document.addEventListener('DOMContentLoaded', refreshActionBarTotal);
+
+function summaryText(){
+  const sels = getSelections();
+  const t = getTotals();
+  const lines = sels.map(s => `${s.code} — ${s.name} (${s.price})`);
+  return lines.join(' · ') + ` · Total: ${t.total} (recurrente: ${t.recurrent}/año)`;
+}
+
+function openModal(kind){
+  if(kind === 'consulta'){
+    document.getElementById('modal-consulta').classList.add('open');
+    return;
+  }
+  const title = document.getElementById('md-title');
+  const hint = document.getElementById('md-hint');
+  const submit = document.getElementById('md-submit');
+  const body = document.getElementById('md-body');
+  const ok = document.getElementById('md-ok');
+  body.style.display = 'block';
+  document.querySelector('#modal-decision .modal-foot').style.display = 'flex';
+  ok.style.display = 'none';
+  document.getElementById('modal-decision').dataset.kind = kind;
+  if(kind === 'accept'){
+    title.textContent = 'Aceptar propuesta';
+    hint.textContent = 'Confirmá tus datos de contacto. Vamos a registrar la configuración exactamente como quedó seleccionada en esta página.';
+    submit.textContent = 'Confirmar aceptación';
+    submit.className = 'mbtn mbtn-submit accept';
+  } else {
+    title.textContent = 'Rechazar propuesta';
+    hint.textContent = 'Contanos brevemente el motivo (opcional). Nos ayuda a ajustar futuras propuestas.';
+    submit.textContent = 'Confirmar rechazo';
+    submit.className = 'mbtn mbtn-submit reject';
+  }
+  document.getElementById('md-summary').textContent = summaryText();
+  document.getElementById('modal-decision').classList.add('open');
+}
+function closeModal(which){
+  document.getElementById('modal-' + which).classList.remove('open');
+}
+
+async function submitDecision(){
+  const kind = document.getElementById('modal-decision').dataset.kind;
+  const clientName = document.getElementById('md-name').value.trim();
+  const clientEmail = document.getElementById('md-email').value.trim();
+  const clientPhone = document.getElementById('md-phone').value.trim();
+  const comments = document.getElementById('md-comments').value.trim();
+  if(!clientName || !clientEmail){ alert('Completá nombre y email para continuar.'); return; }
+  const payload = {
+    proposalId: PROPOSAL_ID,
+    decision: kind === 'accept' ? 'accept' : 'reject',
+    clientName, clientEmail, clientPhone, comments,
+    selections: getSelections(),
+    totals: getTotals()
+  };
+  try{
+    const r = await fetch('/api/decision', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    if(!r.ok) throw new Error('request failed');
+    document.getElementById('md-body').style.display = 'none';
+    document.querySelector('#modal-decision .modal-foot').style.display = 'none';
+    document.getElementById('md-ok').style.display = 'block';
+  }catch(e){
+    alert('No pudimos enviar tu respuesta. Probá de nuevo en un momento.');
+  }
+}
+
+async function submitConsulta(){
+  const name = document.getElementById('cq-name').value.trim();
+  const email = document.getElementById('cq-email').value.trim();
+  const phone = document.getElementById('cq-phone').value.trim();
+  const message = document.getElementById('cq-message').value.trim();
+  if(!name || !email || !message){ alert('Completá nombre, email y tu consulta.'); return; }
+  const payload = { proposalId: PROPOSAL_ID, name, email, phone, message };
+  try{
+    const r = await fetch('/api/consulta', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    if(!r.ok) throw new Error('request failed');
+    document.querySelector('#modal-consulta .modal-b').style.display = 'none';
+    document.querySelector('#modal-consulta .modal-foot').style.display = 'none';
+    document.getElementById('cq-ok').style.display = 'block';
+  }catch(e){
+    alert('No pudimos enviar tu consulta. Probá de nuevo en un momento.');
+  }
+}
+
+async function downloadSelection(){
+  const payload = { proposalId: PROPOSAL_ID, selections: getSelections(), totals: getTotals() };
+  try{
+    const r = await fetch('/api/pdf', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    if(!r.ok) throw new Error('pdf failed');
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'Alystech-Presupuesto-Araucanos.pdf';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }catch(e){
+    alert('No pudimos generar el PDF. Probá de nuevo en un momento.');
+  }
+}
+
+document.querySelectorAll('.modal-overlay').forEach(ov => {
+  ov.addEventListener('click', e => { if(e.target === ov) ov.classList.remove('open'); });
+});
+
+/* ============== WIZARD ============== */
+const WIZARD_LABELS = ["Resumen ejecutivo","A · Plataforma móvil","B · Servidor y red","C · Auditoría y monitoreo","D · Soporte unificado","Tu selección"];
+let wizardStep = 0;
+
+function renderWizard(){
+  document.querySelectorAll('.wstep').forEach((el) => {
+    el.classList.toggle('active', parseInt(el.dataset.step,10) === wizardStep);
+  });
+  document.getElementById('wp-fill').style.width = (wizardStep/(WIZARD_LABELS.length-1)*100)+'%';
+  document.getElementById('wp-current').textContent = 'Paso ' + (wizardStep+1);
+  document.getElementById('wp-title').textContent = WIZARD_LABELS[wizardStep];
+  document.getElementById('wnav-back').style.visibility = wizardStep===0 ? 'hidden' : 'visible';
+  document.getElementById('wnav-next').style.display = wizardStep===WIZARD_LABELS.length-1 ? 'none' : 'inline-flex';
+  document.querySelectorAll('.wnav-dots span').forEach((d,i)=> d.classList.toggle('on', i===wizardStep));
+  document.querySelectorAll('.quicknav a[data-step]').forEach((a)=>{
+    a.classList.toggle('active', parseInt(a.dataset.step,10) === wizardStep);
+  });
+  if(wizardStep === WIZARD_LABELS.length-1) renderFinalSummary();
+}
+function wizardNext(){ if(wizardStep < WIZARD_LABELS.length-1){ wizardStep++; renderWizard(); scrollToWizard(); } }
+function wizardPrev(){ if(wizardStep > 0){ wizardStep--; renderWizard(); scrollToWizard(); } }
+function goToStep(n){ wizardStep = n; renderWizard(); scrollToWizard(); }
+function scrollToWizard(){ const w = document.getElementById('wizard'); if(w) w.scrollIntoView({behavior:'smooth', block:'start'}); }
+
+function renderFinalSummary(){
+  const sels = getSelections();
+  const t = getTotals();
+  document.getElementById('fs-total').textContent = t.total;
+  document.getElementById('fs-recur').textContent = t.recurrent;
+  document.getElementById('fs-items').innerHTML = sels.map(s => `
+    <div class="fs-item"><span class="fs-item-g">${GROUP_LABELS[s.group]||s.group}</span><span class="fs-item-n">${s.code} — ${s.name}</span><span class="fs-item-p">${s.price}</span></div>
+  `).join('');
+  document.getElementById('fs-alt').innerHTML = PROPOSAL_GROUPS.map(g => {
+    const grp = document.querySelector(`.options[data-group="${g}"]`);
+    if(!grp) return '';
+    const opts = Array.from(grp.querySelectorAll('.opt')).map(o => {
+      const name = o.querySelector('.opt-name') ? o.querySelector('.opt-name').textContent : o.dataset.id;
+      const code = o.querySelector('.opt-code') ? o.querySelector('.opt-code').textContent : '';
+      const price = '$'+(+o.dataset.price).toLocaleString('en-US');
+      const sel = o.classList.contains('sel');
+      return `<div class="fs-alt-opt ${sel?'chosen':''}"><span>${sel?'✓ ':''}${code} — ${name}</span><b>${price}</b></div>`;
+    }).join('');
+    return `<details class="fs-alt-block"><summary>${GROUP_LABELS[g]||g} — ver todas las opciones</summary><div class="fs-alt-list">${opts}</div></details>`;
+  }).join('');
+}
+
+(function initWizard(){
+  const dotsWrap = document.getElementById('wnav-dots');
+  WIZARD_LABELS.forEach((_, i) => {
+    const d = document.createElement('span');
+    d.addEventListener('click', () => goToStep(i));
+    dotsWrap.appendChild(d);
+  });
+  document.querySelectorAll('.quicknav a[data-step]').forEach(a=>{
+    a.addEventListener('click', e=>{ e.preventDefault(); goToStep(parseInt(a.dataset.step,10)); });
+  });
+  const HASH_MAP = {'#bloque-a':1,'#bloque-b':2,'#bloque-c':3,'#bloque-d':4,'#wizard':0};
+  if(HASH_MAP[location.hash] !== undefined) wizardStep = HASH_MAP[location.hash];
+  renderWizard();
+
+  document.querySelectorAll('.gmcard[data-goto]').forEach(btn => {
+    btn.addEventListener('click', () => goToStep(parseInt(btn.dataset.goto, 10)));
+    const g = btn.dataset.rangeGroup;
+    const opts = Array.from(document.querySelectorAll(`.options[data-group="${g}"] .opt`));
+    if(!opts.length) return;
+    const prices = opts.map(o => +o.dataset.price);
+    const lo = Math.min(...prices), hi = Math.max(...prices);
+    const rangeEl = btn.querySelector('.gm-range');
+    rangeEl.textContent = lo === hi ? fUSD(lo) : `${fUSD(lo)} – ${fUSD(hi)}`;
+  });
+})();
+
+/* Scrollspy para los anclajes que quedan fuera del wizard */
+(function(){
+  const links = Array.from(document.querySelectorAll('.quicknav a:not([data-step])'));
+  if(!links.length) return;
+  const targets = links.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if(en.isIntersecting){
+        const id = '#' + en.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  targets.forEach(t => obs.observe(t));
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alystech — Canvas Plan de Ciberseguridad & Gestión Móvil</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: '#0d1f3c',
+          navyLight: '#17335c',
+          steel: '#2c5788',
+          brandBlue: '#2f6fed',
+          brandBlueDark: '#1a4fc0',
+          brandGreen: '#0f7a48',
+          brandGreenSoft: '#e6f4ec',
+          brandAmber: '#a8710f',
+          brandAmberSoft: '#fbf3e2',
+          brandRed: '#b23a2b',
+          brandRedSoft: '#fbece9',
+          slate: '#48546b'
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .slide-container {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  }
+  .slide-hidden {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transform: translateY(20px);
+  }
+  .slide-active {
+    opacity: 1;
+    transform: translateY(0);
+    position: relative;
+  }
+  @media print {
+    body {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    .no-print, .wizard-navigation, .slide-step:not(#slide-step-canvas), #welcome-screen {
+      display: none !important;
+    }
+    #slide-step-canvas {
+      display: block !important;
+      opacity: 1 !important;
+      position: relative !important;
+      transform: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+    .print-canvas-wrapper {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 15px !important;
+    }
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body class="bg-slate-50 text-navy font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brandBlue/20 selection:text-brandBlueDark">
+
+  <header class="bg-navy border-b-2 border-brandBlue text-white py-4 px-6 sticky top-0 z-40 shadow-md no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-brandBlue to-steel flex items-center justify-center font-extrabold text-lg shadow-lg">AT</div>
+        <div>
+          <h2 class="text-base font-bold tracking-tight">Alystech para Araucanos S.A.</h2>
+          <p class="text-[11px] opacity-75">Configurador Canvas de Ciberseguridad Móvil e Infraestructura · Ref: AT-2026-0630-P</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="hidden md:flex gap-1.5" id="dots-container">
+          <!-- Generado dinámicamente por JS -->
+        </div>
+        <div class="bg-navyLight px-3 py-1.5 rounded-full border border-slate/40 text-[12px] font-semibold" id="step-tag">
+          Carga: Inicializando...
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 w-full max-w-7xl mx-auto px-4 py-8 md:py-12 flex items-center justify-center">
+    
+    <!-- SLIDE 0: BIENVENIDA -->
+    <div id="welcome-screen" class="slide-step slide-active w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden border border-slate/10 no-print">
+      <div class="grid grid-cols-1 md:grid-cols-12">
+        <div class="md:col-span-5 bg-navy text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-brandBlue/25 to-transparent pointer-events-none"></div>
+          <div class="relative z-10 space-y-6">
+            <span class="inline-block bg-white/10 text-white text-[11px] font-bold tracking-wider uppercase px-2.5 py-1 rounded">Bienvenido</span>
+            <h1 class="text-3xl font-extrabold leading-tight">Planificación Estratégica Interactiva</h1>
+            <p class="text-sm opacity-85 leading-relaxed">Presentamos la propuesta de seguridad y auditoría en formato Canvas Plan de Trabajo. Personalice cada módulo, evalúe el retorno operativo de su inversión y descargue su plan de trabajo en formato PDF ejecutivo.[cite: 1, 2]</p>
+          </div>
+          <div class="relative z-10 pt-8 border-t border-white/10 mt-8">
+            <p class="text-[11px] opacity-60">Araucanos S.A. · Paraguay, 2026</p>
+          </div>
+        </div>
+        <div class="md:col-span-7 p-8 md:p-12 flex flex-col justify-center space-y-6">
+          <h2 class="text-2xl font-bold text-navy">¿Cómo funciona este asistente?</h2>
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-brandBlue/10 text-brandBlue flex items-center justify-center text-xs font-bold mt-0.5">1</span>
+              <div>
+                <b class="text-sm text-navy block">Relevamiento y Contexto</b>
+                <span class="text-xs text-slate">Cada paso de selección cuenta con un análisis ejecutivo del problema detectado en su planta y las consecuencias operativas reales.</span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-brandBlue/10 text-brandBlue flex items-center justify-center text-xs font-bold mt-0.5">2</span>
+              <div>
+                <b class="text-sm text-navy block">Modularidad Absoluta</b>
+                <span class="text-xs text-slate">Seleccione la alternativa tecnológica que se ajuste a su nivel presupuestario anual o al grado de criticidad deseado.</span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-brandBlue/10 text-brandBlue flex items-center justify-center text-xs font-bold mt-0.5">3</span>
+              <div>
+                <b class="text-sm text-navy block">Project Canvas Integrado</b>
+                <span class="text-xs text-slate">Al finalizar, obtendrá un plano matricial interactivo con costos de desarrollo, cotización en Guaraníes, viabilidad, plazos e hitos comerciales.[cite: 1, 2]</span>
+              </div>
+            </div>
+          </div>
+          <button onclick="startWizard()" class="w-full bg-brandBlue text-white hover:bg-brandBlueDark transition-colors font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brandBlue/25">
+            Comenzar Configuración de Propuesta 
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDES DEL WIZARD (CONSTRUCCIÓN DINÁMICA DE ESTRUCTURA SPLIT) -->
+    <div id="wizard-slides-wrapper" class="hidden w-full max-w-6xl flex-col gap-6 no-print">
+      
+      <!-- Slide MDM -->
+      <div id="slide-step-mdm" class="slide-step slide-hidden bg-white rounded-2xl shadow-xl overflow-hidden border border-slate/10 p-6 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <!-- Lado Izquierdo: Tarjeta Informativa del Canvas (Diagnóstico Operativo) -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-brandBlue/5 rounded-xl p-5 border border-brandBlue/10">
+              <span class="text-[10px] font-bold tracking-wider text-brandBlue uppercase block mb-1">Bloque A · Canvas Operacional</span>
+              <h2 class="text-lg font-bold text-navy">Alineación del MDM Móvil</h2>
+              <div class="mt-4 space-y-3 text-xs text-slate">
+                <p><strong>El Riesgo:</strong> Los guardias en campo pueden desactivar intencionalmente el GPS, deshabilitar los datos móviles o forzar el apagado del dispositivo para eludir las rutas de patrullaje asignadas.</p>
+                <p><strong>Impacto Comercial:</strong> Pérdida de visibilidad de cobertura, incumplimiento de compromisos de nivel de servicio (SLA) frente a sus clientes de servicios de seguridad.</p>
+                <p class="bg-white p-3 rounded-lg border border-slate/10 text-navy font-medium"><strong>Garantía Común:</strong> Todas las alternativas MDM, de la más básica a la pro, implementan de forma inflexible el control de apagado, bloqueo de reinicio, bloqueo de GPS y datos fijos a nivel de Knox.</p>
+              </div>
+            </div>
+            
+            <!-- TARJETA DE ANÁLISIS DE COSTO TCO REGIONAL -->
+            <div class="p-4 bg-navyLight text-white rounded-xl space-y-3 border border-white/10">
+              <span class="text-[10px] font-bold tracking-wider text-brandBlue uppercase block">📊 TCO 3 Años: Regional vs Alystech</span>
+              <div class="text-[11px] space-y-2">
+                <p>La alternativa SaaS Cloud estándar en la región (ej. SureMDM) para **80 dispositivos** requiere licenciamiento anual recurrente de unos **$82 c/u**:</p>
+                <div class="flex justify-between border-b border-white/10 pb-1.5 text-brandRed">
+                  <span>Licencia Comercial Regional (3 Años):</span>
+                  <strong>$19,680 USD</strong>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-1.5 text-brandGreen">
+                  <span>Plataforma Local Alystech (3 Años):</span>
+                  <strong>$0 USD (Licencia)</strong>
+                </div>
+                <p class="text-[10px] opacity-75 font-medium">Usted ahorra **$19,680 USD** en 3 años optando por auto-hospedar código abierto de nivel empresarial.</p>
+              </div>
+            </div>
+
+            <div class="p-4 bg-brandAmberSoft/30 rounded-lg border border-brandAmber/20">
+              <span class="text-xs font-bold text-brandAmber flex items-center gap-1.5 mb-1">💡 Nota de Ingeniería</span>
+              <p class="text-[11px] text-brandAmber leading-relaxed">Para forzar un control inalterable por formateo o hardware, integramos la plataforma a <strong>Knox Mobile Enrollment (KME)</strong>. El dispositivo se reconfigurará solo incluso tras un borrado de fábrica.</p>
+            </div>
+          </div>
+          
+          <!-- Lado Derecho: Opciones de Selección de Presupuesto -->
+          <div class="lg:col-span-7 space-y-4">
+            <h3 class="text-base font-bold text-navy">Seleccione el Alcance para Gestión de Dispositivos Móviles:</h3>
+            <div class="space-y-3 options-container" data-group="mdm">
+              
+              <!-- Opción MDM-A -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="mdm-a" data-price="6200" data-recur="0" data-code="MDM-A">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-slate/10 text-slate font-bold text-[10px] px-2 py-0.5 rounded">MDM-A</span>
+                    <h4 class="font-bold text-sm text-navy">Plataforma Código Abierto — Base</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$6.200</span>
+                </div>
+                <p class="text-xs text-slate">Implementación de consola centralizada propia. Cobertura inalterable Knox (anti-apagado, GPS y datos forzados). No incluye el canal de mensajería SMS redundante de emergencia.</p>
+                
+                <details class="mt-2 text-xs text-slate">
+                  <summary class="cursor-pointer text-brandBlue hover:underline">Ver desglose de costos internos</summary>
+                  <div class="bg-slate-50 p-2.5 rounded mt-2 space-y-1">
+                    <div class="flex justify-between"><span>Servidor MDM (Implementación):</span><span>$2.200</span></div>
+                    <div class="flex justify-between"><span>Integración Knox & KME Enrolamiento:</span><span>$1.800</span></div>
+                    <div class="flex justify-between"><span>Cargo base de implementación:</span><span>$770</span></div>
+                    <div class="flex justify-between"><span>Capacitación de supervisores:</span><span>$880</span></div>
+                    <div class="flex justify-between"><span>Documentación técnica:</span><span>$550</span></div>
+                  </div>
+                </details>
+              </div>
+
+              <!-- Opción MDM-B (RECOMENDADA) -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-brandBlue bg-brandBlue/5 cursor-pointer hover:bg-slate-50 transition-all relative selected" data-id="mdm-b" data-price="8500" data-recur="0" data-code="MDM-B">
+                <span class="absolute top-3 right-3 bg-brandBlue text-white text-[9px] font-bold px-2 py-0.5 rounded">Recomendada</span>
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-brandBlue text-white font-bold text-[10px] px-2 py-0.5 rounded">MDM-B</span>
+                    <h4 class="font-bold text-sm text-navy">Código Abierto — Despliegue Completo</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-brandBlue">$8.500</span>
+                </div>
+                <p class="text-xs text-slate">Todo el alcance de la versión base sumando el **canal de comando SMS redundante**. Si un celular se queda sin datos de red o cobertura celular normal, podrá controlarlo y localizarlo remotamente vía SMS cifrado.</p>
+                
+                <details class="mt-2 text-xs text-slate">
+                  <summary class="cursor-pointer text-brandBlue hover:underline">Ver desglose de costos internos</summary>
+                  <div class="bg-slate-50 p-2.5 rounded mt-2 space-y-1">
+                    <div class="flex justify-between"><span>Servidor MDM base:</span><span>$2.200</span></div>
+                    <div class="flex justify-between"><span>Integración Knox & KME:</span><span>$1.800</span></div>
+                    <div class="flex justify-between"><span>Canal de comando SMS redundant:</span><span>$1.600</span></div>
+                    <div class="flex justify-between"><span>Configuración políticas (Geocercas, Kiosco):</span><span>$700</span></div>
+                    <div class="flex justify-between"><span>Cargo base, capacitación & manuales:</span><span>$2.200</span></div>
+                  </div>
+                </details>
+              </div>
+
+              <!-- Opción MDM-C -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="mdm-c" data-price="11800" data-recur="0" data-code="MDM-C">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-steel text-white font-bold text-[10px] px-2 py-0.5 rounded">MDM-C</span>
+                    <h4 class="font-bold text-sm text-navy">Consola e Interfaz de Mapa a Medida</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$11.800</span>
+                </div>
+                <p class="text-xs text-slate">Desarrollo personalizado de una capa de interfaz a la medida para Araucanos S.A. Mapa en vivo corporativo, roles de visualización específicos y panel unificado de supervisión de flota.</p>
+                
+                <details class="mt-2 text-xs text-slate">
+                  <summary class="cursor-pointer text-brandBlue hover:underline">Ver desglose de costos internos</summary>
+                  <div class="bg-slate-50 p-2.5 rounded mt-2 space-y-1">
+                    <div class="flex justify-between"><span>Implementación MDM con SMS completo:</span><span>$8.500</span></div>
+                    <div class="flex justify-between"><span>Capa de software / Mapa corporativo adaptado:</span><span>$3.300</span></div>
+                  </div>
+                </details>
+              </div>
+
+              <!-- Opción MDM-D -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="mdm-d" data-price="12900" data-recur="6560" data-code="MDM-D">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-navyLight text-white font-bold text-[10px] px-2 py-0.5 rounded">MDM-D</span>
+                    <h4 class="font-bold text-sm text-navy">Plataforma Cloud Comercial (SureMDM)</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$12.900</span>
+                </div>
+                <p class="text-xs text-slate">Consola SureMDM (42Gears) madura y en la nube. Requiere licenciamiento anual por dispositivo (~$82/dispositivo/año) para continuar operando en campo.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Slide Servidor -->
+      <div id="slide-step-srv" class="slide-step slide-hidden bg-white rounded-2xl shadow-xl overflow-hidden border border-slate/10 p-6 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <!-- Lado Izquierdo: Relevamiento Ejecutivo -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-brandBlue/5 rounded-xl p-5 border border-brandBlue/10">
+              <span class="text-[10px] font-bold tracking-wider text-brandBlue uppercase block mb-1">Bloque B · Canvas de Infraestructura</span>
+              <h2 class="text-lg font-bold text-navy">Servidor Local Dedicado</h2>
+              <div class="mt-4 space-y-3 text-xs text-slate">
+                <p><strong>El Riesgo:</strong> La planta de Araucanos opera actualmente con un computador de escritorio estándar actuando como servidor, expuesto y sin aislamiento de tráfico de red lógico.</p>
+                <p><strong>Impacto de Negocio:</strong> Un corte de energía eléctrica prolongado, un fallo de disco o un ataque directo paraliza la operación central y destruye bases de datos de patrullaje de celulares.</p>
+                <p class="bg-white p-3 rounded-lg border border-slate/10 text-navy font-medium"><strong>Propósito Dual:</strong> El servidor local propuesto actuará como nodo físico dual. Hospedará simultáneamente la consola del MDM y concentrará el monitoreo de seguridad SIEM de puestos de trabajo de oficina.</p>
+              </div>
+            </div>
+            
+            <div class="p-4 bg-navyLight text-white rounded-xl space-y-3 border border-white/10">
+              <span class="text-[10px] font-bold tracking-wider text-brandBlue uppercase block">📊 Viabilidad de Adquisición Regional</span>
+              <div class="text-[11px] space-y-2">
+                <p>La cotización de importación de servidores nuevos en el Cono Sur puede estar sujeta a demoras arancelarias. Presentamos una comparación clara:</p>
+                <div class="flex justify-between border-b border-white/10 pb-1 text-slate-300">
+                  <span>Adquisición Regional Estimada:</span>
+                  <strong>$4,800 - $5,500 USD</strong>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-1 text-brandGreen font-semibold">
+                  <span>Opción Alystech Torre (PowerEdge):</span>
+                  <strong>$4,399 USD</strong>
+                </div>
+                <p class="text-[10px] opacity-75">Incluye UPS estabilizadora de tensión de **2500 VA** libre de costos de intermediación de despachos locales.</p>
+              </div>
+            </div>
+
+            <div class="p-4 bg-brandGreenSoft text-brandGreen rounded-lg border border-brandGreen/20">
+              <span class="text-xs font-bold flex items-center gap-1.5 mb-1">🛡️ Optimización Proxmox</span>
+              <p class="text-[11px] leading-relaxed">Utilizamos virtualización **Proxmox VE (sin costo de licencia comercial)** para segmentar servicios en ambientes virtuales aislados y autónomos.</p>
+            </div>
+          </div>
+          
+          <!-- Lado Derecho: Opciones de Selección -->
+          <div class="lg:col-span-7 space-y-4">
+            <h3 class="text-base font-bold text-navy">Seleccione el Tipo de Servidor:</h3>
+            <div class="space-y-3 options-container" data-group="srv">
+              
+              <!-- Opción SRV-A -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="srv-a" data-price="2299" data-recur="0" data-code="SRV-A">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-slate/10 text-slate font-bold text-[10px] px-2 py-0.5 rounded">SRV-A</span>
+                    <h4 class="font-bold text-sm text-navy">Servidor Rack Reacondicionado + UPS</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$2.299</span>
+                </div>
+                <p class="text-xs text-slate">Servidor reacondicionado (HPE Gen9), Xeon E3, 32GB RAM ECC, 2x2TB almacenamiento en RAID 1 de seguridad. Incluye UPS de 2500 VA.</p>
+                
+                <details class="mt-2 text-xs text-slate">
+                  <summary class="cursor-pointer text-brandBlue hover:underline">Ver desglose de costos internos</summary>
+                  <div class="bg-slate-50 p-2.5 rounded mt-2 space-y-1">
+                    <div class="flex justify-between"><span>Servidor reacondicionado HPE + discos:</span><span>$1.200</span></div>
+                    <div class="flex justify-between"><span>UPS Estabilizadora de tensión (2500 VA):</span><span>$680</span></div>
+                    <div class="flex justify-between"><span>Instalación lógica y endurecimiento de red:</span><span>$419</span></div>
+                  </div>
+                </details>
+              </div>
+
+              <!-- Opción SRV-B (RECOMENDADA) -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-brandBlue bg-brandBlue/5 cursor-pointer hover:bg-slate-50 transition-all relative selected" data-id="srv-b" data-price="4399" data-recur="0" data-code="SRV-B">
+                <span class="absolute top-3 right-3 bg-brandBlue text-white text-[9px] font-bold px-2 py-0.5 rounded">Recomendada</span>
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-brandBlue text-white font-bold text-[10px] px-2 py-0.5 rounded">SRV-B</span>
+                    <h4 class="font-bold text-sm text-navy">Servidor de Torre Dell/Lenovo Nuevo</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-brandBlue">$4.399</span>
+                </div>
+                <p class="text-xs text-slate">Equipamiento nuevo Dell PowerEdge o Lenovo. Xeon E-2300 con arquitectura moderna, 32GB RAM ECC con margen de crecimiento a 128GB, RAID 1 con discos empresariales, UPS de 2500 VA y soporte extendido del fabricante.</p>
+                
+                <details class="mt-2 text-xs text-slate">
+                  <summary class="cursor-pointer text-brandBlue hover:underline">Ver desglose de costos internos</summary>
+                  <div class="bg-slate-50 p-2.5 rounded mt-2 space-y-1">
+                    <div class="flex justify-between"><span>Servidor Torre Dell / Lenovo nuevo:</span><span>$2.880</span></div>
+                    <div class="flex justify-between"><span>UPS de Seguridad 2500 VA:</span><span>$750</span></div>
+                    <div class="flex justify-between"><span>Instalación e hipervisor de virtualización:</span><span>$769</span></div>
+                  </div>
+                </details>
+              </div>
+
+              <!-- Opción SRV-C -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="srv-c" data-price="3479" data-recur="0" data-code="SRV-C">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-slate/10 text-slate font-bold text-[10px] px-2 py-0.5 rounded">SRV-C</span>
+                    <h4 class="font-bold text-sm text-navy">Servidor Compacto Nuevo (Micro)</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$3.479</span>
+                </div>
+                <p class="text-xs text-slate">HPE ProLiant MicroServer Gen11 nuevo. Diseño silencioso de oficina. Xeon 6300P, 16-32GB ECC RAM, 2x2TB RAID 1, UPS de 2500 VA.</p>
+              </div>
+
+              <!-- Opción SRV-D -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="srv-d" data-price="6799" data-recur="0" data-code="SRV-D">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-steel text-white font-bold text-[10px] px-2 py-0.5 rounded">SRV-D</span>
+                    <h4 class="font-bold text-sm text-navy">Alta Disponibilidad (Doble Nodo Físico)</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$6.799</span>
+                </div>
+                <p class="text-xs text-slate">Esquema redundante activo/pasivo con replicación de datos física automatizada. Si el servidor principal falla por hardware, el nodo secundario toma el control sin caídas del servicio móvil.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Slide Red -->
+      <div id="slide-step-net" class="slide-step slide-hidden bg-white rounded-2xl shadow-xl overflow-hidden border border-slate/10 p-6 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <!-- Lado Izquierdo: Relevamiento Ejecutivo -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-brandBlue/5 rounded-xl p-5 border border-brandBlue/10">
+              <span class="text-[10px] font-bold tracking-wider text-brandBlue uppercase block mb-1">Bloque B.2 · Seguridad Perimetral</span>
+              <h2 class="text-lg font-bold text-navy">Segmentación Física y Lógica de Red</h2>
+              <div class="mt-4 space-y-3 text-xs text-slate">
+                <p><strong>El Riesgo:</strong> La red local de administración de Araucanos comparte el mismo canal y rango IP con la navegación general operativa y accesos de terceros.</p>
+                <p><strong>Impacto de Negocio:</strong> Si un puesto operativo de baja confianza se infecta por malware, la amenaza se puede desplazar lateralmente a través de la LAN y comprometer servidores centrales.</p>
+                <p class="bg-white p-3 rounded-lg border border-slate/10 text-navy font-medium"><strong>Aislamiento Virtual:</strong> Creamos cortafuegos a través de VLANs seguras para blindar la conectividad del servidor administrativo.</p>
+              </div>
+            </div>
+            
+            <div class="p-4 bg-brandAmberSoft/40 text-navy rounded-xl space-y-2 border border-brandAmber/20">
+              <span class="text-xs font-bold text-brandAmber block">🛡️ VPN Corporativa Unificada</span>
+              <p class="text-[11px] text-slate leading-relaxed">Con la opción recomendada, se despliega una VPN cifrada de tipo WireGuard. Permite al equipo directivo supervisar la consola móvil y acceder a los archivos de forma 100% segura desde fuera de la planta.</p>
+            </div>
+          </div>
+          
+          <!-- Lado Derecho: Opciones de Selección -->
+          <div class="lg:col-span-7 space-y-4">
+            <h3 class="text-base font-bold text-navy">Seleccione el Nivel de Seguridad de Red:</h3>
+            <div class="space-y-3 options-container" data-group="net">
+              
+              <!-- Opción NET-A -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="net-a" data-price="0" data-recur="0" data-code="NET-A">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-slate/10 text-slate font-bold text-[10px] px-2 py-0.5 rounded">NET-A</span>
+                    <h4 class="font-bold text-sm text-navy">Reutilizar Equipamiento Existente</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$0</span>
+                </div>
+                <p class="text-xs text-slate">Se reconfiguran lógicamente sus routers de red actuales. No requiere inversión en hardware, pero mantiene vectores de riesgo si el hardware existente no tolera VLANs de aislamiento.</p>
+              </div>
+
+              <!-- Opción NET-B (RECOMENDADA) -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-brandBlue bg-brandBlue/5 cursor-pointer hover:bg-slate-50 transition-all relative selected" data-id="net-b" data-price="899" data-recur="0" data-code="NET-B">
+                <span class="absolute top-3 right-3 bg-brandBlue text-white text-[9px] font-bold px-2 py-0.5 rounded">Recomendada</span>
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-brandBlue text-white font-bold text-[10px] px-2 py-0.5 rounded">NET-B</span>
+                    <h4 class="font-bold text-sm text-navy">Cortafuegos Dedicado + Switch Administrable</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-brandBlue">$899</span>
+                </div>
+                <p class="text-xs text-slate">Despliegue de un hardware firewall dedicado con sistema abierto OPNsense y switch perimetral administrable de 8-16 puertos. Segmentación de tráfico y tunelización VPN cifrada para accesos administrativos remotos seguros.</p>
+                
+                <details class="mt-2 text-xs text-slate">
+                  <summary class="cursor-pointer text-brandBlue hover:underline">Ver desglose de costos internos</summary>
+                  <div class="bg-slate-50 p-2.5 rounded mt-2 space-y-1">
+                    <div class="flex justify-between"><span>Appliance de Firewall Dedicado:</span><span>$420</span></div>
+                    <div class="flex justify-between"><span>Switch administrable (8-16 puertos):</span><span>$280</span></div>
+                    <div class="flex justify-between"><span>Servicio técnico e ingeniería de redes:</span><span>$199</span></div>
+                  </div>
+                </details>
+              </div>
+
+              <!-- Opción NET-C -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="net-c" data-price="1899" data-recur="0" data-code="NET-C">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-steel text-white font-bold text-[10px] px-2 py-0.5 rounded">NET-C</span>
+                    <h4 class="font-bold text-sm text-navy">Segmentación de Red Corporativa Completa</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$1.899</span>
+                </div>
+                <p class="text-xs text-slate">Agrega puntos de acceso inalámbrico WiFi empresarial con SSID de invitados aislado de la administración, Switch administrable de 24 puertos corporativo y Firewall ampliado.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Slide Auditoria -->
+      <div id="slide-step-aud" class="slide-step slide-hidden bg-white rounded-2xl shadow-xl overflow-hidden border border-slate/10 p-6 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <!-- Lado Izquierdo: Relevamiento Ejecutivo -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-brandBlue/5 rounded-xl p-5 border border-brandBlue/10">
+              <span class="text-[10px] font-bold tracking-wider text-brandBlue uppercase block mb-1">Bloque C · Canvas de Seguridad Informática</span>
+              <h2 class="text-lg font-bold text-navy">Saneamiento y Monitoreo de Amenazas</h2>
+              <div class="mt-4 space-y-3 text-xs text-slate">
+                <p><strong>El Riesgo:</strong> El parque de ~20 computadores de administración ya registró intrusiones activas de malware. El riesgo de persistencia de troyanos o "backdoors" lógicos es extremadamente alto.</p>
+                <p><strong>Impacto de Negocio:</strong> Potencial robo de credenciales corporativas o paralización de sistemas mediante ramsonware.</p>
+                <p class="bg-white p-3 rounded-lg border border-slate/10 text-navy font-medium"><strong>Módulo SIEM/XDR:</strong> Se instalarán agentes ligeros de telemetría en las 20 terminales para recolectar registros, detectar anomalías de ejecución de software y alertar proactivamente.</p>
+              </div>
+            </div>
+            
+            <div class="p-4 bg-navyLight text-white rounded-xl space-y-3 border border-white/10">
+              <span class="text-[10px] font-bold tracking-wider text-brandBlue uppercase block">📊 Retorno ROI Regional de Auditoría</span>
+              <div class="text-[11px] space-y-2">
+                <p>Un servicio de remediación y monitoreo per-seat contratado con firmas de ciberseguridad tradicionales en Paraguay suele estructurarse en abonos anuales caros:</p>
+                <div class="flex justify-between border-b border-white/10 pb-1 text-slate-300">
+                  <span>Costo Regional de SOC SaaS Anual:</span>
+                  <strong>$2,400 USD / año</strong>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-1 text-brandGreen font-semibold">
+                  <span>Alystech Monitoreo SIEM Integrado:</span>
+                  <strong>$659 USD / año</strong>
+                </div>
+                <p class="text-[10px] opacity-75">La infraestructura de alertas se centraliza en su propia máquina virtual del servidor local, ahorrándole un 70% anual.</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Lado Derecho: Opciones de Selección -->
+          <div class="lg:col-span-7 space-y-4">
+            <h3 class="text-base font-bold text-navy">Seleccione el Nivel de Auditoría y Remediación:</h3>
+            <div class="space-y-3 options-container" data-group="aud">
+              
+              <!-- Opción AUD-A -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="aud-a" data-price="1548" data-recur="349" data-code="AUD-A">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-slate/10 text-slate font-bold text-[10px] px-2 py-0.5 rounded">AUD-A</span>
+                    <h4 class="font-bold text-sm text-navy">Hardening Local Base de Endpoints</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$1.548</span>
+                </div>
+                <p class="text-xs text-slate">Desinfección estándar de virus e instalación de políticas de endurecimiento en las 20 PCs de oficina. No incluye informe estructural de vulnerabilidades.</p>
+                
+                <details class="mt-2 text-xs text-slate">
+                  <summary class="cursor-pointer text-brandBlue hover:underline">Ver desglose de costos internos</summary>
+                  <div class="bg-slate-50 p-2.5 rounded mt-2 space-y-1">
+                    <div class="flex justify-between"><span>Ingeniería de endurecimiento endpoints:</span><span>$1.199</span></div>
+                    <div class="flex justify-between"><span>Agentes antivirus perimetrales (Suscripción):</span><span>$349/año</span></div>
+                  </div>
+                </details>
+              </div>
+
+              <!-- Opción AUD-B (RECOMENDADA) -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-brandBlue bg-brandBlue/5 cursor-pointer hover:bg-slate-50 transition-all relative selected" data-id="aud-b" data-price="2699" data-recur="659" data-code="AUD-B">
+                <span class="absolute top-3 right-3 bg-brandBlue text-white text-[9px] font-bold px-2 py-0.5 rounded">Recomendada</span>
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-brandBlue text-white font-bold text-[10px] px-2 py-0.5 rounded">AUD-B</span>
+                    <h4 class="font-bold text-sm text-navy">Auditoría Integral y Remediación Completa</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-brandBlue">$2.699</span>
+                </div>
+                <p class="text-xs text-slate">Auditoría perimetral de 4-5 jornadas. Análisis forense completo sobre estaciones comprometidas previas, depuración de malware de persistencia, blindaje lógico y entrega de **Informe Técnico con Recomendaciones Priorizadas**.</p>
+                
+                <details class="mt-2 text-xs text-slate">
+                  <summary class="cursor-pointer text-brandBlue hover:underline">Ver desglose de costos internos</summary>
+                  <div class="bg-slate-50 p-2.5 rounded mt-2 space-y-1">
+                    <div class="flex justify-between"><span>Servicio forense y remediación estándar (5 días):</span><span>$2.040</span></div>
+                    <div class="flex justify-between"><span>Protección activa con telemetría SIEM (20 endpoints):</span><span>$659/año</span></div>
+                  </div>
+                </details>
+              </div>
+
+              <!-- Opción AUD-C -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="aud-c" data-price="4859" data-recur="659" data-code="AUD-C">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-steel text-white font-bold text-[10px] px-2 py-0.5 rounded">AUD-C</span>
+                    <h4 class="font-bold text-sm text-navy">Auditoría Integral con Pentesting</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$4.859</span>
+                </div>
+                <p class="text-xs text-slate">Todo el alcance de AUD-B sumando una prueba de intrusión (pentesting) interna simulada para validar la robustez real del cortafuegos y el aislamiento lógico implementado.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Slide Soporte -->
+      <div id="slide-step-sup" class="slide-step slide-hidden bg-white rounded-2xl shadow-xl overflow-hidden border border-slate/10 p-6 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <!-- Lado Izquierdo: Relevamiento Ejecutivo -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-brandBlue/5 rounded-xl p-5 border border-brandBlue/10">
+              <span class="text-[10px] font-bold tracking-wider text-brandBlue uppercase block mb-1">Bloque D · Canvas Operacional</span>
+              <h2 class="text-lg font-bold text-navy">Plan de Soporte Remoto Unificado</h2>
+              <div class="mt-4 space-y-3 text-xs text-slate">
+                <p><strong>El Riesgo:</strong> La infraestructura local requiere actualización, monitorización de logs de ciberseguridad y soporte lógico sobre terminales y dispositivos móviles de forma recurrente.</p>
+                <p><strong>Ahorro del Abono Único:</strong> Como el MDM y el monitoreo de endpoints operan sobre el mismo hardware físico unificado, Alystech consolida el servicio en un solo plan. **Reduce un 50% los costos** de abono preventivo frente a servicios contratados de manera separada.</p>
+              </div>
+            </div>
+            
+            <div class="p-4 bg-slate-100 rounded-lg text-xs space-y-2">
+              <span class="font-bold text-navy uppercase tracking-wider block">📈 Incorporación de Celulares en el futuro</span>
+              <p class="text-slate">La capacitación para que Araucanos realice el onboarding sin costo está incluida. Si prefiere que lo haga Alystech, rigen las tarifas por volumen:</p>
+              <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate">
+                <li>1 a 5 dispositivos: **$24 c/u**</li>
+                <li>6 a 20 dispositivos: **$19 c/u**</li>
+                <li>Más de 20 dispositivos: **$14 c/u**</li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Lado Derecho: Opciones de Selección -->
+          <div class="lg:col-span-7 space-y-4">
+            <h3 class="text-base font-bold text-navy">Seleccione el Nivel del Plan de Soporte Remoto:</h3>
+            <div class="space-y-3 options-container" data-group="sup">
+              
+              <!-- Opción SOP-A -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="sup-a" data-price="890" data-recur="890" data-code="SOP-A">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-slate/10 text-slate font-bold text-[10px] px-2 py-0.5 rounded">SOP-A</span>
+                    <h4 class="font-bold text-sm text-navy">Plan Remoto Esencial Anual</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$890 <small class="text-xs font-normal text-slate">/año</small></span>
+                </div>
+                <p class="text-xs text-slate">Soporte reactivo de incidencias lógicas vía canales remotos en días laborables hábiles estándar. SLA de respuesta asegurado de 24-48 horas. Actualizaciones críticas del sistema de forma trimestral.</p>
+              </div>
+
+              <!-- Opción SOP-B (RECOMENDADA) -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-brandBlue bg-brandBlue/5 cursor-pointer hover:bg-slate-50 transition-all relative selected" data-id="sup-b" data-price="1590" data-recur="1590" data-code="SOP-B">
+                <span class="absolute top-3 right-3 bg-brandBlue text-white text-[9px] font-bold px-2 py-0.5 rounded">Recomendada</span>
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-brandBlue text-white font-bold text-[10px] px-2 py-0.5 rounded">SOP-B</span>
+                    <h4 class="font-bold text-sm text-navy">Plan Proactivo y de Monitoreo Estándar</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-brandBlue">$1.590 <small class="text-xs font-normal text-brandBlue">/año</small></span>
+                </div>
+                <p class="text-xs text-slate">Servicio prioritario con SLA de resolución remota de 8-12 horas. Gestión proactiva frente a las alertas generadas por los agentes SIEM del servidor. Altas, bajas y enrolamiento de celulares sin costos de servicio adicionales.</p>
+              </div>
+
+              <!-- Opción SOP-C -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="sup-c" data-price="2890" data-recur="2890" data-code="SOP-C">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-steel text-white font-bold text-[10px] px-2 py-0.5 rounded">SOP-C</span>
+                    <h4 class="font-bold text-sm text-navy">Plan Prioritario de Alta Continuidad</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$2.890 <small class="text-xs font-normal text-slate">/año</small></span>
+                </div>
+                <p class="text-xs text-slate">Atención extendida fines de semana incluidos, SLA prioritario de 2 horas para incidentes críticos y una (1) visita de control preventivo presencial trimestral incluida.</p>
+              </div>
+
+              <!-- Opción SOP-D -->
+              <div onclick="selectOption(this)" class="opt-card p-4 rounded-xl border-2 border-slate/10 cursor-pointer hover:bg-slate-50 transition-all relative" data-id="sup-d" data-price="4900" data-recur="4900" data-code="SOP-D">
+                <div class="flex justify-between items-baseline mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-navy text-white font-bold text-[10px] px-2 py-0.5 rounded">SOP-D</span>
+                    <h4 class="font-bold text-sm text-navy">Plan SOC Dedicado 24/7</h4>
+                  </div>
+                  <span class="text-lg font-extrabold text-navy">$4.900 <small class="text-xs font-normal text-slate">/año</small></span>
+                </div>
+                <p class="text-xs text-slate">SLA de respuesta de 1 hora ininterrumpida 24/7/365, con ingeniero de ciberseguridad dedicado asignado a la cuenta de Araucanos y una jornada on-site mensual de mantenimiento.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Slide 6: Canvas Plan de Trabajo Final -->
+      <div id="slide-step-canvas" class="slide-step slide-hidden bg-white rounded-2xl shadow-xl border border-slate-200 p-6 md:p-8">
+        
+        <!-- Header de la Ficha Canvas en Impresión -->
+        <div class="hidden print:flex items-center justify-between border-b pb-4 mb-6">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-md bg-navy text-white font-bold flex items-center justify-center">AT</div>
+            <div>
+              <h3 class="text-sm font-bold text-navy">Alystech — Ciberseguridad</h3>
+              <p class="text-[10px] text-slate">Soluciones a Medida para Araucanos S.A.</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-[10px] text-slate">Ref: <b>AT-2026-0630-P · Rev 6</b></p>
+            <p class="text-[10px] text-slate">Fecha: 30 de junio de 2026</p>
+          </div>
+        </div>
+
+        <div class="border-b border-slate-100 pb-4 mb-6 print:mb-4">
+          <h1 class="text-2xl font-extrabold text-navy tracking-tight">Project Canvas — Plan de Trabajo Consolidado</h1>
+          <p class="text-xs text-slate mt-1">Lienzo estratégico de alcance corporativo, costos de desarrollo y viabilidad del plan de seguridad de red estructurado.[cite: 1, 2]</p>
+        </div>
+
+        <!-- ESTRUCTURA DEL CANVAS MATRICIAL -->
+        <div class="print-canvas-wrapper grid grid-cols-1 md:grid-cols-3 gap-5">
+          
+          <!-- Cuadrante 1: Diagnóstico Operativo -->
+          <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50 flex flex-col justify-between">
+            <div>
+              <h3 class="text-[11px] font-extrabold text-slate tracking-wider uppercase border-b pb-2 mb-3 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-brandRed"></span> 1. Diagnóstico Operativo
+              </h3>
+              <ul class="text-[12px] text-navy font-medium space-y-2 list-disc pl-4 leading-relaxed">
+                <li>Flota móvil de ~80 Samsung descontrolada (desactivan GPS, datos o apagan equipos).</li>
+                <li>Parque informático crítico administrativo expuesto (PCs con infecciones recurrentes de malware).</li>
+                <li>Operación sobre red local unificada sin segmentación lógica de privilegios.</li>
+              </ul>
+            </div>
+            <div class="text-[11px] text-slate mt-4 border-t pt-2 italic">Alineación del riesgo del negocio corporativo</div>
+          </div>
+
+          <!-- Cuadrante 2: Arquitectura de la Solución -->
+          <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50 flex flex-col justify-between">
+            <div>
+              <h3 class="text-[11px] font-extrabold text-slate tracking-wider uppercase border-b pb-2 mb-3 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-brandGreen"></span> 2. Arquitectura Tecnológica
+              </h3>
+              <p class="text-[12px] text-slate leading-relaxed">
+                Implementación de arquitectura de seguridad basada en **código abierto auditable autohospedado** localmente sobre hardware dedicado, eliminando cobros recurrentes por dispositivo en la nube.
+              </p>
+              <div class="bg-white p-3 rounded-lg border border-slate-100 mt-3">
+                <span class="text-[10px] font-bold text-navy block mb-1">Consola Central Unificada</span>
+                <p class="text-[11px] text-slate">Monitoreo cruzado de flota móvil mediante Knox y detección perimetral SIEM/XDR de virus en una única máquina física.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cuadrante 3: Módulos Elegidos -->
+          <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50 flex flex-col justify-between">
+            <div>
+              <h3 class="text-[11px] font-extrabold text-slate tracking-wider uppercase border-b pb-2 mb-3 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-brandBlue"></span> 3. Configuración del Alcance
+              </h3>
+              <div id="canvas-selection-details" class="space-y-2 text-xs">
+                <!-- Inyectado por JS -->
+              </div>
+            </div>
+            <div class="text-[11px] text-slate mt-4 border-t pt-2">Basado en sus selecciones interactivas</div>
+          </div>
+
+          <!-- Cuadrante 4: Viabilidad, Plazos y Pagos -->
+          <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50 flex flex-col justify-between">
+            <div>
+              <h3 class="text-[11px] font-extrabold text-slate tracking-wider uppercase border-b pb-2 mb-3 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-steel"></span> 4. Viabilidad & Plan de Trabajo
+              </h3>
+              <div class="space-y-2 text-[12px]">
+                <div class="flex justify-between pb-1.5 border-b border-slate-200/50">
+                  <span class="text-slate font-medium">Plazo Flota Móvil</span>
+                  <span class="text-navy font-semibold">3 a 4 semanas</span>
+                </div>
+                <div class="flex justify-between pb-1.5 border-b border-slate-200/50">
+                  <span class="text-slate font-medium">Plazo Servidor</span>
+                  <span class="text-navy font-semibold">2 a 4 semanas</span>
+                </div>
+                <div class="flex justify-between pb-1.5 border-b border-slate-200/50">
+                  <span class="text-slate font-medium">Auditoría en Planta</span>
+                  <span class="text-navy font-semibold">4 a 5 jornadas</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate font-medium">Estructura Pagos</span>
+                  <span class="text-navy font-semibold">50% / 25% / 25%</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-[11px] text-slate mt-4 border-t pt-2">Puesta en marcha e implementación</div>
+          </div>
+
+          <!-- Cuadrante 5: Inversión Año 1 y Recurrente -->
+          <div class="border-2 border-brandBlue/30 rounded-xl p-5 bg-brandBlue/5 flex flex-col justify-between shadow-sm">
+            <div>
+              <h3 class="text-[11px] font-extrabold text-brandBlue tracking-wider uppercase border-b border-brandBlue/20 pb-2 mb-3 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-brandBlue"></span> 5. Resumen Presupuestario
+              </h3>
+              <div class="space-y-2">
+                <div class="flex justify-between items-baseline">
+                  <span class="text-xs text-slate font-semibold uppercase">Total Año 1</span>
+                  <span class="text-2xl font-black text-navy" id="canvas-final-usd">$0</span>
+                </div>
+                <div class="flex justify-between text-[11px] text-slate font-medium">
+                  <span>Equivalente en Guaraníes</span>
+                  <span class="text-navy font-bold" id="canvas-final-gs">≈ 0 Gs</span>
+                </div>
+                <div class="border-t border-brandBlue/10 pt-3 mt-3">
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-xs text-slate">Soporte Anual (Abono)</span>
+                    <span class="text-sm font-bold text-navy" id="canvas-recur-usd">$0</span>
+                  </div>
+                  <p class="text-[9px] text-slate mt-0.5 italic">Cubre actualizaciones lógicas de ciberseguridad y celulares de forma cruzada.</p>
+                </div>
+              </div>
+            </div>
+            <div class="text-[10px] text-slate mt-4 border-t border-brandBlue/10 pt-2 italic">Valores incluyen IVA corporativo de 10%</div>
+          </div>
+
+          <!-- Cuadrante 6: Guardrails y Cláusulas del Plan -->
+          <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50 flex flex-col justify-between">
+            <div>
+              <h3 class="text-[11px] font-extrabold text-slate tracking-wider uppercase border-b pb-2 mb-3 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-brandAmber"></span> 6. Guardrails de Viabilidad
+              </h3>
+              <div class="space-y-2 text-[11px] leading-relaxed text-slate">
+                <p id="canvas-guardrail-alert" class="font-bold text-brandAmber bg-brandAmberSoft/40 p-2 rounded border border-brandAmber/20">
+                  Verificando umbral de inversión...
+                </p>
+                <p>• Los traslados para configuración on-site fuera de soporte remoto base conllevan viáticos más un canon de **$250 por jornada extendida**.</p>
+                <p>• Los terminales móviles deben ser entregados en el laboratorio para el enrolamiento Knox masivo seguro.</p>
+              </div>
+            </div>
+            <div class="text-[11px] text-slate mt-4 border-t pt-2">Condiciones generales de Alystech</div>
+          </div>
+
+        </div>
+
+        <!-- EVALUACIÓN DE ALTERNATIVAS DESCARTADAS -->
+        <div class="mt-8 pt-6 border-t border-slate-100 no-print alternative-trigger">
+          <details class="bg-slate-50 rounded-xl border border-slate-200 p-4 transition-all">
+            <summary class="font-bold text-navy cursor-pointer select-none text-sm hover:text-brandBlue flex items-center justify-between">
+              <span>🔍 Ver y Evaluar las Otras Alternativas del Módulo</span>
+              <span class="text-xs text-brandBlue font-semibold">Tocar para desplegar</span>
+            </summary>
+            
+            <div class="mt-4 overflow-x-auto">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead>
+                  <tr class="bg-navy text-white">
+                    <th class="p-3 rounded-l-lg">Módulo</th>
+                    <th class="p-3">Opción Seleccionada</th>
+                    <th class="p-3 rounded-r-lg">Otras Alternativas Disponibles</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                  <tr>
+                    <td class="p-3 font-semibold text-navy">A · Gestión Flota Móvil</td>
+                    <td class="p-3 text-brandBlue font-bold" id="alt-mdm-selected">-</td>
+                    <td class="p-3 text-slate">MDM-A ($6.200) / MDM-C ($11.800 - Consola a Medida) / MDM-D ($12.900 + abono cloud)</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold text-navy">B · Servidor Dedicado</td>
+                    <td class="p-3 text-brandBlue font-bold" id="alt-srv-selected">-</td>
+                    <td class="p-3 text-slate">SRV-A ($2.299 - Servidor Rack Reacondicionado) / SRV-C ($3.479 - Compacto) / SRV-D ($6.799 - Alta Disponibilidad)</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold text-navy">B.2 · Seguridad de Red</td>
+                    <td class="p-3 text-brandBlue font-bold" id="alt-net-selected">-</td>
+                    <td class="p-3 text-slate">NET-A ($0 - Reutilizar routers) / NET-C ($1.899 - Red Ampliada)</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold text-navy">C · Auditoría e Informe</td>
+                    <td class="p-3 text-brandBlue font-bold" id="alt-aud-selected">-</td>
+                    <td class="p-3 text-slate">AUD-A ($1.548 - Hardening base local sin informe) / AUD-C ($4.859 - Auditoría + Pentesting)</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold text-navy">D · Plan de Soporte</td>
+                    <td class="p-3 text-brandBlue font-bold" id="alt-sup-selected">-</td>
+                    <td class="p-3 text-slate font-normal">SOP-A ($890/año) / SOP-C ($2.890/año) / SOP-D ($4.900/año)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+
+        <!-- PIE DE FIRMAS PARA EXPORTACIÓN IMPRESA -->
+        <div class="hidden print:grid grid-cols-2 gap-12 mt-16 text-center text-[11px]">
+          <div class="border-t border-slate-400 pt-3">
+            <p class="font-bold text-navy">Firma Autorizada Araucanos S.A.</p>
+            <p class="text-slate mt-1">Conformidad con el Canvas Plan de Trabajo[cite: 1, 2]</p>
+          </div>
+          <div class="border-t border-slate-400 pt-3">
+            <p class="font-bold text-navy">Firma Responsable Alystech</p>
+            <p class="text-slate mt-1">Garantía de Implementación Técnica</p>
+          </div>
+        </div>
+
+        <!-- ACCIONES COMERCIALES INTERACTIVAS -->
+        <div class="mt-8 flex flex-wrap justify-center sm:justify-start gap-3 no-print commercial-actions">
+          <button onclick="openCommercialModal('accept')" class="bg-brandGreen text-white hover:bg-brandGreen/90 transition-colors font-bold px-5 py-3 rounded-xl inline-flex items-center gap-2 shadow-lg shadow-brandGreen/25">
+            ✔️ Aprobar Propuesta Canvas
+          </button>
+          <button onclick="runPrintMode()" class="bg-navy text-white hover:bg-navyLight transition-colors font-bold px-5 py-3 rounded-xl inline-flex items-center gap-2 shadow-lg shadow-navy/25">
+            📄 Descargar Plan Elegido (PDF)
+          </button>
+          <button onclick="openCommercialModal('query')" class="bg-slate text-white hover:bg-slate/90 transition-colors font-bold px-5 py-3 rounded-xl inline-flex items-center gap-2">
+            💬 Hacer una Consulta
+          </button>
+          <button onclick="openCommercialModal('reject')" class="bg-brandRedSoft text-brandRed hover:bg-brandRedSoft/80 transition-colors font-bold px-5 py-3 rounded-xl inline-flex items-center gap-2">
+            ❌ Rechazar
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- PERSISTENT FOOTER FOR NAVIGATION AND PRICING -->
+  <footer class="bg-white border-t border-slate border-slate-200 py-4 px-6 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-4">
+        <div>
+          <span class="text-[10px] font-bold text-slate uppercase tracking-wider block">Inversión Estimada Año 1</span>
+          <div class="flex items-baseline gap-2">
+            <strong class="text-2xl font-black text-navy" id="sticky-total-usd">$0</strong>
+            <span class="text-xs text-slate font-medium" id="sticky-total-gs">≈ 0 Gs</span>
+          </div>
+        </div>
+        <div class="border-l border-slate-200 pl-4">
+          <span class="text-[10px] font-bold text-slate uppercase tracking-wider block">Soporte Anual</span>
+          <strong class="text-sm font-bold text-navy" id="sticky-recur-usd">$0 /año</strong>
+        </div>
+      </div>
+      
+      <!-- Wizard Buttons -->
+      <div class="flex gap-2 font-bold wizard-navigation">
+        <button id="btn-back" onclick="changeWizardStep(-1)" class="hidden bg-slate-100 hover:bg-slate-200 text-slate px-5 py-2.5 rounded-xl">
+          Atrás
+        </button>
+        <button id="btn-next" onclick="changeWizardStep(1)" class="hidden bg-brandBlue text-white hover:bg-brandBlueDark px-5 py-2.5 rounded-xl">
+          Siguiente
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL PARA OPERACIONES COMERCIALES (SIN ALERTS) -->
+  <div class="modal-overlay" id="decision-modal" style="display:none; position:fixed; inset:0; background:rgba(10,20,40,0.55); align-items:center; justify-content:center; z-index:100; padding:20px;">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 id="modal-title" class="font-extrabold text-navy text-lg">Estructura Corporativa</h3>
+        <button onclick="closeCommercialModal()" class="text-slate hover:text-navy text-xl font-bold">&times;</button>
+      </div>
+      
+      <!-- Formulario interactivo -->
+      <div id="modal-form-content" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-navy uppercase tracking-wider mb-1">Nombre del Responsable</label>
+          <input type="text" id="form-name" class="w-full border border-slate-200 rounded-lg p-2 text-sm" placeholder="Ej. Dirección de Operaciones">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-navy uppercase tracking-wider mb-1">Correo Electrónico Institucional</label>
+          <input type="email" id="form-email" class="w-full border border-slate-200 rounded-lg p-2 text-sm" placeholder="usuario@araucanos.com.py">
+        </div>
+        <div>
+          <label id="comments-label" class="block text-xs font-bold text-navy uppercase tracking-wider mb-1">Notas o Comentarios Adicionales</label>
+          <textarea id="form-comments" rows="3" class="w-full border border-slate-200 rounded-lg p-2 text-sm" placeholder="Indique alguna aclaración de plazos, presupuesto o requerimientos on-site aquí..."></textarea>
+        </div>
+        
+        <div class="pt-4 flex justify-end gap-2">
+          <button onclick="closeCommercialModal()" class="bg-slate-100 text-slate font-bold px-4 py-2 rounded-lg text-sm hover:bg-slate-200 transition-colors">Cancelar</button>
+          <button onclick="executeActionSubmit()" id="modal-submit-btn" class="bg-brandBlue text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-brandBlueDark transition-colors">Enviar Registro</button>
+        </div>
+      </div>
+
+      <!-- Éxito Modal -->
+      <div id="modal-success-content" class="hidden text-center py-6 space-y-3">
+        <div class="w-12 h-12 rounded-full bg-brandGreenSoft text-brandGreen mx-auto flex items-center justify-center text-xl font-bold">✓</div>
+        <h4 class="font-bold text-navy text-base">¡Registro Enviado Exitosamente!</h4>
+        <p class="text-xs text-slate">El equipo de Alystech ha recibido sus requerimientos y se comunicará de inmediato con Araucanos S.A.</p>
+        <button onclick="closeCommercialModal()" class="bg-navy text-white font-bold px-4 py-2 rounded-lg text-xs hover:bg-navyLight mt-2 transition-all">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const EXCHANGE_RATE = 6250;
+    const TOTAL_STEPS = 5; // Cantidad de pasos de selección interactiva (MDM, Servidor, Red, Auditoría, Soporte)
+    const ORDERED_STEPS = ['mdm', 'srv', 'net', 'aud', 'sup'];
+    
+    // Variables globales de estado del Wizard
+    let wizardCurrentIdx = -1; // -1 significa pantalla de bienvenida
+
+    // Inicializar Dots indicadores del Typeform Wizard
+    function buildWizardDots() {
+      const container = document.getElementById('dots-container');
+      container.innerHTML = '';
+      
+      // Dot para bienvenida
+      let welcomeDot = document.createElement('div');
+      welcomeDot.className = "w-2.5 h-2.5 rounded-full bg-white transition-all duration-300";
+      welcomeDot.id = "dot-welcome";
+      container.appendChild(welcomeDot);
+
+      // Dots para cada paso de selección
+      ORDERED_STEPS.forEach((step, idx) => {
+        let dot = document.createElement('div');
+        dot.className = "w-2 h-2 rounded-full bg-white/30 transition-all duration-300";
+        dot.id = `dot-${step}`;
+        container.appendChild(dot);
+      });
+
+      // Dot para Canvas Final
+      let finalDot = document.createElement('div');
+      finalDot.className = "w-2 h-2 rounded-full bg-white/30 transition-all duration-300";
+      finalDot.id = "dot-canvas";
+      container.appendChild(finalDot);
+    }
+
+    // Iniciar Wizard interactivo
+    function startWizard() {
+      document.getElementById('welcome-screen').classList.add('slide-hidden');
+      document.getElementById('welcome-screen').classList.remove('slide-active');
+      document.getElementById('wizard-slides-wrapper').classList.remove('hidden');
+      document.getElementById('wizard-slides-wrapper').classList.add('flex');
+      
+      wizardCurrentIdx = 0;
+      updateSlidesVisibility();
+    }
+
+    // Lógica del switch entre pantallas (Slides)
+    function changeWizardStep(direction) {
+      wizardCurrentIdx += direction;
+      
+      // Control de bordes
+      if (wizardCurrentIdx < -1) wizardCurrentIdx = -1;
+      const maxIdx = ORDERED_STEPS.length; // incluye el paso final canvas
+      if (wizardCurrentIdx > maxIdx) wizardCurrentIdx = maxIdx;
+
+      // Volver a bienvenida si se retrocede del paso 0
+      if (wizardCurrentIdx === -1) {
+        document.getElementById('welcome-screen').classList.remove('slide-hidden');
+        document.getElementById('welcome-screen').classList.add('slide-active');
+        document.getElementById('wizard-slides-wrapper').classList.add('hidden');
+        document.getElementById('wizard-slides-wrapper').classList.remove('flex');
+        
+        // Sincronizar UI de barra inferior
+        document.getElementById('btn-back').classList.add('hidden');
+        document.getElementById('btn-next').classList.add('hidden');
+        document.getElementById('step-tag').textContent = "Carga: Inicio";
+        updateActiveDot('welcome');
+        return;
+      }
+
+      updateSlidesVisibility();
+    }
+
+    // Gestionar la opacidad y visibilidad física de las pantallas activas
+    function updateSlidesVisibility() {
+      // Primero, ocultar todas las diapositivas
+      document.querySelectorAll('.slide-step').forEach(el => {
+        el.classList.add('slide-hidden');
+        el.classList.remove('slide-active');
+      });
+
+      // Si es un paso normal de selección
+      if (wizardCurrentIdx >= 0 && wizardCurrentIdx < ORDERED_STEPS.length) {
+        const stepId = ORDERED_STEPS[wizardCurrentIdx];
+        const activeSlide = document.getElementById(`slide-step-${stepId}`);
+        if (activeSlide) {
+          activeSlide.classList.remove('slide-hidden');
+          activeSlide.classList.add('slide-active');
+        }
+
+        // Sincronizar indicador superior
+        document.getElementById('step-tag').textContent = `Módulo ${wizardCurrentIdx + 1} de ${ORDERED_STEPS.length}`;
+        updateActiveDot(stepId);
+
+        // Control de navegación
+        document.getElementById('btn-back').classList.remove('hidden');
+        document.getElementById('btn-next').classList.remove('hidden');
+        document.getElementById('btn-next').textContent = "Siguiente";
+        document.getElementById('btn-next').className = "bg-brandBlue hover:bg-brandBlueDark text-white px-5 py-2.5 rounded-xl transition-all shadow-md shadow-brandBlue/15";
+      } 
+      // Si llegamos a la pantalla del Canvas Integrado
+      else if (wizardCurrentIdx === ORDERED_STEPS.length) {
+        const canvasSlide = document.getElementById('slide-step-canvas');
+        if (canvasSlide) {
+          canvasSlide.classList.remove('slide-hidden');
+          canvasSlide.classList.add('slide-active');
+        }
+
+        document.getElementById('step-tag').textContent = "Canvas Plan de Trabajo";
+        updateActiveDot('canvas');
+
+        // Navegación en el paso final
+        document.getElementById('btn-back').classList.remove('hidden');
+        document.getElementById('btn-next').classList.add('hidden'); // Ocultar porque ya es el final
+      }
+
+      // Sincronizar cálculos dinámicos de costos en cada salto de paso
+      calculateProjectCanvas();
+    }
+
+    // Sincronizar el Dot activo superior
+    function updateActiveDot(activeId) {
+      // Restablecer todos a desactivado
+      document.getElementById('dot-welcome').className = "w-2 h-2 rounded-full bg-white/30 transition-all duration-300";
+      ORDERED_STEPS.forEach(step => {
+        document.getElementById(`dot-${step}`).className = "w-2 h-2 rounded-full bg-white/30 transition-all duration-300";
+      });
+      document.getElementById('dot-canvas').className = "w-2 h-2 rounded-full bg-white/30 transition-all duration-300";
+
+      // Activar el correspondiente
+      const targetDot = document.getElementById(`dot-${activeId}`);
+      if (targetDot) {
+        targetDot.className = "w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 shadow-md ring-2 ring-white/20";
+      }
+    }
+
+    // Lógica al seleccionar una tarjeta interactiva (mecanismo modular)
+    function selectOption(element) {
+      const container = element.closest('.options-container');
+      if (!container) return;
+
+      // Quitar clases previas de selección en el mismo grupo
+      container.querySelectorAll('.opt-card').forEach(card => {
+        card.classList.remove('border-brandBlue', 'bg-brandBlue/5', 'selected');
+        card.classList.add('border-slate/10');
+      });
+
+      // Añadir clases activas al elemento seleccionado
+      element.classList.add('border-brandBlue', 'bg-brandBlue/5', 'selected');
+      element.classList.remove('border-slate/10');
+
+      // Calcular proyecto inmediato
+      calculateProjectCanvas();
+    }
+
+    // Lógica Matemática y Matricial de Project Canvas (Calculo dinámico de subtotal y conversión a guaraníes)
+    function calculateProjectCanvas() {
+      let accumUSD = 0;
+      let recurrentUSD = 0;
+      let selectionDetailsHTML = '';
+
+      // Almacenes de selección para comparativas de alternativas
+      const selectionsMap = {};
+
+      ORDERED_STEPS.forEach(step => {
+        const stepContainer = document.querySelector(`.options-container[data-group="${step}"]`);
+        if (!stepContainer) return;
+
+        const selCard = stepContainer.querySelector('.opt-card.selected');
+        if (!selCard) return;
+
+        const price = parseInt(selCard.dataset.price) || 0;
+        const recur = parseInt(selCard.dataset.recur) || 0;
+        const code = selCard.dataset.code;
+
+        accumUSD += price;
+        recurrentUSD += recur;
+        selectionsMap[step] = code;
+
+        // Construir fila de visualización para el Cuadrante 3 del Canvas Plan
+        selectionDetailsHTML += `
+          <div class="flex justify-between pb-1.5 border-b border-slate-200/50">
+            <span class="text-slate font-medium">${getGroupTitleSpanish(step)}</span>
+            <span class="text-navy font-bold">${code}</span>
+          </div>`;
+      });
+
+      const totalGs = accumUSD * EXCHANGE_RATE;
+
+      // Sincronizar footer persistente de costos
+      document.getElementById('sticky-total-usd').textContent = `$${accumUSD.toLocaleString('en-US')}`;
+      document.getElementById('sticky-total-gs').textContent = `≈ ${totalGs.toLocaleString('es-PY')} Gs`;
+      document.getElementById('sticky-recur-usd').textContent = `$${recurrentUSD.toLocaleString('en-US')} /año`;
+
+      // Sincronizar Cuadrante 5 del Canvas Plan
+      document.getElementById('canvas-final-usd').textContent = `$${accumUSD.toLocaleString('en-US')}`;
+      document.getElementById('canvas-final-gs').textContent = `≈ ${totalGs.toLocaleString('es-PY')} Gs`;
+      document.getElementById('canvas-recur-usd').textContent = `$${recurrentUSD.toLocaleString('en-US')} /año`;
+      document.getElementById('canvas-selection-details').innerHTML = selectionDetailsHTML;
+
+      // Sincronizar tabla de alternativas descartadas comparativas
+      document.getElementById('alt-mdm-selected').textContent = selectionsMap['mdm'] || '-';
+      document.getElementById('alt-srv-selected').textContent = selectionsMap['srv'] || '-';
+      document.getElementById('alt-net-selected').textContent = selectionsMap['net'] || '-';
+      document.getElementById('alt-aud-selected').textContent = selectionsMap['aud'] || '-';
+      document.getElementById('alt-sup-selected').textContent = selectionsMap['sup'] || '-';
+
+      // Validación de guardrail comercial de inversión mínima (USD 12.000)
+      const guardrailText = document.getElementById('canvas-guardrail-alert');
+      if (accumUSD < 12000) {
+        guardrailText.className = "font-bold text-brandRed bg-brandRedSoft text-xs p-2.5 rounded border border-brandRed/20";
+        guardrailText.textContent = "⚠️ Alerta: El alcance configurado no cubre el mínimo de desarrollo del proyecto (USD 12.000). El plan definitivo queda sujeto a validación técnica de Alystech.";
+      } else {
+        guardrailText.className = "font-bold text-brandGreen bg-brandGreenSoft text-xs p-2.5 rounded border border-brandGreen/20";
+        guardrailText.textContent = "✓ Inversión mínima corporativa cubierta para el desarrollo de ingeniería.";
+      }
+    }
+
+    // Helper para retornar títulos en español legible corporativo
+    function getGroupTitleSpanish(group) {
+      const titles = {
+        mdm: 'Flota Móvil',
+        srv: 'Servidor Local',
+        net: 'Seguridad Red',
+        aud: 'Auditoría / SIEM',
+        sup: 'Soporte Unificado'
+      };
+      return titles[group] || group;
+    }
+
+    // --- ACCIONES COMERCIALES (GESTIÓN SIN ALERTS) ---
+    function openCommercialModal(action) {
+      const modal = document.getElementById('decision-modal');
+      const title = document.getElementById('modal-title');
+      const submitBtn = document.getElementById('modal-submit-btn');
+      const commentLabel = document.getElementById('comments-label');
+      const formContent = document.getElementById('modal-form-content');
+      const successContent = document.getElementById('modal-success-content');
+
+      // Reiniciar estado visual del modal
+      formContent.classList.remove('hidden');
+      successContent.classList.add('hidden');
+      modal.dataset.action = action;
+
+      if (action === 'accept') {
+        title.textContent = '✔️ Aprobar Plan Canvas de Ciberseguridad';
+        submitBtn.textContent = 'Aprobar e Iniciar Proyecto';
+        submitBtn.className = "bg-brandGreen text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-brandGreen/90 transition-colors";
+        commentLabel.textContent = 'Aclaraciones o directrices iniciales (Opcional)';
+      } else if (action === 'reject') {
+        title.textContent = '❌ Rechazar Propuesta Técnica';
+        submitBtn.textContent = 'Confirmar Rechazo';
+        submitBtn.className = "bg-brandRed text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-brandRed/90 transition-colors";
+        commentLabel.textContent = 'Por favor coméntenos el motivo del rechazo para optimizar futuras versiones (Opcional)';
+      } else {
+        title.textContent = '💬 Realizar Consulta de Ingeniería';
+        submitBtn.textContent = 'Enviar Mensaje';
+        submitBtn.className = "bg-brandBlue text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-brandBlueDark transition-colors";
+        commentLabel.textContent = 'Describa sus dudas sobre plazos, hardware, importaciones o compatibilidad del software';
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closeCommercialModal() {
+      document.getElementById('decision-modal').style.display = 'none';
+      // Limpiar campos para siguientes interacciones
+      document.getElementById('form-name').value = '';
+      document.getElementById('form-email').value = '';
+      document.getElementById('form-comments').value = '';
+    }
+
+    // Envío seguro de decisiones lógicas
+    function executeActionSubmit() {
+      const name = document.getElementById('form-name').value.trim();
+      const email = document.getElementById('form-email').value.trim();
+
+      if (!name || !email) {
+        // En lugar de alert, aplicamos borde rojo transitorio
+        document.getElementById('form-name').classList.add('border-brandRed');
+        document.getElementById('form-email').classList.add('border-brandRed');
+        setTimeout(() => {
+          document.getElementById('form-name').classList.remove('border-brandRed');
+          document.getElementById('form-email').classList.remove('border-brandRed');
+        }, 3000);
+        return;
+      }
+
+      // Transición a pantalla de éxito
+      document.getElementById('modal-form-content').classList.add('hidden');
+      document.getElementById('modal-success-content').classList.remove('hidden');
+    }
+
+    // Modo de Impresión Limpio del Presupuesto Canvas de Cpat
+    function runPrintMode() {
+      document.body.classList.add('print-mode');
+      setTimeout(() => {
+        window.print();
+      }, 150);
+      
+      // Restaurar tras cerrar diálogo del explorador
+      window.onafterprint = () => document.body.classList.remove('print-mode');
+    }
+
+    // Ejecuciones en carga inicial
+    window.onload = function() {
+      buildWizardDots();
+      bindUIEvents();
+    }
+
+    function bindUIEvents() {
+      // Registrar evento de click del modal de escape perimetral
+      const modal = document.getElementById('decision-modal');
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeCommercialModal();
+      });
+    }
+  </script>
+
+</body>
+</html>

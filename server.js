@@ -218,10 +218,34 @@ app.post('/api/pdf', (req, res) => {
   doc.fontSize(11).fillColor('#0d1f3c').font('Helvetica-Bold').text('Configuración seleccionada', 50, y);
   y += 22;
   (selections || []).forEach(s => {
+    if (y > 680) { doc.addPage(); y = 50; }
     doc.fontSize(9).fillColor('#48546b').font('Helvetica-Bold').text(GROUP_LABELS[s.group] || s.group, 50, y, { width: 105 });
-    doc.fillColor('#182437').font('Helvetica').fontSize(9.5).text(`${s.code} — ${s.name}`, 160, y, { width: 280 });
+    doc.fillColor('#182437').font('Helvetica-Bold').fontSize(9.5).text(`${s.code} — ${s.name}`, 160, y, { width: 280 });
     doc.font('Helvetica-Bold').fillColor('#0d1f3c').fontSize(9.5).text(s.price, 450, y, { width: 95, align: 'right' });
-    y += 20;
+    y += 16;
+    
+    if (s.description) {
+      doc.fillColor('#48546b').font('Helvetica').fontSize(8.5).text(s.description, 160, y, { width: 380, lineGap: 2 });
+      y += doc.heightOfString(s.description, { width: 380, fontSize: 8.5 }) + 8;
+    } else {
+      y += 8;
+    }
+
+    if (s.costBreakdown && s.costBreakdown.length > 0) {
+      const boxHeight = s.costBreakdown.length * 16 + 12;
+      if (y + boxHeight > 750) { doc.addPage(); y = 50; }
+      doc.rect(160, y, 385, boxHeight).fill('#fafbfd');
+      doc.rect(160, y, 385, boxHeight).strokeColor('#eef1f6').stroke();
+      y += 6;
+      s.costBreakdown.forEach(line => {
+        doc.fillColor('#8590a3').font('Helvetica').fontSize(8.5).text(line.label, 170, y, { width: 200 });
+        doc.fillColor('#182437').font('Helvetica-Bold').text(line.recurring ? `$${line.amountUsd.toLocaleString('es-PY')}/año` : `$${line.amountUsd.toLocaleString('es-PY')}`, 450, y, { width: 85, align: 'right' });
+        y += 16;
+      });
+      y += 6;
+    }
+
+    y += 12;
     doc.moveTo(50, y - 6).lineTo(545, y - 6).strokeColor('#eef1f6').stroke();
   });
 

@@ -1,0 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+
+  /* ── Escala tipográfica ──
+     Reemplaza los text-[Npx] arbitrarios dispersos en los componentes.
+     text-xs/sm/base/lg/xl/2xl/3xl siguen siendo los defaults de Tailwind (12/14/16/18/20/24/30px);
+     los tres pasos de abajo cubren el rango de texto pequeño (eyebrows, badges, notas) que
+     antes se resolvía con valores arbitrarios sueltos por componente. */
+  --text-3xs: 0.5625rem; /* 9px  — eyebrows, badges diminutos */
+  --text-2xs: 0.6875rem; /* 11px — labels secundarios, notas al pie */
+  --text-md: 0.8125rem; /* 13px — texto entre xs (12px) y sm (14px), el más usado en cuerpo de tarjetas */
+
+  /* ── Surface (dark shell) ── */
+  --color-surface: #0f172a;
+  --color-surface-alt: #1e293b;
+  --color-surface-border: rgba(255, 255, 255, 0.06);
+
+  /* ── Card (light content area) ── */
+  --color-card: #ffffff;
+  --color-card-hover: #f8fafc;
+  --color-card-border: #e2e8f0;
+
+  /* ── Brand palette ── */
+  --color-navy: #0d1f3c;
+  --color-navy-2: #17335c;
+  --color-steel: #2c5788;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-soft: #eff6ff;
+  --color-accent-muted: rgba(37, 99, 235, 0.08);
+
+  /* ── Semantic ── */
+  --color-positive: #16a34a;
+  --color-positive-soft: #f0fdf4;
+  --color-amber: #d97706;
+  --color-amber-soft: #fffbeb;
+  --color-danger: #dc2626;
+  --color-danger-soft: #fef2f2;
+
+  /* ── Text ── */
+  --color-ink: #0f172a;
+  --color-ink-secondary: #475569;
+  --color-ink-muted: #94a3b8;
+  --color-ink-on-dark: #f1f5f9;
+  --color-ink-on-dark-secondary: #94a3b8;
+
+  /* ── Legacy compat (used by TcoComparisonStep, CanvasStep) ── */
+  --color-blue: #2563eb;
+  --color-blue-dark: #1d4ed8;
+  --color-blue-soft: #eff6ff;
+  --color-green: #16a34a;
+  --color-green-soft: #f0fdf4;
+  --color-red: #dc2626;
+  --color-red-soft: #fef2f2;
+  --color-slate: #475569;
+  --color-line: #e2e8f0;
+  --color-line-soft: #f1f5f9;
+  --color-bg: #0f172a;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

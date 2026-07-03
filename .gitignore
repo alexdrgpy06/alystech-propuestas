@@ -1,3 +1,6 @@
 node_modules/
 data/*.json
 .env
+
+# Generado por `npm run build` en frontend/ (Vite) — no se edita a mano
+public/araucanos/
