@@ -124,7 +124,7 @@ export function CostBreakdownModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.18, ease: 'easeIn' } }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="relative w-full max-w-2xl max-h-[85vh] overflow-hidden"
+            className="relative w-full max-w-2xl md:max-w-3xl max-h-[85vh] overflow-hidden"
           >
             <GlassPanel variant="light" className="h-full flex flex-col !bg-white">
               {/* Header */}
@@ -172,8 +172,11 @@ export function CostBreakdownModal({
                   </div>
                 )}
 
-                {/* Two-column layout on desktop: features left, costs right */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Two-column layout on desktop: features left, costs right.
+                    md: (768px viewport), not lg:, since the modal itself is
+                    only max-w-3xl — lg:1024px rarely triggered even on real
+                    desktop windows, forcing a single cramped column. */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Left: Features */}
                   {features && features.length > 0 && (
                     <div className="space-y-3">
@@ -221,18 +224,18 @@ export function CostBreakdownModal({
                             <p className="font-label-caps text-label-caps text-ink-muted">Costo único</p>
                           )}
                           {oneTimeCosts.map((cost, idx) => (
-                            <div key={idx} className="flex justify-between items-center gap-2 font-body-base text-body-base py-2 border-b border-border-slate/30 last:border-0">
-                              <div className="flex items-start gap-1.5 flex-1 min-w-0">
-                                {cost.category && (
-                                  <span className={`font-label-caps text-label-caps border px-2 py-0.5 rounded shrink-0 mt-0.5 ${CATEGORY_COLORS[cost.category] || 'bg-surface-container-high text-ink-muted border-border-slate'}`}>
+                            <div key={idx} className="py-2 border-b border-border-slate/30 last:border-0">
+                              <div className="flex items-center justify-between gap-2">
+                                {cost.category ? (
+                                  <span className={`font-label-caps text-label-caps border px-2 py-0.5 rounded ${CATEGORY_COLORS[cost.category] || 'bg-surface-container-high text-ink-muted border-border-slate'}`}>
                                     {CATEGORY_LABELS[cost.category] || cost.category}
                                   </span>
-                                )}
-                                <span className="text-ink-secondary leading-snug">{cost.label}</span>
+                                ) : <span />}
+                                <span className="font-body-base text-base font-bold text-ink-navy shrink-0 whitespace-nowrap">
+                                  {formatUsd(cost.amountUsd)}
+                                </span>
                               </div>
-                              <span className="font-body-base text-base font-bold text-ink-navy shrink-0 whitespace-nowrap">
-                                {formatUsd(cost.amountUsd)}
-                              </span>
+                              <p className="font-body-base text-body-base text-ink-secondary leading-snug mt-1">{cost.label}</p>
                             </div>
                           ))}
                         </div>
@@ -242,18 +245,18 @@ export function CostBreakdownModal({
                         <div className="space-y-2 pt-2 border-t border-border-slate">
                           <p className="font-label-caps text-label-caps text-ink-muted">Recurrente anual</p>
                           {recurringCosts.map((cost, idx) => (
-                            <div key={idx} className="flex justify-between items-center gap-2 font-body-base text-body-base py-2 border-b border-border-slate/30 last:border-0">
-                              <div className="flex items-start gap-1.5 flex-1 min-w-0">
-                                {cost.category && (
-                                  <span className={`font-label-caps text-label-caps border px-2 py-0.5 rounded shrink-0 mt-0.5 ${CATEGORY_COLORS[cost.category] || 'bg-surface-container-high text-ink-muted border-border-slate'}`}>
+                            <div key={idx} className="py-2 border-b border-border-slate/30 last:border-0">
+                              <div className="flex items-center justify-between gap-2">
+                                {cost.category ? (
+                                  <span className={`font-label-caps text-label-caps border px-2 py-0.5 rounded ${CATEGORY_COLORS[cost.category] || 'bg-surface-container-high text-ink-muted border-border-slate'}`}>
                                     {CATEGORY_LABELS[cost.category] || cost.category}
                                   </span>
-                                )}
-                                <span className="text-ink-secondary leading-snug">{cost.label}</span>
+                                ) : <span />}
+                                <span className="font-body-base text-base font-bold text-positive shrink-0 whitespace-nowrap">
+                                  {formatUsd(cost.amountUsd)}/año
+                                </span>
                               </div>
-                              <span className="font-body-base text-base font-bold text-positive shrink-0 whitespace-nowrap">
-                                {formatUsd(cost.amountUsd)}/año
-                              </span>
+                              <p className="font-body-base text-body-base text-ink-secondary leading-snug mt-1">{cost.label}</p>
                             </div>
                           ))}
                         </div>

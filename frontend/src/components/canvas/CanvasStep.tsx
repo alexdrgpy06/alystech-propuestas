@@ -298,11 +298,11 @@ export function CanvasStep({
           </span>
         </button>
         {conditionsOpen && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 pt-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 pt-0">
             {conditions.map((cond, idx) => (
-              <div key={idx}>
-                <h3 className="font-body-medium text-body-medium text-ink-navy font-bold mb-1">{cond.title}</h3>
-                <p className="font-body-base text-body-base text-ink-secondary leading-relaxed">{cond.text}</p>
+              <div key={idx} className="rounded-xl border border-border-slate bg-white p-4">
+                <h3 className="font-label-caps text-label-caps text-primary mb-1.5">{cond.title}</h3>
+                <p className="text-body-medium text-ink-secondary leading-relaxed">{cond.text}</p>
               </div>
             ))}
           </div>
