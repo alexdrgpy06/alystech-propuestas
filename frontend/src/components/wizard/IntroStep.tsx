@@ -55,7 +55,7 @@ const MODULE_CHIPS = [
 
 export function IntroStep({ onStart }: IntroStepProps) {
   return (
-    <div className="w-full max-w-[720px] mx-auto flex flex-col items-center text-center space-y-lg py-xl">
+    <div className="w-full max-w-[720px] mx-auto flex flex-col items-center text-center space-y-md md:space-y-lg py-md md:py-xl">
       {/* Logo/Icon Anchor */}
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
@@ -63,7 +63,7 @@ export function IntroStep({ onStart }: IntroStepProps) {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="flex flex-col items-center gap-3"
       >
-        <div className="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-ink-navy shadow-lg shadow-primary/20 flex items-center justify-center mb-md overflow-hidden">
+        <div className="w-20 h-20 md:w-32 md:h-32 rounded-2xl bg-ink-navy shadow-lg shadow-primary/20 flex items-center justify-center mb-md overflow-hidden">
           <img
             src={`${import.meta.env.BASE_URL}logo.png`}
             alt="AlysTech"
@@ -111,11 +111,11 @@ export function IntroStep({ onStart }: IntroStepProps) {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.32, duration: 0.4 }}
-        className="pt-lg"
+        className="pt-md md:pt-lg"
       >
         <PrimaryButton
           onClick={onStart}
-          size="lg"
+          size="md"
           rightIcon={
             <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 0" }}>
               arrow_forward
@@ -131,7 +131,7 @@ export function IntroStep({ onStart }: IntroStepProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.42, duration: 0.4 }}
-        className="flex gap-2 pt-xl mt-xl border-t border-border-slate w-full max-w-[200px] justify-center opacity-50"
+        className="flex gap-2 pt-lg mt-lg md:pt-xl md:mt-xl border-t border-border-slate w-full max-w-[200px] justify-center opacity-50"
       >
         <div className="w-8 h-1 bg-primary rounded-full" />
         <div className="w-8 h-1 bg-border-slate rounded-full" />

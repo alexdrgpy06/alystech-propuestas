@@ -130,11 +130,11 @@ export const RadioCard = forwardRef<HTMLDivElement, RadioCardProps>(
 
         {/* Content section */}
         <div className="flex-1">
-          <h3 className="font-headline-md text-headline-md text-on-surface mb-1.5">
+          <h3 className="text-lg md:text-headline-md font-bold md:font-extrabold text-on-surface mb-1.5">
             {title}
           </h3>
           {description && (
-            <p className="font-body-base text-body-base text-secondary leading-snug mb-3 line-clamp-3">
+            <p className="text-body-medium md:text-body-base text-secondary leading-snug mb-3 line-clamp-3">
               {description}
             </p>
           )}
@@ -150,7 +150,7 @@ export const RadioCard = forwardRef<HTMLDivElement, RadioCardProps>(
                 </span>
               )}
               {price && (
-                <span className="font-extrabold text-primary text-2xl leading-tight">
+                <span className="font-extrabold text-primary text-xl md:text-2xl leading-tight">
                   {price}
                   {pricePeriod && (
                     <span className="text-xs font-semibold text-secondary ml-1">{pricePeriod}</span>

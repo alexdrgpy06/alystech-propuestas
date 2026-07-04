@@ -58,7 +58,7 @@ export function WizardFooter({
               <span className="font-label-caps text-[10px] text-ink-muted uppercase tracking-widest font-bold">
                 Inversión Año 1
               </span>
-              <span className="font-headline-md text-2xl text-ink-navy font-extrabold leading-tight">
+              <span className="text-lg md:text-2xl text-ink-navy font-extrabold leading-tight">
                 {formatUsd(totalUsd)}
               </span>
             </div>
@@ -69,7 +69,7 @@ export function WizardFooter({
                   <span className="font-label-caps text-[10px] text-ink-muted uppercase tracking-widest font-bold">
                     Costo Anual Recurrente
                   </span>
-                  <span className="font-body-medium text-lg text-primary font-bold leading-tight">
+                  <span className="text-base md:text-lg text-primary font-bold leading-tight">
                     {formatUsd(recurUsd)}/año
                   </span>
                 </div>

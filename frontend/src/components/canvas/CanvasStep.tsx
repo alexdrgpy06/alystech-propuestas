@@ -181,11 +181,11 @@ export function CanvasStep({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="mb-12 text-center md:text-left"
+        className="mb-6 md:mb-12 text-center md:text-left"
       >
-        <span className="inline-block px-3 py-1 bg-success/20 text-success font-label-caps text-label-caps rounded-full mb-4">FINALIZADO</span>
-        <h1 className="font-display-lg-mobile md:font-display-lg text-ink-navy mb-2">{content.title}</h1>
-        <p className="font-body-base text-body-base text-ink-secondary">{content.subtitle || 'Configuración final y detalles de inversión. Revisa los módulos seleccionados antes de confirmar.'}</p>
+        <span className="inline-block px-3 py-1 bg-success/20 text-success font-label-caps text-label-caps rounded-full mb-3 md:mb-4">FINALIZADO</span>
+        <h1 className="text-headline-md md:text-display-lg text-ink-navy mb-2">{content.title}</h1>
+        <p className="text-body-medium md:text-body-base text-ink-secondary">{content.subtitle || 'Configuración final y detalles de inversión. Revisa los módulos seleccionados antes de confirmar.'}</p>
       </motion.div>
 
       {/* Bento Grid Layout */}

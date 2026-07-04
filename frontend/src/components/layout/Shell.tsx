@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { WizardHeader } from './WizardHeader';
 import { WizardFooter } from './WizardFooter';
 
@@ -62,6 +62,16 @@ export function Shell({
   recurUsd,
   footerActions,
 }: ShellProps) {
+  const mainRef = useRef<HTMLElement>(null);
+
+  // The content canvas is its own scroll region (header/footer are pinned outside
+  // it), so the browser's own "scroll to top on navigation" never kicks in here —
+  // without this, moving to a new step keeps whatever scroll position the
+  // previous, possibly longer, step was left at.
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+  }, [currentStep]);
+
   return (
     <div className="relative h-dvh bg-surface-dark overflow-hidden">
       {/* Background Elements */}
@@ -77,7 +87,7 @@ export function Shell({
         />
 
         {/* Only this region scrolls — header/footer stay pinned */}
-        <main className="flex-1 min-h-0 overflow-y-auto flex flex-col items-center w-full px-margin-mobile md:px-margin-desktop py-lg md:py-10">
+        <main ref={mainRef} className="flex-1 min-h-0 overflow-y-auto flex flex-col items-center w-full px-margin-mobile md:px-margin-desktop py-lg md:py-10">
           <div className="w-full max-w-max-width-content">
             {header}
             <div className="flex-1 w-full">

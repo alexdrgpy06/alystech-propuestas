@@ -43,14 +43,14 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
         <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full font-label-caps text-label-caps mb-4">
           Paso 12 de 13
         </span>
-        <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-sm">
+        <h1 className="font-headline-md md:font-display-lg text-headline-md md:text-display-lg text-on-surface mb-sm">
           Comparativa de Inversión a 3 Años (TCO)
         </h1>
-        <p className="font-headline-md text-headline-md text-ink-secondary font-medium">
+        <p className="font-body-medium md:font-headline-md text-body-medium md:text-headline-md text-ink-secondary font-medium">
           Análisis proyectado de costos operativos y profesionales
         </p>
         {content.intro && (
-          <p className="font-body-base text-body-base text-ink-muted max-w-2xl mx-auto mt-sm flex items-start gap-1.5 text-left">
+          <p className="font-body-medium md:font-body-base text-body-medium md:text-body-base text-ink-muted max-w-2xl mx-auto mt-sm flex items-start gap-1.5 text-left">
             <span className="material-symbols-outlined text-[16px] shrink-0 mt-0.5" style={{ fontVariationSettings: "'FILL' 0" }}>
               info
             </span>
@@ -78,7 +78,7 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
           </div>
           <div>
             <h3 className="font-body-medium text-body-medium text-ink-secondary mb-xs">Costo único de Desarrollo</h3>
-            <div className="font-display-lg text-display-lg text-on-background">
+            <div className="text-headline-md md:text-display-lg text-on-background">
               {formatUsd(alystechDev)} <span className="text-body-base font-body-base text-ink-muted font-normal">USD</span>
             </div>
             <p className="font-body-base text-body-base text-ink-muted mt-sm text-sm">
@@ -99,7 +99,7 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
           </div>
           <div>
             <h3 className="font-body-medium text-body-medium text-ink-secondary mb-xs">Soporte Acumulado (3 años)</h3>
-            <div className="font-display-lg text-display-lg text-on-background">
+            <div className="text-headline-md md:text-display-lg text-on-background">
               {formatUsd(alystechSupport3Years)} <span className="text-body-base font-body-base text-ink-muted font-normal">USD</span>
             </div>
             <p className="font-body-base text-body-base text-ink-muted mt-sm text-sm">
@@ -126,7 +126,7 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
               </span>
               Total Cost of Ownership Proyectado
             </div>
-            <div className="font-display-lg text-[48px] leading-tight font-extrabold text-on-primary-fixed-variant">
+            <div className="text-[28px] md:text-[48px] leading-tight font-extrabold text-on-primary-fixed-variant">
               {formatUsd(alystechTotal3Years)} <span className="text-[24px] text-primary/70 font-normal">USD</span>
             </div>
           </div>
@@ -160,7 +160,7 @@ export function TcoComparisonStep({ content, totals, groups }: TcoComparisonStep
           </div>
           <div className="bg-positive px-6 py-4 text-center flex flex-col items-center justify-center gap-1 shrink-0">
             <span className="font-label-caps text-label-caps text-white/80">Ahorro Proyectado</span>
-            <span className="font-display-lg text-display-lg text-white">{savingsPct}%</span>
+            <span className="text-headline-md md:text-display-lg text-white">{savingsPct}%</span>
             <span className="font-body-medium text-body-medium text-white/80">{formatUsd(savingsUsd)}</span>
           </div>
         </div>

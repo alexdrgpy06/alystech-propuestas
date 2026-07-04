@@ -74,10 +74,10 @@ export function OptionsStep({
         <span className="inline-block px-3 py-1 bg-tertiary-container/20 text-tertiary rounded-full font-label-caps text-label-caps mb-2">
           {content.groupTitle} · Alternativas técnicas
         </span>
-        <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-2">
+        <h1 className="font-headline-md md:font-display-lg text-headline-md md:text-display-lg text-on-surface mb-2">
           {content.title}
         </h1>
-        <p className="font-body-base text-body-base text-secondary max-w-2xl mx-auto md:mx-0">
+        <p className="font-body-medium md:font-body-base text-body-medium md:text-body-base text-secondary max-w-2xl mx-auto md:mx-0">
           {content.intro || 'Selecciona el nivel de control y seguridad para tu infraestructura. Cada nivel ofrece diferentes capacidades de administración y protección.'}
         </p>
       </motion.div>
