@@ -124,7 +124,7 @@ export function CostBreakdownModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.18, ease: 'easeIn' } }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="relative w-full max-w-2xl md:max-w-3xl max-h-[85vh] overflow-hidden"
+            className="relative w-full max-w-2xl md:max-w-3xl max-h-[85dvh] overflow-hidden"
           >
             <GlassPanel variant="light" className="h-full flex flex-col !bg-white">
               {/* Header */}
@@ -162,7 +162,7 @@ export function CostBreakdownModal({
               </GlassPanelHeader>
 
               {/* Content (scrollable) */}
-              <GlassPanelBody className="flex-1 min-h-0 max-h-[calc(85vh-160px)] overflow-y-auto p-6 space-y-6">
+              <GlassPanelBody className="flex-1 min-h-0 max-h-[calc(85dvh-160px)] overflow-y-auto p-6 space-y-6">
                 {/* Description */}
                 {description && (
                   <div className="bg-surface-container-low rounded-lg border border-border-slate p-4">

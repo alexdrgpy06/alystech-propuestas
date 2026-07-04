@@ -36,12 +36,12 @@ export function WizardHeader({
 
   return (
     <header className={`w-full bg-surface-dark border-b border-white/10 shrink-0 ${className}`}>
-      <div className="flex justify-between items-center gap-4 h-20 md:h-24 px-margin-mobile md:px-margin-desktop">
+      <div className="flex justify-between items-center gap-4 h-14 md:h-24 px-margin-mobile md:px-margin-desktop">
         {/* Logo/Brand */}
-        <div className="flex items-center gap-3 flex-shrink-0">
+        <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
           {logo || (
             <>
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl overflow-hidden flex-shrink-0">
+              <div className="w-9 h-9 md:w-14 md:h-14 rounded-lg md:rounded-xl overflow-hidden flex-shrink-0">
                 <img
                   src={`${import.meta.env.BASE_URL}logo.png`}
                   alt=""
@@ -50,10 +50,10 @@ export function WizardHeader({
                 />
               </div>
               <div className="hidden sm:block">
-                <h1 className="font-headline-md text-headline-md md:text-[28px] font-extrabold text-white leading-none">
+                <h1 className="text-base md:text-[28px] font-extrabold text-white leading-none">
                   AlysTech
                 </h1>
-                <p className="font-label-caps text-[10px] text-white/50 uppercase tracking-widest font-bold mt-1">
+                <p className="font-label-caps text-[10px] text-white/50 uppercase tracking-widest font-bold mt-1 hidden md:block">
                   Propuesta Técnica
                 </p>
               </div>
@@ -75,8 +75,8 @@ export function WizardHeader({
 
         {/* Right: Step badge */}
         <div className="flex items-center gap-md flex-shrink-0">
-          <div className="bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-lg">
-            <span className="font-body-medium text-body-medium text-primary font-bold whitespace-nowrap">
+          <div className="bg-primary/10 border border-primary/30 px-2 py-1 md:px-3 md:py-1.5 rounded-lg">
+            <span className="text-xs md:text-body-medium text-primary font-bold whitespace-nowrap">
               Paso {currentStep + 1}/{totalSteps}
             </span>
           </div>
