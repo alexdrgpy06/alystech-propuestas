@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { z } = require('zod');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -21,6 +22,7 @@ const SMTP_USER = process.env.SMTP_USER || '';
 const SMTP_PASS = process.env.SMTP_PASS || '';
 const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER || 'no-reply@alystechpy.online';
 const SMTP_SECURE = process.env.SMTP_SECURE === 'true';
+const SMTP_REJECT_UNAUTHORIZED = process.env.SMTP_REJECT_UNAUTHORIZED !== 'false';
 const CONTACT_EMAIL = process.env.NOTIFY_EMAIL || 'aramirez@alystechpy.online';
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -47,9 +49,7 @@ function getTransporter() {
       port: SMTP_PORT,
       secure: SMTP_SECURE || SMTP_PORT === 465,
       auth: { user: SMTP_USER, pass: SMTP_PASS },
-      // Self-hosted Stalwart instance on our own infrastructure without a
-      // trusted cert configured yet — accept its self-signed certificate.
-      tls: { rejectUnauthorized: false }
+      tls: { rejectUnauthorized: SMTP_REJECT_UNAUTHORIZED }
     });
   }
   return transporter;
@@ -111,19 +111,47 @@ function infoRow(label, value) {
 
 app.use(express.json({ limit: '256kb' }));
 
+const DecisionSchema = z.object({
+  proposalId: z.string().optional(),
+  decision: z.enum(['accept', 'reject']),
+  clientName: z.string().min(1),
+  clientEmail: z.string().email(),
+  clientPhone: z.string().optional(),
+  comments: z.string().optional(),
+  selections: z.array(z.object({
+    group: z.string(),
+    code: z.string(),
+    name: z.string(),
+    price: z.string().optional(),
+    description: z.string().optional(),
+    costBreakdown: z.array(z.object({ label: z.string(), amountUsd: z.number(), recurring: z.boolean().optional() })).optional(),
+    addons: z.array(z.object({ label: z.string(), amountUsd: z.number(), recurring: z.boolean().optional() })).optional(),
+  })).optional(),
+  totals: z.object({
+    total: z.string().optional(),
+    recurrent: z.string().optional(),
+  }).optional(),
+});
+
+const ConsultaSchema = z.object({
+  proposalId: z.string().optional(),
+  name: z.string().min(1),
+  email: z.string().email(),
+  phone: z.string().optional(),
+  message: z.string().min(1),
+});
+
 app.use(express.static(path.join(__dirname, 'public'), { index: 'landing.html' }));
 app.use('/araucanos', express.static(path.join(__dirname, 'public', 'araucanos')));
 
 app.get('/healthz', (req, res) => res.status(200).send('ok'));
 
 app.post('/api/decision', async (req, res) => {
-  const { proposalId, decision, clientName, clientEmail, clientPhone, comments, selections, totals } = req.body || {};
-  if (!decision || !['accept', 'reject'].includes(decision)) {
-    return res.status(400).json({ ok: false, error: 'decision inválida' });
+  const parsed = DecisionSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ ok: false, error: 'datos inválidos', issues: parsed.error.flatten().fieldErrors });
   }
-  if (!clientName || !clientEmail) {
-    return res.status(400).json({ ok: false, error: 'faltan datos de contacto' });
-  }
+  const { proposalId, decision, clientName, clientEmail, clientPhone, comments, selections, totals } = parsed.data;
   const entry = {
     id: crypto.randomUUID(),
     type: 'decision',
@@ -193,10 +221,11 @@ app.post('/api/decision', async (req, res) => {
 });
 
 app.post('/api/consulta', async (req, res) => {
-  const { proposalId, name, email, phone, message } = req.body || {};
-  if (!name || !email || !message) {
-    return res.status(400).json({ ok: false, error: 'faltan datos' });
+  const parsed = ConsultaSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ ok: false, error: 'datos inválidos', issues: parsed.error.flatten().fieldErrors });
   }
+  const { proposalId, name, email, phone, message } = parsed.data;
   const entry = {
     id: crypto.randomUUID(),
     type: 'consulta',
@@ -415,5 +444,6 @@ app.post('/api/pdf', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Alystech propuestas escuchando en puerto ${PORT}`);
-  if (!getTransporter()) console.log('⚠ SMTP no configurado — las notificaciones solo quedan guardadas en el contenedor (data/*.json).');
+  if (!getTransporter() && SMTP_HOST) console.log('⚠ SMTP no configurado — las notificaciones solo quedan guardadas en el contenedor (data/*.json).');
+  else if (SMTP_HOST && !SMTP_REJECT_UNAUTHORIZED) console.warn('⚠ SMTP_REJECT_UNAUTHORIZED=false: TLS certificate validation is disabled. Only use in staging.');
 });
