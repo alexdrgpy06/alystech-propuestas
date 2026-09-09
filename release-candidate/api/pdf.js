@@ -12,7 +12,15 @@ function parseBody(request) {
     throw error;
   }
   if (typeof rawBody !== 'string') {
-    return rawBody && typeof rawBody === 'object' ? rawBody : {};
+    if (rawBody && typeof rawBody === 'object') {
+      if (Buffer.byteLength(JSON.stringify(rawBody), 'utf8') > MAX_BODY_BYTES) {
+        const error = new Error('Payload too large');
+        error.code = 'PAYLOAD_TOO_LARGE';
+        throw error;
+      }
+      return rawBody;
+    }
+    return {};
   }
   if (Buffer.byteLength(rawBody, 'utf8') > MAX_BODY_BYTES) {
     const error = new Error('Payload too large');
