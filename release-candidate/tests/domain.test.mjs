@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';import{templates}from'../src/templates.mjs';import{validate,defaults,summary,decision,money}from'../src/domain.mjs';import{renderPdf}from'../pdf.mjs';
+for(const p of templates)test(p.id+' config and baseline',()=>{validate(p);const s=summary(p,defaults(p));assert.ok(s.initial>0);assert.ok(s.annual>=0)});
+test('included extras cannot be charged twice',()=>{const p=templates[0];assert.equal(summary(p,{website:'complete'},{website:['copy']}).initial,230000)});
+test('duplicate extras charged once, annual separated',()=>{const p=templates[0],s=summary(p,defaults(p),{website:['copy','copy','maintenance']});assert.equal(s.initial,105000);assert.equal(s.annual,24000)});
+test('inapplicable extras ignored on tier switch',()=>{const p=structuredClone(templates[0]);p.groups[0].addons[0].applicableTiers=['growth'];assert.equal(summary(p,defaults(p),{website:['copy']}).initial,80000)});
+test('invalid selections rejected',()=>assert.throws(()=>summary(templates[0],{website:'no'})));
+for(const price of [-1,NaN,Infinity,0.1,1000000001])test('invalid money '+price,()=>{const p=structuredClone(templates[0]);p.groups[0].options[0].price=price;assert.throws(()=>validate(p))});
+test('duplicate groups rejected',()=>{const p=structuredClone(templates[0]);p.groups.push(p.groups[0]);assert.throws(()=>validate(p))});
+test('invalid logo rejected',()=>{assert.throws(()=>validate({...templates[0],logo:'https://example.com/logo.svg'}))});
+for(const type of ['accepted','changes_requested','consultation_requested','rejected'])test(type+' receipt snapshot',()=>{const p=templates[0],r=decision(p,defaults(p),{},type,true,'hello');assert.equal(r.sandbox,true);assert.equal(r.initial,80000);assert.equal(r.version,'1');assert.ok(Date.parse(r.timestamp));assert.equal(r.message,'hello')});
+test('minor unit formatting',()=>{assert.match(money(templates[0],12345),/123/);assert.match(money({...templates[0],currency:'PYG'},12345),/12/)});
+test('real multipage PDF generated',async()=>{const p=structuredClone(templates[0]);p.terms=Array.from({length:80},(_,i)=>`Term ${i}: Synthetic long scope conditions requiring multiple pages.`);const pdf=await renderPdf(p,defaults(p),{website:['copy']},true);assert.equal(pdf.subarray(0,4).toString(),'%PDF');const count=pdf.toString('latin1').match(/\/Type \/Page\b/g);assert.ok(count.length>=3);assert.ok(pdf.length>3000)});

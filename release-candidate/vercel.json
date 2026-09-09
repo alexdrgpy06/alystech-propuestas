@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/es", "destination": "/index.html" },
+    { "source": "/es/", "destination": "/index.html" },
+    { "source": "/en", "destination": "/index.html" },
+    { "source": "/en/", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/pdf.js": {
+      "maxDuration": 30
+    }
+  }
+}
