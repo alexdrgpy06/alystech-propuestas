@@ -38,6 +38,12 @@ test('rejects oversized JSON before PDF generation', async () => {
   assert.deepEqual(result.payload, { error: 'Request payload is too large' });
 });
 
+test('rejects oversized parsed bodies before PDF generation', async () => {
+  const result = await invoke({ padding: 'x'.repeat(1_600_000) });
+  assert.equal(result.statusCode, 413);
+  assert.deepEqual(result.payload, { error: 'Request payload is too large' });
+});
+
 test('returns a PDF for a valid proposal request', async () => {
   const proposal = structuredClone(templates[0]);
   const result = await invoke({ proposal, selections: { website: 'essential' }, extras: {} });
