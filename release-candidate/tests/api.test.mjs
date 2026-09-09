@@ -20,6 +20,18 @@ test('rejects malformed JSON as a client error', async () => {
   assert.deepEqual(result.payload, { error: 'Invalid proposal or PDF request' });
 });
 
+test('maps Vercel body-parser errors to a client error', async () => {
+  const result = { statusCode: 200, payload: undefined };
+  const response = {
+    setHeader() {},
+    status(code) { result.statusCode = code; return this; },
+    json(value) { result.payload = value; return result; },
+  };
+  await handler({ method: 'POST', url: 'https://example.test/api/pdf', get body() { throw new Error('malformed'); } }, response);
+  assert.equal(result.statusCode, 400);
+  assert.deepEqual(result.payload, { error: 'Invalid proposal or PDF request' });
+});
+
 test('rejects oversized JSON before PDF generation', async () => {
   const result = await invoke(JSON.stringify({ padding: 'x'.repeat(1_600_000) }));
   assert.equal(result.statusCode, 413);

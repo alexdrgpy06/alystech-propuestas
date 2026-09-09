@@ -3,16 +3,24 @@ import { renderPdf } from '../pdf.mjs';
 const MAX_BODY_BYTES = 1_500_000;
 
 function parseBody(request) {
-  if (typeof request.body !== 'string') {
-    return request.body && typeof request.body === 'object' ? request.body : {};
+  let rawBody;
+  try {
+    rawBody = request.body;
+  } catch {
+    const error = new Error('Invalid JSON payload');
+    error.code = 'INVALID_JSON';
+    throw error;
   }
-  if (Buffer.byteLength(request.body, 'utf8') > MAX_BODY_BYTES) {
+  if (typeof rawBody !== 'string') {
+    return rawBody && typeof rawBody === 'object' ? rawBody : {};
+  }
+  if (Buffer.byteLength(rawBody, 'utf8') > MAX_BODY_BYTES) {
     const error = new Error('Payload too large');
     error.code = 'PAYLOAD_TOO_LARGE';
     throw error;
   }
   try {
-    return JSON.parse(request.body);
+    return JSON.parse(rawBody);
   } catch {
     const error = new Error('Invalid JSON payload');
     error.code = 'INVALID_JSON';
