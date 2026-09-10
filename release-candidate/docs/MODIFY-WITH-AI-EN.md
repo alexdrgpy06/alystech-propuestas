@@ -4,7 +4,7 @@
 
 1. Extract the ZIP into a working folder and run `npm ci`, `npm test`, and `npm run build`.
 2. Back up the configuration through **Configure proposal → Export JSON**. Do not overwrite the original synthetic example.
-3. Ask the AI to change only `release-candidate` and to preserve `package-lock.json` unless it explains why a new dependency is needed.
+3. Ask the AI to change only this package's root folder and to preserve `package-lock.json` unless it explains why a new dependency is needed.
 
 ## Changes available in the interface
 

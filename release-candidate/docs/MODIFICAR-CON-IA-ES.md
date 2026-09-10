@@ -4,7 +4,7 @@
 
 1. Descomprime el ZIP en una carpeta de trabajo y ejecuta `npm ci`, `npm test` y `npm run build`.
 2. Crea una copia de la configuración desde **Configurar propuesta → Exportar JSON**. No reemplaces el ejemplo sintético original.
-3. Pide a la IA que modifique solamente `release-candidate` y que conserve `package-lock.json` salvo que justifique una dependencia nueva.
+3. Pide a la IA que modifique únicamente la carpeta raíz de este paquete y que conserve `package-lock.json` salvo que justifique una dependencia nueva.
 
 ## Cambios que se pueden hacer desde la interfaz
 
