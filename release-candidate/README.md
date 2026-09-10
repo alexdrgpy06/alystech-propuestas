@@ -1,5 +1,7 @@
 # Interactive Proposal Builder
 
+**Release-candidate source kit for a one-time, offline-capable delivery.** Read [Start here — ES](START-HERE-ES.md) or [Start here — EN](START-HERE-EN.md), then use the clean ZIP builder in `scripts/Build-OfflinePackage.ps1`.
+
 Self-hosted proposal builder for service businesses. Configure packages and add-ons, let a client compare options, calculate the investment, download an A4 PDF, and record a local decision receipt.
 
 This package is a release candidate. It uses synthetic examples and stores commercial configuration in the browser. It does not provide accounts, payments, e-signatures, CRM, email delivery, webhook delivery or cloud synchronization.
@@ -41,3 +43,5 @@ Decision buttons create a JSON receipt containing the proposal version, timestam
 ## License and limitations
 
 See [LICENSE](LICENSE). Keep third-party notices with any redistribution. Review provenance for any future visual assets before adding them. The package is a source kit; hosting, domain, data retention and support are the buyer's responsibility.
+
+Sales copy: [Spanish](LISTING-ES.md) · [English](LISTING-EN.md). Buyer terms and offline operation: [Spanish](docs/COMPRA-UNICA-OFFLINE-ES.md) · [English](docs/ONE-TIME-PURCHASE-OFFLINE-EN.md). AI modification guides: [Spanish](docs/MODIFICAR-CON-IA-ES.md) · [English](docs/MODIFY-WITH-AI-EN.md). Third-party notices: [docs/LICENSES-THIRD-PARTY.md](docs/LICENSES-THIRD-PARTY.md).
